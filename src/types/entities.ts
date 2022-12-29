@@ -15,3 +15,8 @@ export interface Test {
   lastname?: string;
   date?: string;
 }
+
+export interface Activity {
+  id: string;
+  name: string;
+}

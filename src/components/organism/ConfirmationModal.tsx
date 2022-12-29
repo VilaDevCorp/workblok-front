@@ -7,7 +7,7 @@ import { useModal } from '../../hooks/useModal';
 
 
 const StyledText = styled.p`
-    font-size: ${props => props.theme.fontSize.highText};
+    font-size: ${props => props.theme.fontSize.title};
     color: ${props => props.theme.color.darkFont};
     text-align: center;
     display: flex;

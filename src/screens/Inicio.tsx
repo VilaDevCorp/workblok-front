@@ -8,6 +8,7 @@ import { CoolSelect } from '../components/atom/CoolSelect';
 import { CoolTextInput } from '../components/atom/CoolTextInput';
 import { ScreenFrame } from '../components/molecule/ScreenFrame';
 import { CoolTable } from '../components/organism/CoolTable';
+import { WeekPlanner } from '../components/organism/WeekPlanner';
 import { useApi } from '../hooks/useApi';
 import { useModal } from '../hooks/useModal';
 import { snackAtom } from '../recoil/mainAtoms';
@@ -19,6 +20,7 @@ const MainBox = styled.div`
     display: flex;
     gap: 5vh;
     margin-left: 10%;
+    margin-top: 20vh;
     justify-content: center;
     flex-direction: column;
 `;
@@ -78,12 +80,13 @@ export function Inicio() {
     ]
 
     return (
-        <ScreenFrame title='Pantalla de inicio'>
-            <MainBox>
-                <CoolButton clickFun={() => setopensnack(({ visible: true, text: 'Elemento borrado correctamente', icon: IconTypeEnum.DELETE, color: ColorEnum.DANGER }))} />
+        <MainBox>
+
+            <WeekPlanner startDate={new Date(2022, 11, 26)} />
+            {/* <CoolButton clickFun={() => setopensnack(({ visible: true, text: 'Elemento borrado correctamente', icon: IconTypeEnum.DELETE, color: ColorEnum.DANGER }))} />
                 <CoolTable width={50} height={50} headers={headers} data={data} setPage={setPage} contextOptions={contextOptions} isLoading={isLoading}></CoolTable>
-                <p style={{ position: 'absolute', top: 500 }}>{selectVal}</p>
-                {/* <CoolFormElement label='Tipo de petición'>
+                <p style={{ position: 'absolute', top: 500 }}>{selectVal}</p> */}
+            {/* <CoolFormElement label='Tipo de petición'>
                     <CoolSelect id='select' setValue={setSelectVal} value={selectVal} options={optionsArray} />
                 </CoolFormElement>
                 <CoolFormElement label='Nombre'>
@@ -93,7 +96,6 @@ export function Inicio() {
                     <CoolCheckbox value={checkbox} setValue={setCheckbox} label={'Aceptar términos y condiciones'} isDark />
     </CoolFormElement>*/}
 
-            </MainBox>
-        </ScreenFrame >
+        </MainBox>
     )
 }

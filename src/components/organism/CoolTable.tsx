@@ -50,7 +50,7 @@ const StyledTable = styled.table`
         z-index: 3;
         color: ${(props) => props.theme.color.lightFont};
         background: ${(props) => props.theme.color.mainColor};
-        font-size: ${(props) => props.theme.fontSize.highText};
+        font-size: ${(props) => props.theme.fontSize.title};
         height: 8vh;
         @media ${device.desktopL} { 
             height: 5vh;
@@ -178,7 +178,7 @@ export function CoolTable({ width, height, headers, data, setPage, contextOption
     return (
         <MainBox widthProp={width} heightProp={height}>
             <TableBox contextVisible={contextMenuProps.visible}>
-                {true ?
+                {isLoading ?
                     <LoadingIconBlur widthProp={width} heightProp={height}>
                         <LoadingIconBox>
                             <LoadingIconInsideBox>

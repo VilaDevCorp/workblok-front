@@ -25,16 +25,16 @@ export const device = {
 
 export const StyledTheme = ({ children }: { children: ReactNode }) => {
 
-  const bgColor = '#fefefe'
-  const mainColor = '#0071bc'
+  const bgColor = '#091820'
+  const mainColor = '#0F3E57'
   const secondColor = '#94BFBE'
   const highlightColor = '#E1A600'
   const mainColorLowOp = '#0071bc5c'
   const modalBackground = '#3fb1fc21'
   const danger = 'red'
-  const lightFont = '#fefefe'
+  const lightFont = '#EEF7FC'
   const darkFont = '#040126'
-  const lightBackground = '#deedffcc'
+  const lightBackground = '#123040'
   const button = '#0F9EFB'
   const buttonHover = '#005790'
   const hoverInputLight = '#ccdef5'
@@ -49,12 +49,12 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
    }
 
   const regularText = '1.1rem'
-  const highText = '1.2rem'
+  const title = '1.2rem'
   const buttonLabel = '1.3rem'
   const h1 = '1.8rem'
   const h2 = '1.6rem'
 
-  const fontSize = { regularText, h1, buttonLabel, highText, h2}
+  const fontSize = { regularText, h1, buttonLabel, title, h2}
 
   const value: DefaultTheme = {
     color,

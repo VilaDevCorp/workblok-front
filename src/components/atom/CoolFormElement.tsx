@@ -13,7 +13,7 @@ const MainBox = styled.div`
     margin-bottom: 4vh;
 `
 const StyledLabel = styled.label`
-    font-size: ${props => props.theme.fontSize.highText};
+    font-size: ${props => props.theme.fontSize.title};
     color: ${props => props.theme.color.mainColor};
     font-weight: bold;
 `

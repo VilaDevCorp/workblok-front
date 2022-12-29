@@ -21,6 +21,7 @@ export enum SizeEnum {
   M,
   L,
   XL,
+  M_VERTICAL
 }
 
 export enum ButtonTypeEnum {
@@ -65,5 +66,5 @@ export interface ModalButton {
 }
 
 export enum ModalType {
-  CONFIRMATION,
+  SELECT_ACTIVITY,
 }

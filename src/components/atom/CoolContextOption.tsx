@@ -46,7 +46,7 @@ const LabelBox = styled.span`
     display: flex;
     width: 75%;
     margin-left: 5%;
-    font-size: ${props => props.theme.fontSize.highText};
+    font-size: ${props => props.theme.fontSize.title};
     background-color: transparent;
     box-sizing: border-box;
     @media ${device.desktopL} {

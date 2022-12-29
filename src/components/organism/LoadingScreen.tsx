@@ -2,12 +2,12 @@ import React, { } from 'react';
 import {BounceLoader, DotLoader, PropagateLoader, PuffLoader } from 'react-spinners';
 import styled, { useTheme } from 'styled-components';
 // import loadingScreenImg from './../../resources/loadingScreenImg.png'
-import loadingScreenImg from './../../../public/loadingScreenImg.png'
+import loadingScreenImg from './../../../public/logo.svg'
 
 
 const MainBox = styled.div`
     display: flex;
-    background: ${props=> props.theme.color.mainColor};
+    background: ${props=> props.theme.color.bgColor};
     box-sizing: border-box;
     flex-direction: column;
     padding: 1% 2%;

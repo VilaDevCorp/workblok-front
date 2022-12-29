@@ -30,6 +30,7 @@ const CoolStyledButton = styled(ButtonBase) <AllProps>`
     align-items: center;
     justify-content: space-around;
     overflow: hidden;
+    border-radius: 12px;
     @media ${device.desktopL} { 
         width: ${props => `${1.2 * props.width}px`};
         height: ${props => `${1.2 * props.height}px`};

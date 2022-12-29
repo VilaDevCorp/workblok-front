@@ -24,7 +24,7 @@ export interface ThemeColors {
 
 interface ThemeFontSizes {
   regularText: string;
-  highText: string;
+  title: string;
   buttonLabel: string;
   h1: string;
   h2: string;

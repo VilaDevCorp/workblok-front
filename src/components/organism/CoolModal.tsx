@@ -3,12 +3,13 @@ import { ModalType } from '../../types/types';
 import { useRecoilState } from 'recoil';
 import { OtherModal } from './OtherModal';
 import { useModal } from '../../hooks/useModal';
+import { SelectActivityModal } from './SelectActivityModal';
 
 
 const getModalComponent = (modalType?: ModalType): JSX.Element => {
     switch (modalType) {
-        case ModalType.CONFIRMATION:
-            return <OtherModal />
+        case ModalType.SELECT_ACTIVITY:
+            return <SelectActivityModal/>
         default:
             return <></>
     }

@@ -41,6 +41,8 @@ const getSize = (size?: SizeEnum): SizeInfo => {
             return { width: 40, height: 35, maxHeight: 250 }
         case SizeEnum.XS:
             return { width: 40, height: 25, maxHeight: 215 }
+        case SizeEnum.M_VERTICAL:
+            return { width: 30, height: 70, maxHeight: 1000 }
         default:
             return { width: 60, height: 45, maxHeight: 215 }
     }
@@ -68,7 +70,9 @@ const InsideBox = styled.div<ModalProps>`
     flex-direction: column;
     max-width: ${props => props.size === SizeEnum.S ? '425px' : undefined};
     background: ${props => props.theme.color.lightBackground};
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;`;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius:12px;
+    `;
 
 const ModalHeader = styled.div<ModalProps>`
     width:100%;
@@ -79,11 +83,10 @@ const ModalHeader = styled.div<ModalProps>`
     align-items: center;
     box-sizing: border-box;
     padding: 0 5%;
-    background: ${props => props.theme.color.mainColor};
     & h2 {
         color: ${props => props.theme.color.lightFont};
         @media ${device.laptop} { 
-            font-size: ${props => props.theme.fontSize.highText}
+            font-size: ${props => props.theme.fontSize.title}
         }
         @media ${device.desktopL} { 
             font-size: 2rem
