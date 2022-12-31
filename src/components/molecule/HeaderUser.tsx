@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { CoolIconButton } from '../atom/CoolIconButon';
 import { IconTypeEnum, SizeEnum } from '../../types/types';
 import { CoolIcon } from '../atom/CoolIcon';
+import { CoolButton } from '../atom/CoolButton';
 
 
 const MainBox = styled.div`
@@ -38,29 +39,6 @@ const UserIcon = styled.div`
     box-sizing: border-box;
 `;
 
-const LogoutButton = styled(ButtonBase)`
-    color: ${props => props.theme.color.mainColor};
-    border-radius: 60px;
-    width: 35px;
-    height: 35px;
-    border: none;
-    font-size: 1.5rem;
-    background-color: ${props => props.theme.color.bgColor};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    margin-left: auto;
-    border: 3px solid transparent;
-
-    transition: border-color .2s, color .2s;
-
-    &:hover {
-    transition: border-color .2s, color .2s;
-        border: 3px solid #E1A600;
-        color: ${props => props.theme.color.highlightColor};
-        border-color: ${props => props.theme.color.highlightColor};
-    }`;
     
 export function HeaderUser() {
 
@@ -81,9 +59,9 @@ export function HeaderUser() {
                 <UserIcon>
                     <CoolIcon type={IconTypeEnum.USER} />
                 </UserIcon>
-                {authInfo.id}
+                {'davidvilas'}
             </UserInfo>
-            <CoolIconButton type={IconTypeEnum.LOGOUT} clickFun={onLogout} size={SizeEnum.XS} />
+            <CoolButton type={IconTypeEnum.LOGOUT} clickFun={onLogout} size={SizeEnum.S} />
         </MainBox>
     )
 }

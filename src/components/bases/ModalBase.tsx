@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled, { DefaultTheme, keyframes } from 'styled-components';
-import { IconTypeEnum, SizeEnum } from '../../types/types';
+import { ButtonStyleEnum, IconTypeEnum, SizeEnum } from '../../types/types';
 import { ModalButton } from '../../types/types'
 import { CoolButton } from '../atom/CoolButton';
 import { device } from '../../StyledTheme';
@@ -141,7 +141,7 @@ export function ModalBase({ children, title, size, onClose, buttons }: { childre
             <InsideBox size={size} >
                 <ModalHeader size={size} >
                     <h2>{title}</h2>
-                    <CoolIconButton clickFun={() => { onClose() }} type={IconTypeEnum.CLOSE} size={SizeEnum.XS} />
+                    <CoolIconButton buttonStyle={ButtonStyleEnum.OUTLINE} clickFun={() => { onClose() }} type={IconTypeEnum.CLOSE} size={SizeEnum.XS} />
                 </ModalHeader>
                 {children ?
                     <ModalBody size={size}>

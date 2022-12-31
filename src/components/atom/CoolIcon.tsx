@@ -5,6 +5,7 @@ import { CgCloseR } from 'react-icons/cg';
 import { FaSignInAlt, FaUserCircle } from 'react-icons/fa';
 import { MdNavigateBefore, MdNavigateNext, MdOutlineCancel } from 'react-icons/md';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { BiSearch } from 'react-icons/bi';
 import { IconTypeEnum } from '../../types/types';
 
 
@@ -32,6 +33,8 @@ export function CoolIcon({ type }: { type: IconTypeEnum }) {
                 return <AiOutlineEdit />
             case IconTypeEnum.DELETE:
                 return <AiOutlineDelete />
+            case IconTypeEnum.SEARCH:
+                return <BiSearch />
             default:
                 return <></>
         }

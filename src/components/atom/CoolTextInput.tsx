@@ -23,16 +23,17 @@ const CoolStyledTextInput = styled(TextInputBase) <AllProps>`
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
-    background: ${props => props.isDark ? props.theme.color.mainColor : props.theme.color.lightBackground};
-    color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.darkFont};
+    background: ${props => props.theme.color.mainColor};
+    color: ${props => props.theme.color.lightFont};
     border: none;
     transition: border .2s;
+    border-radius: 12px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-around;
     overflow: hidden;
-    border: 3px solid transparent;
+    border: 1px solid transparent;
     outline:none;
     @media ${device.desktopL} { 
         width: ${props => `${1.2 * props.width}px`};
@@ -51,14 +52,15 @@ const CoolStyledTextInput = styled(TextInputBase) <AllProps>`
         width: 80%;
     }
     &:focus {
-        border: 3px solid ${props => props.theme.color.highlightColor};
+        border: 1px solid ${props => props.theme.color.highlightColor};
         transition: border .2s;
+        background-color: #18618C ;
     }
     transition: background .2s;
     
     &:hover {
         transition: background .2s;
-        background-color: ${props => props.theme.color.hoverInputLight} ;
+        background-color: #18618C ;
     }
     
 `;

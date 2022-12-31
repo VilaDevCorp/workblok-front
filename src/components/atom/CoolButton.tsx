@@ -22,7 +22,7 @@ const CoolStyledButton = styled(ButtonBase) <AllProps>`
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
     background: ${props => props.isDark ? props.theme.color.mainColor : props.theme.color.lightBackground};
-    color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.darkFont};
+    color: ${props => props.theme.color.lightFont};
     border: none;
     transition: background .2s;
     box-sizing: border-box;
@@ -48,11 +48,15 @@ const CoolStyledButton = styled(ButtonBase) <AllProps>`
         width: 80%;
     }
     transition: background .2s;
-    
+    border: 1px solid transparent;
+
     &:hover {
         transition: background .2s;
-        background: ${props => props.isDark ? props.theme.color.hoverInputDark : props.theme.color.hoverInputLight};
+        background: ${props => props.theme.color.lightMain};
     }    
+    &:active {
+        border: 1px solid ${props => props.theme.color.highlightColor};
+    }
     
 `;
 
@@ -72,6 +76,8 @@ export function CoolButton({ clickFun, className, type, size, isDark = true }: {
                 return 'Eliminar'
             case IconTypeEnum.LOGIN:
                 return 'Entrar'
+            case IconTypeEnum.LOGOUT:
+                return 'Logout'
             default:
                 return ''
         }
@@ -84,7 +90,7 @@ export function CoolButton({ clickFun, className, type, size, isDark = true }: {
             case SizeEnum.M:
                 return { width: 140, height: 60, fontSize: '1.2rem' }
             case SizeEnum.S:
-                return { width: 120, height: 50, fontSize: '1.2rem' }
+                return { width: 110, height: 40, fontSize: '1rem' }
             case SizeEnum.XS:
                 return { width: 100, height: 30, fontSize: '.9rem' }
             default:

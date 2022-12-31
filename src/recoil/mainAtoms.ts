@@ -7,15 +7,20 @@ export const isLoading = atom<boolean>({
 });
 
 export interface SnackAtomProps {
-  visible: boolean
-  text?: string
-  icon?: IconTypeEnum
-  color?: ColorEnum
+  visible: boolean;
+  text?: string;
+  icon?: IconTypeEnum;
+  color?: ColorEnum;
 }
 
 export const snackAtom = atom<SnackAtomProps>({
   key: "snackAtom",
-  default: { visible: false, text: 'Elemento borrado correctamente', icon: IconTypeEnum.DELETE, color: ColorEnum.DANGER},
+  default: {
+    visible: false,
+    text: "Elemento borrado correctamente",
+    icon: IconTypeEnum.DELETE,
+    color: ColorEnum.DANGER,
+  },
 });
 
 export const clearContextAtom = atom<boolean>({
@@ -23,7 +28,10 @@ export const clearContextAtom = atom<boolean>({
   default: false,
 });
 
-
+export const selectedActivitiesAtom = atom<string[]>({
+  key: "selectedActivitiesAtom",
+  default: [],
+});
 // export interface FamiliarModalProps {
 //   visible: boolean;
 //   familiarId?: string | undefined;

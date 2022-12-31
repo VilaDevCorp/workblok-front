@@ -32,6 +32,9 @@ export enum ButtonTypeEnum {
   CONFIRM,
 }
 
+export enum ButtonStyleEnum {FILL, OUTLINE}
+
+
 export enum IconTypeEnum {
     PREVIOUS,
     NEXT,
@@ -42,7 +45,8 @@ export enum IconTypeEnum {
     USER,
     LOGIN,
     DELETE,
-    EDIT
+    EDIT,
+    SEARCH
 }
 
 export enum ColorEnum {

@@ -4,6 +4,10 @@ import { device } from "./StyledTheme";
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Seymour+One&display=swap');
+
+    font-family: 'Open Sans', sans-serif;
+
     padding: 0;
     width:100%;
     height: 100vh;

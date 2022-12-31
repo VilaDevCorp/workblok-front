@@ -20,7 +20,7 @@ const MainBox = styled.div`
     display: flex;
     gap: 5vh;
     margin-left: 10%;
-    margin-top: 20vh;
+    margin-top: 5vh;
     justify-content: center;
     flex-direction: column;
 `;

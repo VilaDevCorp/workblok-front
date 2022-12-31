@@ -8,7 +8,7 @@ const MainBox = styled.div`
     display: flex;
     height: 100%;
     padding: 2vh 5%;
-    color: ${props => props.theme.color.highlightColor};
+    color: ${props => props.theme.color.lightFont};
     justify-content: center;
     box-sizing: border-box;
     &:hover {
@@ -21,7 +21,7 @@ const ActivityIcon = styled.span`
     margin-right: 5%;
     vertical-align: middle;
 `
-export function AddActivityButton() {
+export function AddActivityIndicator() {
 
     return (
         <MainBox>

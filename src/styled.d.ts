@@ -5,6 +5,7 @@ import "styled-components";
 export interface ThemeColors {
   bgColor: string;
   mainColor: string;
+  lightMain: string;
   secondColor: string;
   highlightColor: string;
   mainColorLowOp: string;

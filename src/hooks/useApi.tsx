@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react';
-import { Test, User } from '../types/entities';
+import { Activity, Test, User } from '../types/entities';
 import { Page } from '../types/types';
 import { conf } from './../conf'
 
@@ -8,6 +8,7 @@ export interface ApiContext {
     logout: () => void
     fakeDelay: (delay: number) => void
     getUserInfo: () => Promise<User>
+    getActivities: () => Promise<Activity[]>
     getTestData: (page: number) => Promise<Page<Test>>
 }
 
@@ -94,6 +95,30 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         // return result
         return { id: '123', name: 'david@notacool.com', pass: '1234' }
     }
+
+    const getActivities = async (): Promise<Activity[]> => {
+        const url = `${conf.mainApiUrl}activity`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'GET',
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject
+        } catch (e) {
+            throw Error('Error al obtener las actividades')
+        }
+        return result
+    }
+
 
     const getTestData = async (page: number): Promise<Page<Test>> => {
         const content1: Test[] = [{ id: '2', name: 'Javi', lastname: 'Vilasanchez', date: '29/10/94' },
@@ -192,6 +217,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         logout,
         getUserInfo,
         fakeDelay,
+        getActivities,
         getTestData
     }
 
