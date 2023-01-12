@@ -48,11 +48,10 @@ export function SelectActivityModal() {
     const [searchText, setSearchText] = useState<string>('')
     const [activities, setActivities] = useState<Activity[]>([])
     const [selectedActivitiesModal, setSelectedActivities] = useRecoilState<string[]>(selectedActivitiesAtom)
-    const { getActivities } = useApi()
+    const { getTestData } = useApi()
 
     const onGetActivities = async () => {
-        const result = await getActivities()
-        setActivities(result)
+        setActivities([{id: '2', name: 'jasljflas'}])
     }
 
     useEffect(() => {

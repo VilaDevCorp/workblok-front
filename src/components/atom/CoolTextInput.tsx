@@ -23,7 +23,7 @@ const CoolStyledTextInput = styled(TextInputBase) <AllProps>`
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
-    background: ${props => props.theme.color.mainColor};
+    background: ${props => props.theme.color.main.n};
     color: ${props => props.theme.color.lightFont};
     border: none;
     transition: border .2s;

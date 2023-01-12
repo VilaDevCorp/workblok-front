@@ -23,7 +23,7 @@ const MainBox = styled.div`
 
 const NumberBox = styled.div`
     font-size: ${props => props.theme.fontSize.h2};
-    color: ${props => props.theme.color.mainColor};
+    color: ${props => props.theme.color.main.n};
 `;
 
 
@@ -32,12 +32,12 @@ export function CoolPagination({ page, setPage, totalPages, isLoading }:
 
     return (
         <MainBox>
-            <CoolIconButton type={IconTypeEnum.PREVIOUS} size={SizeEnum.XS} isDark isActive={!isLoading && page > 0} clickFun={page > 0 ? (e) => {
+            <CoolIconButton type={IconTypeEnum.PREVIOUS} size={SizeEnum.XS} isDark isActive={!isLoading && page > 1} clickFun={page > 1 ? (e) => {
                 e.currentTarget.disabled = true;
                 ; setPage((old) => old - 1);
             } : undefined} />
-            <NumberBox>{page + 1}</NumberBox>
-            <CoolIconButton type={IconTypeEnum.NEXT} size={SizeEnum.XS} isDark isActive={!isLoading && page < (totalPages - 1)} clickFun={page < (totalPages - 1) ? () => setPage((old) => old + 1) : undefined} />
+            <NumberBox>{page}</NumberBox>
+            <CoolIconButton type={IconTypeEnum.NEXT} size={SizeEnum.XS} isDark isActive={!isLoading && page < (totalPages)} clickFun={page < (totalPages) ? () => setPage((old) => old + 1) : undefined} />
         </MainBox>
     )
 }

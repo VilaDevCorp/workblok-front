@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
 
 const MainBox = styled.div`
     width: 50%;
@@ -15,18 +17,20 @@ const MenuElement = styled.a`
     color: ${props => props.theme.color.lightFont};
     font-size: ${props => props.theme.fontSize.title};
     &:hover {
-        color: ${props => props.theme.color.mainColor};    
+        color: ${props => props.theme.color.main.n};    
     }
 `;
 
 export function HeaderMenu() {
 
+    const navigate = useNavigate()
+
     return (
         <MainBox>
-            <MenuElement href='#'>
+            <MenuElement href='#' onClick={()=>navigate('/')}>
                 {'Planning'}
             </MenuElement>
-            <MenuElement href='#'>
+            <MenuElement href='#' onClick={()=>navigate('/activities')}>
                 {'Activities'}
             </MenuElement>
         </MainBox>

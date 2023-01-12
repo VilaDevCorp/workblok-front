@@ -8,7 +8,7 @@ const MainBox = styled.div`
     width: 100%;
     height: 40vh;
     overflow-y: auto;
-    background-color: #0D2430;
+    background-color: ${props => props.theme.color.background.l1};
     overflow-x: hidden;
     align-items: center;
     ::-webkit-scrollbar {
@@ -22,7 +22,6 @@ const MainBox = styled.div`
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: ${props => props.theme.color.highlightColor};
     width: 0;
 
     }

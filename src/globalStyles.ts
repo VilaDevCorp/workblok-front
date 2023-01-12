@@ -13,22 +13,22 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     overflow: hidden;
     scroll-behavior: smooth;
-    color: ${(props) => props.theme.color.darkFont};
+    color: ${(props) => props.theme.color.main.l6};
     @media ${device.desktopL} { 
       font-size: 150% !important;
     }
 
   }
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 1px;
 }
 
 ::-webkit-scrollbar-track {
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: ${(props) => props.theme.color.mainColorLowOp};  
+  border-radius: 12px;
+  background: ${props => props.theme.color.highlightColor};
 }
 `;
 

@@ -19,9 +19,10 @@ const MainBox = styled.div<ContextMenuPosition>`
     display: flex;
     cursor: default;
     flex-direction: column;
+    border-radius: 12px;
+    border: ${props => `1px solid ${props.theme.color.main.d1}`};
     position: absolute;
     width: 125px;
-    background: ${props => props.theme.color.lightBackground};
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     box-sizing: border-box;
     top: ${props => `${props.top}px`};
@@ -33,7 +34,7 @@ const MainBox = styled.div<ContextMenuPosition>`
 
 
 
-export function CoolContextMenu({ visible, top, left, options, selectedElements }: { visible: boolean, top: number, left: number, options: ContextOption[], selectedElements:string[]}) {
+export function CoolContextMenu({ visible, top, left, options, selectedElement }: { visible: boolean, top: number, left: number, options: ContextOption[], selectedElement: string }) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const setClearContext = useSetRecoilState<boolean>(clearContextAtom)
 
@@ -43,7 +44,7 @@ export function CoolContextMenu({ visible, top, left, options, selectedElements 
         visible ?
             <MainBox ref={wrapperRef} top={top} left={left} visible={visible}>
                 {options.map((option) =>
-                    <CoolContextOption type={option.type} onClick={()=>option.onClick(selectedElements)}></CoolContextOption>
+                    <CoolContextOption key={option.type} type={option.type} onClick={() => option.onClick(selectedElement)} label={option.label}></CoolContextOption>
                 )}
             </MainBox >
             : <></>

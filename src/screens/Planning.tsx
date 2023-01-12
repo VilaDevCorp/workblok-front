@@ -27,7 +27,7 @@ const MainBox = styled.div`
 
 
 
-export function Inicio() {
+export function Planning() {
 
     const headers = ['name', 'lastname', 'date']
 

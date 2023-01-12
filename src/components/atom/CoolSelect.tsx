@@ -21,7 +21,7 @@ const CoolStyledSelect = styled(SelectBase) <AllProps>`
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
-    background: ${props => props.isDark ? props.theme.color.mainColor : props.theme.color.lightBackground};
+    background: ${props => props.isDark ? props.theme.color.main.n : props.theme.color.lightBackground};
     color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.darkFont};
     border: none;
     transition: background .2s;

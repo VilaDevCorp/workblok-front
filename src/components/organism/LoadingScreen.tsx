@@ -7,7 +7,7 @@ import loadingScreenImg from './../../../public/logo.svg'
 
 const MainBox = styled.div`
     display: flex;
-    background: ${props=> props.theme.color.bgColor};
+    background: ${props=> props.theme.color.background.n};
     box-sizing: border-box;
     flex-direction: column;
     padding: 1% 2%;

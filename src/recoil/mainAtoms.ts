@@ -32,6 +32,12 @@ export const selectedActivitiesAtom = atom<string[]>({
   key: "selectedActivitiesAtom",
   default: [],
 });
+
+export const reloadActivitiesAtom = atom<boolean>({
+  key: "reloadActivitiesAtom",
+  default: false,
+});
+
 // export interface FamiliarModalProps {
 //   visible: boolean;
 //   familiarId?: string | undefined;

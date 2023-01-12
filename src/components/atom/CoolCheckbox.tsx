@@ -49,7 +49,7 @@ const CoolStyledCheckbox = styled.div<AllProps>`
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.width}px`};
-    background: ${props => props.isDark ? props.theme.color.mainColor : props.theme.color.lightBackground};
+    background: ${props => props.isDark ? props.theme.color.main.n : props.theme.color.lightBackground};
     color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.darkFont};
     border: none;
     transition: border .2s;
@@ -83,7 +83,7 @@ const CoolStyledCheck = styled.div<AllProps>`
         font-size: 2rem;
         width: 100%;
         height: 100%;
-        color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.mainColor};
+        color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.main.n};
         box-sizing: border-box;
     }
 `

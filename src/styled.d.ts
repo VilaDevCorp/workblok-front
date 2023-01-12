@@ -3,24 +3,27 @@ import "styled-components";
 
 // and extend them!
 export interface ThemeColors {
-  bgColor: string;
-  mainColor: string;
-  lightMain: string;
-  secondColor: string;
+  background: ColorShades;
+  main: ColorShades;
+  second: ColorShades;
   highlightColor: string;
-  mainColorLowOp: string;
+  highlightColorLowOp: string;
+  mainLowOp: string;
   modalBackground: string;
-  lightBackground: string;
   lightFont: string;
   darkFont: string;
+  darkFontLowOp: string;
   button: string;
-  buttonHover: string;
+  buttonHoverDark: string;
+  buttonHoverLight: string;
   inactive:string;
   inputDark: string;
   danger: string;
   inputLight:string;
   hoverInputLight: string;
   hoverInputDark: string;
+  grey:string;
+  lightGrey:string;
 }
 
 interface ThemeFontSizes {

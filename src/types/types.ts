@@ -32,7 +32,7 @@ export enum ButtonTypeEnum {
   CONFIRM,
 }
 
-export enum ButtonStyleEnum {FILL, OUTLINE}
+export enum ButtonStyleEnum {FILLED, OUTLINE}
 
 
 export enum IconTypeEnum {
@@ -43,6 +43,7 @@ export enum IconTypeEnum {
     CONFIRM,
     CLOSE,
     USER,
+    ADD,
     LOGIN,
     DELETE,
     EDIT,
@@ -61,7 +62,8 @@ export interface SelectOption {
 
 export interface ContextOption {
   type: IconTypeEnum;
-  onClick: (ids:string[]) => void;
+  label:string;
+  onClick: (id:string) => void;
 }
 
 export interface ModalButton {

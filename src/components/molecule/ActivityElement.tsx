@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { selectedActivitiesAtom } from '../../recoil/mainAtoms';
 
 const MainBox = styled.div`
-    border-top: 1px solid ${props => props.theme.color.bgColor};
-    border-bottom: 1px solid ${props => props.theme.color.bgColor};
+    border-top: 1px solid ${props => props.theme.color.background.n};
+    border-bottom: 1px solid ${props => props.theme.color.background.n};
     display: flex;
     min-height: 60px;
     height: 13vh;
@@ -17,7 +17,7 @@ const MainBox = styled.div`
     padding: 2vh 5%;
     width: 100%;
     box-sizing: border-box;
-    background-color: ${props => props.theme.color.lightBackground};
+    background-color: ${props => props.theme.color.background.l2};
     cursor: pointer;
 
     
@@ -29,7 +29,7 @@ const MainBox = styled.div`
     &.isSelected {
         border-color: ${props => props.theme.color.highlightColor};
         transition: background .3s;
-        background-color: ${props => props.theme.color.mainColor};
+        background-color: ${props => props.theme.color.main.n};
     }
 `;
 

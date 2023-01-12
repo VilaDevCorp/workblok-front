@@ -31,7 +31,7 @@ const CoolStyledIconButton = styled(ButtonBase) <CoolStyledIconButtonProps>`
     border: none;
     font-size: ${props => `${props.fontSize}`};
     opacity: ${props => props.isActive ? 1 : .5};
-    background-color: ${props => props.isActive ? props.theme.color.mainColor : props.theme.color.inactive};
+    background-color: ${props => props.style === ButtonStyleEnum.FILLED ? props.isActive ? props.theme.color.main.n : props.theme.color.main.d5 : 'transparent'};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,17 +39,18 @@ const CoolStyledIconButton = styled(ButtonBase) <CoolStyledIconButtonProps>`
     border: 2px solid transparent;
     padding: ${props => `${props.padding}px`};
     &:hover {
-        background-color: ${props => props.style === ButtonStyleEnum.FILL ? props.isActive ? props.theme.color.lightMain : undefined : 'transparent'};
+        background-color: ${props => props.style === ButtonStyleEnum.FILLED ? props.isActive ? props.theme.color.main.l1 : undefined : 'transparent'};
+        color: ${props => props.style === ButtonStyleEnum.FILLED ? undefined : props.theme.color.highlightColor};
     }
     &:active{
-    border-color: ${props => props.isActive ? props.theme.color.highlightColor : undefined};
+    border-color: ${props => props.style === ButtonStyleEnum.FILLED ? props.isActive ? props.theme.color.highlightColor : undefined : undefined};
     }
     &:hover svg {
     }
     `;
 
 
-export function CoolIconButton({ clickFun, className, type, size, isDark = false, isActive = true, buttonStyle = ButtonStyleEnum.FILL }: {
+export function CoolIconButton({ clickFun, className, type, size, isDark = false, isActive = true, buttonStyle = ButtonStyleEnum.FILLED }: {
     clickFun?: MouseEventHandler<HTMLButtonElement>, className?: string, type: IconTypeEnum, size?: SizeEnum, isDark?: boolean, isActive?: boolean,
     buttonStyle?: ButtonStyleEnum
 }) {

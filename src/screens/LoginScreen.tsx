@@ -17,7 +17,7 @@ const MainBox = styled.div`
     display: flex;
     position:absolute;
     top: 0;
-    background: ${props => props.theme.color.mainColor};
+    background: ${props => props.theme.color.main.n};
     box-sizing: border-box;
     z-index: 80;
     padding: 1% 2%;
@@ -37,7 +37,7 @@ const LoginBox = styled.div`
     gap: 2vh;
     box-sizing: border-box;
     padding: 1% 2%;
-    background-color: ${props => props.theme.color.bgColor};
+    background-color: ${props => props.theme.color.background.n};
     width: 30%;
     padding: 10vh 0;
     height: 100vh;

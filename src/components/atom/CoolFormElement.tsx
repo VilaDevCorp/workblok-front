@@ -14,7 +14,7 @@ const MainBox = styled.div`
 `
 const StyledLabel = styled.label`
     font-size: ${props => props.theme.fontSize.title};
-    color: ${props => props.theme.color.mainColor};
+    color: ${props => props.theme.color.main.n};
     font-weight: bold;
 `
 const InputBox = styled.div`

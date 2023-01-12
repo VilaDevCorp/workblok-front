@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { MdAddCircleOutline } from 'react-icons/md'
 import { useModal } from '../../hooks/useModal';
-import { ModalType } from '../../types/types';
+import { ButtonStyleEnum, IconTypeEnum, ModalType, SizeEnum } from '../../types/types';
 import { ActivityElement } from './ActivityElement';
 import { Activity } from '../../types/entities';
 import { AddActivityIndicator } from '../atom/AddActivityIndicator';
 import { ActivityArea } from '../organism/ActivityArea';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { selectedActivitiesAtom } from '../../recoil/mainAtoms';
+import { CoolIconButton } from '../atom/CoolIconButon';
 
 const getWeekdayLabel = (date: Date) => {
     const weekDayNumber = moment(date).get('weekday')
@@ -65,6 +66,7 @@ const MainBox = styled.div`
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
+    background-color: ${props => props.theme.color.background.n};
 
     
     &:last-child {
@@ -78,7 +80,6 @@ const MainBox = styled.div`
         border-top-left-radius: 12px;        
         border-bottom-left-radius: 12px;        
     }
-    background-color: ${props => props.theme.color.lightBackground};
     opacity: .7;
     &:hover {
         opacity: 1;
@@ -140,9 +141,8 @@ export function DayElement({ date, activities }: { date: Date, activities: Activ
             </DateLabel>
             <ActivityArea activities={activities} />
             <AddButtonBox>
-                <AddButton onClick={() => openModal()   }>
-                    <MdAddCircleOutline />
-                </AddButton></AddButtonBox>
+                <CoolIconButton buttonStyle={ButtonStyleEnum.OUTLINE} type={IconTypeEnum.ADD} size={SizeEnum.S} clickFun={() => openModal()   }/>
+                </AddButtonBox>
         </MainBox>
     )
 }

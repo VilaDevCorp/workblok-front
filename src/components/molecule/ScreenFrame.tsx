@@ -11,7 +11,7 @@ const MainBox = styled.div`
 `;
 const Title = styled.h1`
     font-size: ${props => props.theme.fontSize.h1};
-    color: ${props => props.theme.color.mainColor};
+    color: ${props => props.theme.color.main.n};
 `;
 
 

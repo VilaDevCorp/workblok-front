@@ -8,8 +8,8 @@ export interface ApiContext {
     logout: () => void
     fakeDelay: (delay: number) => void
     getUserInfo: () => Promise<User>
-    getActivities: () => Promise<Activity[]>
-    getTestData: (page: number) => Promise<Page<Test>>
+    getActivities: (page: number, search: string) => Promise<Page<Activity>>
+    deleteActivity: (id: string) => Promise<void>
 }
 
 const ApiContext = createContext<ApiContext>({} as any)
@@ -96,8 +96,8 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         return { id: '123', name: 'david@notacool.com', pass: '1234' }
     }
 
-    const getActivities = async (): Promise<Activity[]> => {
-        const url = `${conf.mainApiUrl}activity`
+    const getActivities = async (page: number, search: string): Promise<Page<Activity>> => {
+        const url = `${conf.mainApiUrl}activity?page=${page}&search=${search}`
         const options: RequestInit = {
             credentials: 'include',
             method: 'GET',
@@ -119,96 +119,23 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         return result
     }
 
-
-    const getTestData = async (page: number): Promise<Page<Test>> => {
-        const content1: Test[] = [{ id: '2', name: 'Javi', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        ]
-        const content2: Test[] = [{ id: '2', name: 'Javi', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        { id: '4', name: 'David', lastname: 'Vilasanchez', date: '29/10/94' },
-        ]
-        await fakeDelay(2000)
-        if (page === 0) {
-            return { content: content1, page: 0, totalPages: 3 }
-        } else {
-            if (page === 1) {
-                return { content: content1, page: 1, totalPages: 3 }
-            } else {
-                return { content: content2, page: 2, totalPages: 3 }
+    const deleteActivity = async (id: string): Promise<void> => {
+        const url = `${conf.mainApiUrl}activity/${id}`
+        const options: RequestInit = {
+            method: 'DELETE',
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
             }
+        } catch (e) {
+            throw Error('Error deleting activity')
         }
     }
-
 
 
 
@@ -218,7 +145,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         getUserInfo,
         fakeDelay,
         getActivities,
-        getTestData
+        deleteActivity
     }
 
     return (
