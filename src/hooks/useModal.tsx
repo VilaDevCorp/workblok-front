@@ -26,7 +26,8 @@ export interface ModalProps {
 }
 export interface ModalParams {
   body?: string
-  elementId?: string
+  elementId?: string,
+  date?:string
   onConfirm?: () => void
 }
 

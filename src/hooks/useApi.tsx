@@ -1,5 +1,6 @@
+import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
-import { Activity, Test, User } from '../types/entities';
+import { Activity, CreateActivityForm, CreateTaskForm, Task, Test, UpdateActivityForm, User } from '../types/entities';
 import { Page } from '../types/types';
 import { conf } from './../conf'
 
@@ -8,8 +9,14 @@ export interface ApiContext {
     logout: () => void
     fakeDelay: (delay: number) => void
     getUserInfo: () => Promise<User>
+    createActivity: (activity: CreateActivityForm) => Promise<void>
+    updateActivity: (activity: UpdateActivityForm) => Promise<void>
+    getActivity: (id: string) => Promise<Activity>
     getActivities: (page: number, search: string) => Promise<Page<Activity>>
     deleteActivity: (id: string) => Promise<void>
+    createTask: (task: CreateTaskForm) => Promise<void>
+    deleteTask: (id: string) => Promise<void>
+    getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>
 }
 
 const ApiContext = createContext<ApiContext>({} as any)
@@ -96,6 +103,72 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         return { id: '123', name: 'david@notacool.com', pass: '1234' }
     }
 
+    const createActivity = async (activity: CreateActivityForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}activity`
+        const options: RequestInit = {
+            method: 'POST',
+            body: JSON.stringify(activity),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error creating the activity')
+        }
+    }
+
+    const updateActivity = async (activity: UpdateActivityForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}activity`
+        const options: RequestInit = {
+            method: 'PUT',
+            body: JSON.stringify(activity),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error updating the activity')
+        }
+    }
+
+
+    const getActivity = async (id: string): Promise<Activity> => {
+        const url = `${conf.mainApiUrl}activity/${id}`
+        const options: RequestInit = {
+            method: 'GET',
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        let result: Activity | undefined = undefined
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject
+        } catch (e) {
+            throw Error('Error getting the activity')
+        }
+        if (result === undefined) {
+            throw Error('Error getting the activity')
+        }
+
+        return result
+    }
+
+
     const getActivities = async (page: number, search: string): Promise<Page<Activity>> => {
         const url = `${conf.mainApiUrl}activity?page=${page}&search=${search}`
         const options: RequestInit = {
@@ -137,6 +210,72 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const createTask = async (task: CreateTaskForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}task`
+        const options: RequestInit = {
+            method: 'POST',
+            body: JSON.stringify(task),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error creating the task')
+        }
+    }
+
+
+
+    const getUserTasks = async (userId: string, startDate: Date): Promise<Task[]> => {
+        const dateStr = moment(startDate).format(conf.dateUrlFormat)
+        console.log(conf.dateUrlFormat)
+        console.log(dateStr)
+        const url = `${conf.mainApiUrl}user/${userId}/tasks/${encodeURIComponent(dateStr)}`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'GET',
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject
+        } catch (e) {
+            throw Error('Error obtaining user tasks')
+        }
+        return result
+    }
+
+    const deleteTask = async (id: string): Promise<void> => {
+        const url = `${conf.mainApiUrl}task/${id}`
+        const options: RequestInit = {
+            method: 'DELETE',
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error deleting task')
+        }
+    }
+
+
 
 
     const value: ApiContext = {
@@ -144,8 +283,14 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         logout,
         getUserInfo,
         fakeDelay,
+        createActivity,
+        updateActivity,
+        getActivity,
         getActivities,
-        deleteActivity
+        deleteActivity,
+        createTask,
+        deleteTask,
+        getUserTasks
     }
 
     return (

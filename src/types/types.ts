@@ -50,6 +50,17 @@ export enum IconTypeEnum {
     SEARCH
 }
 
+export enum ActivityIconTypeEnum {
+    RUNNING='running',
+    LIFTING='lifting',
+    BIKE='bike',
+    FOOTBALL='football',
+    BOXING='boxing',
+    RUGBY='rugby',
+    WALK='walk'
+}
+
+
 export enum ColorEnum {
   DANGER='danger'
 }
@@ -69,8 +80,11 @@ export interface ContextOption {
 export interface ModalButton {
   type: IconTypeEnum;
   onClick: () => void;
+  label?:string
 }
 
+
 export enum ModalType {
-  SELECT_ACTIVITY,
+    SELECT_ACTIVITY,
+    CREATE_ACTIVITY
 }

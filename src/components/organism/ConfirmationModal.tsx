@@ -44,8 +44,8 @@ export function ConfirmationModal() {
     }
 
     const buttons: ModalButton[] = [
-        { type: IconTypeEnum.CANCEL, onClick: onClear },
-        { type: IconTypeEnum.CONFIRM, onClick: onConfirm },
+        { type: IconTypeEnum.CANCEL, onClick: onClear, label:'Cancel' },
+        { type: IconTypeEnum.CONFIRM, onClick: onConfirm, label:'Confirm' },
 
     ]
 

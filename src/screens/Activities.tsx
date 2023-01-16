@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { CoolButton } from '../components/atom/CoolButton';
+import { ActivitiesTable } from '../components/organism/ActivitiesTable';
 import { CoolTable } from '../components/organism/CoolTable';
 import { useApi } from '../hooks/useApi';
 import { useModal } from '../hooks/useModal';
 import { reloadActivitiesAtom, snackAtom } from '../recoil/mainAtoms';
 import { Test } from '../types/entities';
-import { ButtonStyleEnum, ContextOption, IconTypeEnum, Page } from '../types/types';
+import { ButtonStyleEnum, ContextOption, IconTypeEnum, ModalType, Page } from '../types/types';
 
 
 const MainBox = styled.div`
     display: flex;
+    width: 100%;
     gap: 5vh;
-    margin-left: 10%;
     margin-top: 5vh;
+    align-items: center;
     justify-content: center;
     flex-direction: column;
 `;
@@ -30,7 +32,7 @@ export function Activities() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [data, setData] = useState<Page<Test> | undefined>(undefined)
 
-    const { setConfirmationModalProps } = useModal()
+    const { setConfirmationModalProps, setModalProps } = useModal()
 
     const [opensnack, setopensnack] = useRecoilState(snackAtom)
     const [reloadActivities, setReloadActivities] = useRecoilState(reloadActivitiesAtom)
@@ -43,7 +45,7 @@ export function Activities() {
         setIsLoading(() => true)
         const data = await getActivities(page, "")
         if (data.content.length < 1 && page > 1) {
-            setPage((old)=>old-1)
+            setPage((old) => old - 1)
         }
         setData(data)
         setIsLoading(() => false)
@@ -54,10 +56,21 @@ export function Activities() {
         setReloadActivities((old) => !old)
     }
 
+    const onCreateActivity = () => {
+        setModalProps({ visible: true, type: ModalType.CREATE_ACTIVITY })
+    }
+
+    const onUpdateActivity = (id: string) => {
+        setModalProps({ visible: true, type: ModalType.CREATE_ACTIVITY, params: { elementId: id } })
+    }
+
+
+
     const contextOptions: ContextOption[] = [{
         type: IconTypeEnum.EDIT,
         label: 'Edit',
         onClick: (id: string) => {
+            onUpdateActivity(id)
         }
     }, {
         type: IconTypeEnum.DELETE,
@@ -67,7 +80,7 @@ export function Activities() {
         }
     }]
 
-    const sideButtons = [<CoolButton key={'sideButton_create'} clickFun={() => false} type={IconTypeEnum.ADD} style={ButtonStyleEnum.FILLED}>
+    const sideButtons = [<CoolButton key={'sideButton_create'} clickFun={() => onCreateActivity()} type={IconTypeEnum.ADD} style={ButtonStyleEnum.FILLED}>
         <>{'Create activity'}</>
     </CoolButton>
         ,
@@ -76,19 +89,8 @@ export function Activities() {
 
     return (
         <MainBox>
-
-            <CoolTable width={50} height={50} headers={headers} data={data} page={page} setPage={setPage} isLoading={isLoading}
+            <ActivitiesTable width={75} height={70} headers={headers} data={data} page={page} setPage={setPage} isLoading={isLoading}
                 contextOptions={contextOptions} sideButtons={sideButtons} />
-            {/* <CoolFormElement label='Tipo de petición'>
-                    <CoolSelect id='select' setValue={setSelectVal} value={selectVal} options={optionsArray} />
-                </CoolFormElement>
-                <CoolFormElement label='Nombre'>
-                    <CoolTextInput id='textinput' value={selectVal} setValue={setSelectVal} />
-                </CoolFormElement>
-                <CoolFormElement label='Tipo de petición'>
-                    <CoolCheckbox value={checkbox} setValue={setCheckbox} label={'Aceptar términos y condiciones'} isDark />
-    </CoolFormElement>*/}
-
         </MainBox>
     )
 }

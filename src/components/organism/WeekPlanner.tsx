@@ -1,7 +1,9 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Activity } from '../../types/entities';
+import { useApi } from '../../hooks/useApi';
+import { useAuth } from '../../hooks/useAuth';
+import { Activity, Task } from '../../types/entities';
 import { ActivityOptions } from '../molecule/ActivityOptions';
 import { DayElement } from '../molecule/DayElement';
 
@@ -26,13 +28,15 @@ const Schedule = styled.div`
 
 export function WeekPlanner({ startDate }: { startDate: Date }) {
 
+    const { getUserTasks } = useApi()
+    const { user } = useAuth()
     const [datesArray, setDatesArray] = useState<Date[]>([])
-    const [activities, setActivities] = useState<Activity[][]>([[], [], [], [], [], [{ id: '1', name: 'Running 1/2 hora hasta que nos cansemos mucho pero sin dar más de mi hasta cierto punto' }], [{ id: '2', name: 'Running 1/2 hora' }, { id: '3', name: 'Boxeo 1 hora' },
-    { id: '4', name: 'Running 1 hora' }, { id: '5', name: 'Movilidad 1/2 hora' }, { id: '6', name: 'Movilidad 1/2 hora' }, { id: '7', name: 'Movilidad 1/2 hora' }]])
-    const [selectedActivities, setSelectedActivities] = useState<String[]>([])
+    const [tasks, setTasks] = useState<Task[][]>([])
+    const [selectedTasks, setSelectedTasks] = useState<string[]>([])
 
     useEffect(() => {
         const startMoment = moment(startDate)
+
         const newDateArray = []
         for (let i = 0; i < 7; i++) {
             if (i !== 0) {
@@ -42,14 +46,30 @@ export function WeekPlanner({ startDate }: { startDate: Date }) {
         }
         setDatesArray(newDateArray)
 
+        onGetTasks()
+
     }, [startDate])
+
+    const onGetTasks = async () => {
+        if (user?.id) {
+            const weekTasks: Task[][] = [[], [], [], [], [], [], []]
+            const tasks = await getUserTasks(user.id, startDate)
+            const startDateMoment = moment(startDate)
+            tasks.forEach((task) => {
+                const dueMoment = moment(task.dueDate)
+                weekTasks[dueMoment.diff(startDateMoment, 'days')].push(task)
+            })
+            setTasks(weekTasks)
+        }
+    }
 
     return (
         <MainBox>
             <Schedule>
-                {datesArray.map((date, index) => <DayElement date={date} activities={activities[index] ? activities[index] : []} />)}
+                {datesArray.map((date, index) => <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
+                    selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />)}
             </Schedule>
-            <ActivityOptions />
+            <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
         </MainBox>
     )
 }

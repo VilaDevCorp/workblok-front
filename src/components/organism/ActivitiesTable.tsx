@@ -189,7 +189,7 @@ const StyledCoolSearchBar = styled(CoolSearchBar)`
     margin-bottom: 3vh;
 `
 
-export function CoolTable({ width, height, headers, data, setPage, contextOptions, isLoading = false, sideButtons, page, searchKey, setSearchKey, selectedIds, onPick }: {
+export function ActivitiesTable({ width, height, headers, data, setPage, contextOptions, isLoading = false, sideButtons, page, searchKey, setSearchKey, selectedIds, onPick }: {
     width?: number, height?: number, size?: SizeEnum, headers: HeaderData[], data?: Page<any>, page?: number,
     setPage?: React.Dispatch<React.SetStateAction<number>>, contextOptions?: ContextOption[], isLoading?: boolean,
     sideButtons?: JSX.Element[], searchKey?: string, setSearchKey?: React.Dispatch<SetStateAction<string>>, selectedIds?: string[], onPick?: (user: User) => void

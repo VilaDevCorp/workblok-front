@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { useApi } from '../../hooks/useApi';
 import { useModal } from '../../hooks/useModal';
-import { selectedActivitiesAtom } from '../../recoil/mainAtoms';
 import { IconTypeEnum, SizeEnum } from '../../types/types';
 import { CoolIcon } from '../atom/CoolIcon';
 import { CoolIconButton } from '../atom/CoolIconButon';
 
-export function ActivityOptions() {
+export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
-    const [selectedActivities, setSelectedActivities] = useRecoilState<string[]>(selectedActivitiesAtom)
-    const {setConfirmationModalProps} = useModal()
+    const { setConfirmationModalProps } = useModal()
+    const {deleteTask} = useApi()
 
     const MainBox = styled.div`
         display: flex;
@@ -26,10 +25,17 @@ export function ActivityOptions() {
         background-color: transparent;
     `;
 
-    const isActivities:boolean = selectedActivities.length > 0
+    const isActivities: boolean = selectedTasks ? selectedTasks.length > 0 : false
 
-    const onDeleteActivity = ()=> {
-        setConfirmationModalProps({visible:true, params:{body:'¿Desea borrar estas tareas?'}})
+    const deleteTasks = async()=> {
+        await Promise.all(selectedTasks.map(async (task) => {
+            await deleteTask(task)
+        }))
+        setSelectedTasks([])
+    }
+
+    const onDeleteActivity = () => {
+        setConfirmationModalProps({ visible: true, params: { body: 'Do you really want to delete these tasks?', onConfirm: deleteTasks } })
     }
 
     return (

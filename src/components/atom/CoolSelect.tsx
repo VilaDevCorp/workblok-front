@@ -21,8 +21,8 @@ const CoolStyledSelect = styled(SelectBase) <AllProps>`
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
-    background: ${props => props.isDark ? props.theme.color.main.n : props.theme.color.lightBackground};
-    color: ${props => props.isDark ? props.theme.color.lightFont : props.theme.color.darkFont};
+    background: ${props => props.theme.color.main.n};
+    color: ${props => props.theme.color.lightFont};
     border: none;
     transition: background .2s;
     box-sizing: border-box;
@@ -30,7 +30,8 @@ const CoolStyledSelect = styled(SelectBase) <AllProps>`
     align-items: center;
     justify-content: space-around;
     overflow: hidden;
-    border: 3px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
     outline:none;
     @media ${device.desktopL} { 
         width: ${props => `${1.2 * props.width}px`};
@@ -48,18 +49,18 @@ const CoolStyledSelect = styled(SelectBase) <AllProps>`
         width: 80%;
     }
     &:focus {
-        border: 3px solid ${props => props.theme.color.highlightColor};
+        border: 1px solid ${props => props.theme.color.highlightColor};
         transition: border .2s;
     }
     &:hover {
         transition: background .2s;
-        background: ${props => props.isDark ? props.theme.color.hoverInputDark : props.theme.color.hoverInputLight};
+        background: ${props => props.theme.color.main.l1};
     }    
 `;
 
 
-export function CoolSelect({ id, options, value, setValue, size, isDark }: {
-    id: string, options: SelectOption[], value: string, setValue: (value: string) => void, size?: SizeEnum, isDark?: boolean
+export function CoolSelect({ id, options, value, setValue, size }: {
+    id: string, options: SelectOption[], value: string, setValue: (value: any) => void, size?: SizeEnum
 }) {
 
     const getSize = (): SizeProps => {
@@ -80,6 +81,6 @@ export function CoolSelect({ id, options, value, setValue, size, isDark }: {
     const sizeInfo = getSize()
 
     return (
-        <CoolStyledSelect height={sizeInfo.height} width={sizeInfo.width} fontSize={sizeInfo.fontSize} options={options} setValue={setValue} value={value} isDark={isDark} />
+        <CoolStyledSelect height={sizeInfo.height} width={sizeInfo.width} fontSize={sizeInfo.fontSize} options={options} setValue={setValue} value={value}/>
     )
 }

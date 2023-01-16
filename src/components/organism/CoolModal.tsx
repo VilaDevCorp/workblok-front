@@ -4,12 +4,15 @@ import { useRecoilState } from 'recoil';
 import { OtherModal } from './OtherModal';
 import { useModal } from '../../hooks/useModal';
 import { SelectActivityModal } from './SelectActivityModal';
+import { CreateActivityModal } from './CreateActivityModal';
 
 
 const getModalComponent = (modalType?: ModalType): JSX.Element => {
     switch (modalType) {
         case ModalType.SELECT_ACTIVITY:
-            return <SelectActivityModal/>
+            return <SelectActivityModal />
+        case ModalType.CREATE_ACTIVITY:
+            return <CreateActivityModal />
         default:
             return <></>
     }
@@ -18,7 +21,7 @@ const getModalComponent = (modalType?: ModalType): JSX.Element => {
 
 export function CoolModal() {
 
-    const {modalProps, setModalProps} = useModal()
+    const { modalProps, setModalProps } = useModal()
 
     return (
         modalProps.visible ?

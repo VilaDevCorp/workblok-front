@@ -28,11 +28,6 @@ export const clearContextAtom = atom<boolean>({
   default: false,
 });
 
-export const selectedActivitiesAtom = atom<string[]>({
-  key: "selectedActivitiesAtom",
-  default: [],
-});
-
 export const reloadActivitiesAtom = atom<boolean>({
   key: "reloadActivitiesAtom",
   default: false,

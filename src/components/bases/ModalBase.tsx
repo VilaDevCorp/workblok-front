@@ -18,7 +18,7 @@ const MainBox = styled.div`
     display: flex;
     z-index: 40;
     justify-content:center;
-
+    align-items: center;
 `;
 
 interface ModalProps {
@@ -34,9 +34,9 @@ interface SizeInfo {
 const getSize = (size?: SizeEnum): SizeInfo => {
     switch (size) {
         case SizeEnum.L:
-            return { width: 75, height: 60, maxHeight: 700 }
+            return { width: 70, height: 80, maxHeight: 1000 }
         case SizeEnum.M:
-            return { width: 60, height: 45, maxHeight: 450 }
+            return { width: 70, height: 80, maxHeight: 1000 }
         case SizeEnum.S:
             return { width: 40, height: 35, maxHeight: 250 }
         case SizeEnum.XS:
@@ -62,14 +62,13 @@ const InsideBox = styled.div<ModalProps>`
     animation: ${insideModalAnimation};
     animation-duration: 0.2s;
     width: ${props => `${getSize(props.size).width}%`};
-    margin-top: 20vh;
     min-width: 320px;
     max-height: ${props => `${getSize(props.size).maxHeight}px`};
     height: ${props => `${getSize(props.size).height}vh`};
     display: flex;
     flex-direction: column;
     max-width: ${props => props.size === SizeEnum.S ? '425px' : undefined};
-    background: ${props => props.theme.color.lightBackground};
+    background: ${props => props.theme.color.background.l1};
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius:12px;
     `;
@@ -121,8 +120,8 @@ const ModalFooter = styled.div<ModalProps>`
     padding: 0 5%;
     box-sizing: border-box;
     display:flex;
-    height: 70px;
-    min-height: 70px;
+    height: 60px;
+    min-height: 60px;
     gap: 5%;
     justify-content: flex-end;
     align-items: center;
@@ -150,7 +149,9 @@ export function ModalBase({ children, title, size, onClose, buttons }: { childre
                 }
                 <ModalFooter size={size}>
                     {buttons?.map((button) =>
-                        <CoolButton type={button.type} size={SizeEnum.XS} clickFun={button.onClick} />
+                        <CoolButton type={button.type} size={SizeEnum.XS} clickFun={button.onClick}>
+                            <>{button.label}</>
+                        </CoolButton>
                     )}
                 </ModalFooter>
 

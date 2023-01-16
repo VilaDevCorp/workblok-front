@@ -11,7 +11,6 @@ const MainBox = styled.div`
     border: 1px solid ${props => props.theme.color.background.n};
     border-radius: 12px;
     min-height: 60px;
-    display: flex;
     gap: 3%;
     color: ${props => props.theme.color.lightFont};
     overflow: hidden;
@@ -35,8 +34,9 @@ const MainBox = styled.div`
 `;
 
 const ActivityInfo = styled.div`
-    display: flex;
-    width: 20%;
+display: flex;
+
+
 `
 
 const ActivityIconBox = styled.span`
@@ -47,7 +47,6 @@ const ActivityIconBox = styled.span`
 
 const ActivityName = styled.div`
     font-size: ${props => props.theme.fontSize.regularText};
-    width: 80%;
 `
 
 interface SizeLabelProps {
@@ -68,7 +67,7 @@ const ActivitySize = styled.span<SizeLabelProps>`
     color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
 `
 
-export function ActivityElement({ id, activity, selectedActivities, setSelectedActivities }: {
+export function TaskElement({ id, activity, selectedActivities, setSelectedActivities }: {
     id: string, activity: Activity, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {

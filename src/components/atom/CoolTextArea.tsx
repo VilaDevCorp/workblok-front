@@ -13,21 +13,20 @@ interface SizeProps {
 }
 
 interface AllProps extends SizeProps {
-    isDark?: boolean
 }
 
 
 
-const CoolStyledTextInput = styled(TextInputBase) <AllProps>`
+const CoolStyledTextArea = styled.textarea <AllProps>`
     padding: 5px;
+    border-radius: 12px;
     font-size: ${props => props.fontSize};
     width: ${props => `${props.width}px`};
     height: ${props => `${props.height}px`};
-    background: ${props => props.theme.color.main.n};
+    background-color: ${props => props.theme.color.main.n} ;
     color: ${props => props.theme.color.lightFont};
     border: none;
     transition: border .2s;
-    border-radius: 12px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -52,15 +51,16 @@ const CoolStyledTextInput = styled(TextInputBase) <AllProps>`
         width: 80%;
     }
     &:focus {
-        border: 1px solid ${props => props.theme.color.highlightColor};
+        background-color: ${props => props.theme.color.main.l1} ;
         transition: border .2s;
-        background-color: #18618C ;
+        border: 1px solid ${props => props.theme.color.highlightColor};
+
     }
     transition: background .2s;
     
     &:hover {
         transition: background .2s;
-        background: ${props => props.theme.color.main.l1};
+        background-color: ${props => props.theme.color.main.l1} ;
     }
     
 `;
@@ -77,17 +77,17 @@ const getSize = (size?: SizeEnum): SizeProps => {
         case SizeEnum.XS:
             return { width: 100, height: 40, fontSize: '1rem' }
         default:
-            return { width: 250, height: 40, fontSize: '1rem' }
+            return { width: 280, height: 70, fontSize: '1rem' }
     }
 }
 
-export function CoolTextInput({ id, value, setValue, size, isDark, type = TextInputTypeEnum.TEXT }: {
+export function CoolTextArea({ id, value, setValue, size, isDark, type = TextInputTypeEnum.TEXT }: {
     id: string, value: string, setValue: (value: string) => void, size?: SizeEnum, isDark?: boolean, type?: TextInputTypeEnum
 }) {
 
     const sizeInfo = getSize(size)
 
     return (
-        <CoolStyledTextInput height={sizeInfo.height} width={sizeInfo.width} fontSize={sizeInfo.fontSize} setValue={setValue} value={value} isDark={isDark} type={type} />
+        <CoolStyledTextArea height={sizeInfo.height} width={sizeInfo.width} fontSize={sizeInfo.fontSize} value={value} onChange={(e) => setValue(e.target.value)} />
     )
 }

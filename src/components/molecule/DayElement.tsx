@@ -1,16 +1,13 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { MdAddCircleOutline } from 'react-icons/md'
+import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
 import { ButtonStyleEnum, IconTypeEnum, ModalType, SizeEnum } from '../../types/types';
-import { ActivityElement } from './ActivityElement';
-import { Activity } from '../../types/entities';
-import { AddActivityIndicator } from '../atom/AddActivityIndicator';
-import { ActivityArea } from '../organism/ActivityArea';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { selectedActivitiesAtom } from '../../recoil/mainAtoms';
+import { Task } from '../../types/entities';
 import { CoolIconButton } from '../atom/CoolIconButon';
+import { conf } from './../../conf'
+import { TaskArea } from '../organism/TaskArea';
+
 
 const getWeekdayLabel = (date: Date) => {
     const weekDayNumber = moment(date).get('weekday')
@@ -55,8 +52,12 @@ const AddButton = styled.button`
     transition: opacity .3s;
 `;
 
+interface StyleProps {
+    hasSelected: boolean
+}
 
-const MainBox = styled.div`
+
+const MainBox = styled.div<StyleProps>`
     display:flex;
     flex-direction: column ;
     width: 100%;
@@ -67,7 +68,7 @@ const MainBox = styled.div`
     flex-shrink: 1;
     flex-basis: 0;
     background-color: ${props => props.theme.color.background.n};
-
+    
     
     &:last-child {
         border-right: none;        
@@ -80,7 +81,7 @@ const MainBox = styled.div`
         border-top-left-radius: 12px;        
         border-bottom-left-radius: 12px;        
     }
-    opacity: .7;
+    opacity: ${props => props.hasSelected ? 1 : .7};
     &:hover {
         opacity: 1;
     }
@@ -121,28 +122,32 @@ const AddButtonBox = styled.div`
 
 
 
-export function DayElement({ date, activities }: { date: Date, activities: Activity[] }) {
+export function DayElement({ date, tasks, selectedTasks, setSelectedTasks }: {
+    date: Date, tasks: Task[], selectedTasks: string[],
+    setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>>
+}) {
 
     const { setModalProps } = useModal()
 
     const [hoverAddBut, setHoverAddBut] = useState<boolean>(false)
-    const setSelectedActivities = useSetRecoilState<string[]>(selectedActivitiesAtom)
 
+    const hasSelected = tasks.some((task) => selectedTasks.includes(task.id))
     const openModal = () => {
-        setSelectedActivities([])
-        setModalProps({ visible: true, type: ModalType.SELECT_ACTIVITY })
+        setSelectedTasks([])
+        const dateString = moment(date).format(conf.dateUrlFormat)
+        setModalProps({ visible: true, type: ModalType.SELECT_ACTIVITY, params: { date: dateString } })
     }
 
     return (
-        <MainBox>
+        <MainBox hasSelected={hasSelected}>
             <DateLabel>
                 {getWeekdayLabel(date)}
                 <DateNumber>{date.getDate()}</DateNumber>
             </DateLabel>
-            <ActivityArea activities={activities} />
+            <TaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             <AddButtonBox>
-                <CoolIconButton buttonStyle={ButtonStyleEnum.OUTLINE} type={IconTypeEnum.ADD} size={SizeEnum.S} clickFun={() => openModal()   }/>
-                </AddButtonBox>
-        </MainBox>
+                <CoolIconButton buttonStyle={ButtonStyleEnum.OUTLINE} type={IconTypeEnum.ADD} size={SizeEnum.S} clickFun={() => openModal()} />
+            </AddButtonBox>
+        </MainBox >
     )
 }

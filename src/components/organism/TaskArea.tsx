@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Activity } from '../../types/entities';
-import { ActivityElement } from '../molecule/ActivityElement';
+import { Activity, Task } from '../../types/entities';
+import { ActivityElement, TaskElement } from '../molecule/TaskElement';
 
 const MainBox = styled.div`
     display:flex;    
@@ -34,13 +34,13 @@ const MainBox = styled.div`
     flex-direction: column;
 `;
 
-export function ActivityArea({ activities, selectedActivities, setSelectedActivities }: {
-    activities: Activity[], selectedActivities: string[],
-    setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
+export function TaskArea({ tasks, selectedTasks, setSelectedTasks }: {
+    tasks: Task[], selectedTasks: string[],
+    setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>>
 }) {
     return (
         <MainBox>
-            {activities.map((activity) => <ActivityElement id={activity.id} activity={activity} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />)}
+            {tasks.map((task) => <TaskElement id={task.id} activity={task.activity} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
         </MainBox>
     )
 }

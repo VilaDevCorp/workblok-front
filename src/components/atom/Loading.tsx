@@ -9,7 +9,7 @@ export function Loading () {
     const isLoadingState = useRecoilValue<boolean>(isLoading)
 
     return (
-        isLoadingState ? 
+        false ? 
         <div id='loading'>
             <ClipLoader color={stylesVars.colors.main} loading={isLoadingState} size={150}/>
         </div>

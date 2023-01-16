@@ -1,5 +1,6 @@
 // import original module declarations
 import "styled-components";
+import { ValueGradient } from "./StyledTheme";
 
 // and extend them!
 export interface ThemeColors {
@@ -24,11 +25,13 @@ export interface ThemeColors {
   hoverInputDark: string;
   grey:string;
   lightGrey:string;
+  taskSize: ValueGradient
 }
 
 interface ThemeFontSizes {
   regularText: string;
   title: string;
+  highText: string;
   buttonLabel: string;
   h1: string;
   h2: string;

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export interface AuthContext {
   isAuth: boolean
-  dni?: string
+  user?: User
   id?: string,
   login: (user: string, password: string) => void,
   logout: () => void,
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authChange, setAuthChange] = useState(false)
   const [rol, setRol] = useState<Rol | undefined>(undefined)
   const [id, setId] = useState<string | undefined>(undefined)
-  const [dni, setDni] = useState<string | undefined>(undefined)
+  const [user, setUser] = useState<User | undefined>(undefined)
   const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(false)
   const { fakeDelay } = useApi()
 
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   useEffect(() => {
+    setUser({id: 'a7c467ce-6062-11ed-9f5a-9822efc702f8', name: 'davidvilas'})
     reloadUserInfo()
   }, [authChange])
 
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value: AuthContext = {
     isAuth,
-    dni,
+    user,
     id,
     login,
     logout,

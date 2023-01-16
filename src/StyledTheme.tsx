@@ -40,6 +40,13 @@ export interface ColorShades {
   l7?: string;
 }
 
+export interface ValueGradient {
+  1?: string;
+  2?: string;
+  3?: string;
+  4?: string;
+  5?: string;
+}
 
 export const StyledTheme = ({ children }: { children: ReactNode }) => {
 
@@ -75,7 +82,7 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
     d6: '#071D2A',
     d7: '#05161F',
   }
-  
+
   const second: ColorShades = {
     l5: '',
     l4: '',
@@ -90,26 +97,35 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
     d5: '',
   }
 
-//   const background.n = '#091820'
-// const lightBackground = '#123040'
-// const lighterBackground = '#0D2430'
+  const taskSize: ValueGradient = {
+    1: '#55d745',
+    2: '#95da30',
+    3: '#e1de18',
+    4: '#df8021',
+    5: '#D93030',
+  }
 
-// const mainColor = '#124969'
-// const lightMain = '#18618C'
-// const mainColorLowOp = '#0071bc5c'
-// const secondColor = '#94BFBE'
-// const highlightColor = '#CDBE51'
-// const modalBackground = '#3fb1fc21'
-// const danger = '#e92f2f'
-// const lightFont = '#EEF7FC'
-// const darkFont = '#040126'
-// const button = '#0F9EFB'
-// const buttonHover = '#005790'
-// const hoverInputLight = '#ccdef5'
-// const hoverInputDark = '#005790'
-// const inputDark = '#ccdef5'
-// const inputLight = '#ccdef5'
-// const inactive = '#092434'
+
+  //   const background.n = '#091820'
+  // const lightBackground = '#123040'
+  // const lighterBackground = '#0D2430'
+
+  // const mainColor = '#124969'
+  // const lightMain = '#18618C'
+  // const mainColorLowOp = '#0071bc5c'
+  // const secondColor = '#94BFBE'
+  // const highlightColor = '#CDBE51'
+  // const modalBackground = '#3fb1fc21'
+  // const danger = '#e92f2f'
+  // const lightFont = '#EEF7FC'
+  // const darkFont = '#040126'
+  // const button = '#0F9EFB'
+  // const buttonHover = '#005790'
+  // const hoverInputLight = '#ccdef5'
+  // const hoverInputDark = '#005790'
+  // const inputDark = '#ccdef5'
+  // const inputLight = '#ccdef5'
+  // const inactive = '#092434'
 
   const mainLowOp = '#3659b014'
   const highlightColor = '#CDBE51'
@@ -134,11 +150,11 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
   const color = {
     background, main, second, highlightColor, modalBackground,
     mainLowOp, lightFont, darkFont, button, buttonHoverDark, inactive, hoverInputDark, hoverInputLight, inputDark, inputLight, danger, darkFontLowOp, highlightColorLowOp,
-    buttonHoverLight, grey, lightGrey,
+    buttonHoverLight, grey, lightGrey, taskSize
   }
 
   const regularText = '.9rem'
-  const highText = '1rem'
+  const highText = '1.1rem'
   const title = '1.4rem'
   const buttonLabel = '1.3rem'
   const h1 = '1.8rem'
