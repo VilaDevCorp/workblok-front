@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
-import { Activity, CreateActivityForm, CreateTaskForm, Task, Test, UpdateActivityForm, User } from '../types/entities';
+import { Activity, CreateActivityForm, CreateTaskForm, Task, Test, UpdateActivityForm, UpdateTaskForm, User } from '../types/entities';
 import { Page } from '../types/types';
 import { conf } from './../conf'
 
@@ -15,6 +15,7 @@ export interface ApiContext {
     getActivities: (page: number, search: string) => Promise<Page<Activity>>
     deleteActivity: (id: string) => Promise<void>
     createTask: (task: CreateTaskForm) => Promise<void>
+    updateTask: (task: UpdateTaskForm) => Promise<void>
     deleteTask: (id: string) => Promise<void>
     getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>
 }
@@ -229,7 +230,24 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-
+    const updateTask = async (task: UpdateTaskForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}task`
+        const options: RequestInit = {
+            method: 'PUT',
+            body: JSON.stringify(task),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error updating the task')
+        }
+    }
 
     const getUserTasks = async (userId: string, startDate: Date): Promise<Task[]> => {
         const dateStr = moment(startDate).format(conf.dateUrlFormat)
@@ -289,6 +307,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         getActivities,
         deleteActivity,
         createTask,
+        updateTask,
         deleteTask,
         getUserTasks
     }

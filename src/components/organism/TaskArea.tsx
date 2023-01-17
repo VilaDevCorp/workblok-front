@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Activity, Task } from '../../types/entities';
-import { ActivityElement, TaskElement } from '../molecule/TaskElement';
+import { TaskElement } from '../molecule/TaskElement';
 
 const MainBox = styled.div`
     display:flex;    
     width: 100%;
     height: 40vh;
     overflow-y: auto;
-    background-color: ${props => props.theme.color.background.l1};
+    background-color: ${props => props.theme.color.background.l2};
     overflow-x: hidden;
     align-items: center;
     ::-webkit-scrollbar {
@@ -26,11 +26,6 @@ const MainBox = styled.div`
 
     }
 
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    }
-
     flex-direction: column;
 `;
 
@@ -40,7 +35,7 @@ export function TaskArea({ tasks, selectedTasks, setSelectedTasks }: {
 }) {
     return (
         <MainBox>
-            {tasks.map((task) => <TaskElement id={task.id} activity={task.activity} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
+            {tasks.map((task) => <TaskElement task={task} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
         </MainBox>
     )
 }

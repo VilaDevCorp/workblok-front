@@ -28,6 +28,12 @@ export const clearContextAtom = atom<boolean>({
   default: false,
 });
 
+export const reloadTasksAtom = atom<boolean>({
+  key: "reloadTasksAtom",
+  default: false,
+});
+
+
 export const reloadActivitiesAtom = atom<boolean>({
   key: "reloadActivitiesAtom",
   default: false,

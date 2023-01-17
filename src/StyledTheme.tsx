@@ -130,6 +130,7 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
   const mainLowOp = '#3659b014'
   const highlightColor = '#CDBE51'
   const highlightColorLowOp = '#e1a5002a'
+  const completedGreen = '#1E7578';
   const modalBackground = '#3fb1fc21'
   const danger = 'red'
   const lightFont = '#EFF2FA'
@@ -150,14 +151,14 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
   const color = {
     background, main, second, highlightColor, modalBackground,
     mainLowOp, lightFont, darkFont, button, buttonHoverDark, inactive, hoverInputDark, hoverInputLight, inputDark, inputLight, danger, darkFontLowOp, highlightColorLowOp,
-    buttonHoverLight, grey, lightGrey, taskSize
+    buttonHoverLight, grey, lightGrey, taskSize, completedGreen
   }
 
   const regularText = '.9rem'
   const highText = '1.1rem'
-  const title = '1.4rem'
+  const title = '1.2rem'
   const buttonLabel = '1.3rem'
-  const h1 = '1.8rem'
+  const h1 = '1.6rem'
   const h2 = '1.2rem'
 
   const fontSize = { regularText, h1, buttonLabel, highText, h2, title }

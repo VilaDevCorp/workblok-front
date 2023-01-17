@@ -1,8 +1,10 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { useApi } from '../../hooks/useApi';
 import { useAuth } from '../../hooks/useAuth';
+import { reloadTasksAtom } from '../../recoil/mainAtoms';
 import { Activity, Task } from '../../types/entities';
 import { ActivityOptions } from '../molecule/ActivityOptions';
 import { DayElement } from '../molecule/DayElement';
@@ -33,6 +35,7 @@ export function WeekPlanner({ startDate }: { startDate: Date }) {
     const [datesArray, setDatesArray] = useState<Date[]>([])
     const [tasks, setTasks] = useState<Task[][]>([])
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
+    const reloadTasks = useRecoilValue(reloadTasksAtom)
 
     useEffect(() => {
         const startMoment = moment(startDate)
@@ -48,7 +51,7 @@ export function WeekPlanner({ startDate }: { startDate: Date }) {
 
         onGetTasks()
 
-    }, [startDate])
+    }, [startDate, reloadTasks])
 
     const onGetTasks = async () => {
         if (user?.id) {

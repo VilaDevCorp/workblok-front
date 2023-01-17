@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { useApi } from '../../hooks/useApi';
 import { useModal } from '../../hooks/useModal';
+import { reloadTasksAtom } from '../../recoil/mainAtoms';
 import { IconTypeEnum, SizeEnum } from '../../types/types';
 import { CoolIcon } from '../atom/CoolIcon';
 import { CoolIconButton } from '../atom/CoolIconButon';
@@ -9,7 +11,8 @@ import { CoolIconButton } from '../atom/CoolIconButon';
 export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
     const { setConfirmationModalProps } = useModal()
-    const {deleteTask} = useApi()
+    const { updateTask, deleteTask } = useApi()
+    const setReloadTasks = useSetRecoilState(reloadTasksAtom)
 
     const MainBox = styled.div`
         display: flex;
@@ -27,11 +30,28 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
 
     const isActivities: boolean = selectedTasks ? selectedTasks.length > 0 : false
 
-    const deleteTasks = async()=> {
+    const onCompleteTasks = async () => {
+        await Promise.all(selectedTasks.map(async (task) => {
+            await updateTask({ id: task, completed: true })
+        }))
+        setSelectedTasks([])
+        setReloadTasks((old)=>!old)
+    }
+
+    const onUncompleteTasks = async () => {
+        await Promise.all(selectedTasks.map(async (task) => {
+            await updateTask({ id: task, completed: false })
+        }))
+        setSelectedTasks([])
+        setReloadTasks((old)=>!old)
+    }
+
+    const deleteTasks = async () => {
         await Promise.all(selectedTasks.map(async (task) => {
             await deleteTask(task)
         }))
         setSelectedTasks([])
+        setReloadTasks((old)=>!old)
     }
 
     const onDeleteActivity = () => {
@@ -40,8 +60,8 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
 
     return (
         <MainBox>
-            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CONFIRM}></CoolIconButton>
-            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CANCEL}></CoolIconButton>
+            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CONFIRM} clickFun={onCompleteTasks}></CoolIconButton>
+            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CANCEL}clickFun={onUncompleteTasks}></CoolIconButton>
             <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.DELETE} clickFun={onDeleteActivity}></CoolIconButton>
         </MainBox>
     )

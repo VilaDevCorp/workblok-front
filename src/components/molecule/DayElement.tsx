@@ -67,7 +67,7 @@ const MainBox = styled.div<StyleProps>`
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
-    background-color: ${props => props.theme.color.background.n};
+    background-color: ${props => props.theme.color.background.l1};
     
     
     &:last-child {

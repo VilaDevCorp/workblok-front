@@ -35,6 +35,7 @@ export interface CreateActivityForm {
 export interface UpdateActivityForm {
   id:string
   name: string
+  icon?: ActivityIconTypeEnum
   size: number
 }
 
@@ -42,13 +43,19 @@ export interface Task {
   id: string;
   activity: Activity;
   dueDate: Date
-  userId:string 
+  userId:string;
+  completed:boolean
 }
 
 export interface CreateTaskForm {
   activityId: string
   dueDate: string
   userId: string
+}
+
+export interface UpdateTaskForm {
+  id:string
+  completed:boolean;
 }
 
 

@@ -4,11 +4,14 @@ import { FaRunning } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { ValueGradient } from '../../StyledTheme';
-import { Activity } from '../../types/entities';
+import { Activity, Task } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 
-const MainBox = styled.div`
-    border: 1px solid ${props => props.theme.color.background.n};
+interface TaskProps {
+    isCompleted?: boolean
+}
+const MainBox = styled.div<TaskProps>`
+    border: 1px solid ${props => props.theme.color.background.l2};
     border-radius: 12px;
     min-height: 60px;
     gap: 3%;
@@ -18,7 +21,7 @@ const MainBox = styled.div`
     padding: 2vh 5%;
     width: 100%;
     box-sizing: border-box;
-    background-color: ${props => props.theme.color.background.l2};
+    background-color: ${props => props.isCompleted ? props.theme.color.completedGreen : props.theme.color.background.l3};
     cursor: pointer;
     
     &:hover {
@@ -67,36 +70,35 @@ const ActivitySize = styled.span<SizeLabelProps>`
     color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
 `
 
-export function TaskElement({ id, activity, selectedActivities, setSelectedActivities }: {
-    id: string, activity: Activity, selectedActivities: string[],
+export function TaskElement({ task, selectedActivities, setSelectedActivities }: {
+    task: Task, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {
 
     const onSelect = () => {
         if (isSelected) {
             setSelectedActivities((old) => {
-                const newValue = old.filter((element) => element !== id)
+                const newValue = old.filter((element) => element !== task.id)
                 return newValue
             }
             )
         } else {
-            setSelectedActivities((old) => [id, ...old])
+            setSelectedActivities((old) => [task.id, ...old])
         }
     }
 
-    const isSelected = selectedActivities.includes(id)
+    const isSelected = selectedActivities.includes(task.id)
 
     return (
-        <MainBox onClick={() => onSelect()} className={isSelected ? 'isSelected' : ''}>
+        <MainBox onClick={() => onSelect()} isCompleted={task.completed} className={isSelected ? 'isSelected' : ''}>
             <ActivityInfo>
                 <ActivityIconBox>
-                    <ActivityIcon type={activity.icon} />
+                    <ActivityIcon type={task.activity.icon} />
                 </ActivityIconBox>
-                <ActivitySize size={activity.size}>{activity.size}</ActivitySize>
+                <ActivitySize size={task.activity.size}>{task.activity.size}</ActivitySize>
             </ActivityInfo>
-
             <ActivityName>
-                {activity.name}
+                {task.activity.name}
             </ActivityName>
         </MainBox>
     )

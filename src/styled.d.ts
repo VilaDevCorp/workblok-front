@@ -15,6 +15,7 @@ export interface ThemeColors {
   darkFont: string;
   darkFontLowOp: string;
   button: string;
+  completedGreen: string;
   buttonHoverDark: string;
   buttonHoverLight: string;
   inactive:string;

@@ -16,7 +16,7 @@ import { Planning } from './screens/Planning';
 const MainBox = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: ${props => props.theme.color.background.d2};
+  background-color: ${props => props.theme.color.background.n};
   `;
 
 

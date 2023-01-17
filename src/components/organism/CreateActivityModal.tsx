@@ -61,13 +61,12 @@ export function CreateActivityModal() {
         setIsLoadingState(() => true)
         try {
             if (id) {
-                await updateActivity({ id, name, size: Number.parseInt(size) })
+                await updateActivity({ id, name, size: Number.parseInt(size), icon: icon })
             } else {
                 if (user?.id) {
                     await createActivity({ name, size: Number.parseInt(size), userId: user.id, icon: icon })
                 }
-            }
-            setReloadActivities((old) => !old)
+            } setReloadActivities((old) => !old)
         } catch (e) {
         }
         finally {
