@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Loading } from './components/atom/Loading';
 import { Header } from './components/organism/Header';
 import { useAuth } from './hooks/useAuth';
 import { Activities } from './screens/Activities';
-import { LoadingScreen } from './components/organism/LoadingScreen';
 import styled from 'styled-components';
 import { LoginScreen } from './screens/LoginScreen';
 import { CoolModal } from './components/organism/CoolModal';
 import { ConfirmationModal } from './components/organism/ConfirmationModal';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CoolSnackbar } from './components/atom/CoolSnackbar';
 import { Planning } from './screens/Planning';
+import { CoolLoading } from './components/atom/CoolLoading';
+import { CoolLoadingScreen } from './components/organism/CoolLoadingScreen';
+import { RegisterScreen } from './screens/RegisterScreen';
 
 
 const MainBox = styled.div`
@@ -33,15 +33,16 @@ function Body() {
             <Header />
             <Routes>
             <Route path="/" element={<Planning />} />
+            <Route path="/register" element={<RegisterScreen />} />
             <Route path="/activities" element={<Activities />} />
             </Routes>
-            <Loading />
+            <CoolLoading />
             <CoolModal/>
             <ConfirmationModal/>
             <CoolSnackbar/>
           </>
           :
-          <LoadingScreen />
+          <CoolLoadingScreen />
         }
         <LoginScreen />
 

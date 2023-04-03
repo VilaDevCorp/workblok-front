@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { useApi } from '../../hooks/useApi';
+import { useMisc } from '../../hooks/useMisc';
 import { useModal } from '../../hooks/useModal';
-import { reloadTasksAtom } from '../../recoil/mainAtoms';
-import { IconTypeEnum, SizeEnum } from '../../types/types';
-import { CoolIcon } from '../atom/CoolIcon';
+import { SizeEnum } from '../../types/types';
+import { IconTypeEnum } from '../atom/CoolIcon';
 import { CoolIconButton } from '../atom/CoolIconButon';
 
 export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
     const { setConfirmationModalProps } = useModal()
-    const { updateTask, deleteTask } = useApi()
-    const setReloadTasks = useSetRecoilState(reloadTasksAtom)
+    const { updateTask, deleteTask, updateUserDans } = useApi()
+    const { setReloadTasksFlag, setReloadUserInfoFlag } = useMisc()
 
     const MainBox = styled.div`
         display: flex;
@@ -35,7 +34,8 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
             await updateTask({ id: task, completed: true })
         }))
         setSelectedTasks([])
-        setReloadTasks((old)=>!old)
+        setReloadTasksFlag((old) => !old)
+        setReloadUserInfoFlag((old) => !old)
     }
 
     const onUncompleteTasks = async () => {
@@ -43,7 +43,8 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
             await updateTask({ id: task, completed: false })
         }))
         setSelectedTasks([])
-        setReloadTasks((old)=>!old)
+        setReloadTasksFlag((old) => !old)
+        setReloadUserInfoFlag((old) => !old)
     }
 
     const deleteTasks = async () => {
@@ -51,7 +52,7 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
             await deleteTask(task)
         }))
         setSelectedTasks([])
-        setReloadTasks((old)=>!old)
+        setReloadTasksFlag((old) => !old)
     }
 
     const onDeleteActivity = () => {
@@ -60,9 +61,9 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
 
     return (
         <MainBox>
-            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CONFIRM} clickFun={onCompleteTasks}></CoolIconButton>
-            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.CANCEL}clickFun={onUncompleteTasks}></CoolIconButton>
-            <CoolIconButton isActive={isActivities} size={SizeEnum.S} type={IconTypeEnum.DELETE} clickFun={onDeleteActivity}></CoolIconButton>
+            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.CONFIRM} onClick={onCompleteTasks}></CoolIconButton>
+            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.CANCEL} onClick={onUncompleteTasks}></CoolIconButton>
+            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.DELETE} onClick={onDeleteActivity}></CoolIconButton>
         </MainBox>
     )
 }

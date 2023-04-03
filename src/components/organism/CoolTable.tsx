@@ -1,15 +1,14 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import styled, { keyframes, useTheme } from 'styled-components';
-import { ContextOption, IconTypeEnum, Page, SizeEnum } from '../../types/types';
-import { useRecoilValue } from 'recoil';
-import { clearContextAtom } from '../../recoil/mainAtoms';
+import { Page } from '../../types/types';
 import { CoolPagination } from '../molecule/CoolPagination';
-import { device } from '../../StyledTheme';
 import { ContextMenuPosition, CoolContextMenu } from '../molecule/CoolContextMenu';
 import { PulseLoader } from 'react-spinners';
-// import { CoolSearchBar } from '../atom/CoolSearchBar';
-import { User } from '../../types/entities';
-import { CoolSearchBar } from '../atom/CoolSearchBar';
+import { useTranslation } from 'react-i18next';
+import { useMisc } from '../../hooks/useMisc';
+import { ContextOption } from '../atom/CoolContextOption';
+import { CoolTextInput } from '../atom/CoolTextInput';
+import { IconTypeEnum } from '../atom/CoolIcon';
 
 
 interface SizeProps {
@@ -23,21 +22,19 @@ interface TableProps extends SizeProps {
 
 
 interface RowProps {
-    selected: boolean;
-    picked?: boolean;
+    isSelected?: boolean;
 }
 
 
 const MainBox = styled.div<SizeProps>`
-    width: ${(props) => `${props.widthProp !== undefined ? props.widthProp : 80}%`} ;
-    height: ${(props) => `${props.heightProp !== undefined ? props.heightProp : 60}vh`} ;
+    width: ${(props) => props.widthProp !== undefined ? `${props.widthProp}%` : '100%'} ;
+    height: ${(props) => props.heightProp !== undefined ? `${props.heightProp}vh` : '100%'} ;
     display: flex;
     justify-content: center;
 `;
 
 const TableWithPagBox = styled.div<SizeProps>`
-    width: 80%;
-    margin-right: 5%;
+    width: 100%;
     display: flex;
     flex-direction: column;
 `;
@@ -46,24 +43,21 @@ const TableBox = styled.div<TableProps>`
     width: 100% ;
     height: 100% ;
     position:relative;
-    overflow: ${(props) => `${props.contextVisible ? 'auto' : 'auto'}`};
-    overflow-x: hidden;
-    border: 1px solid ${props => props.theme.color.mainLowOp};
+    overflow:auto;
     border-right: 0;
-    border-radius: 12px;
-
-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-sizing: border-box;
+    border-radius: 14px;
 `;
 
 
 const StyledTable = styled.table`
-    color: ${(props) => props.theme.color.lightFont} ;
+    color: ${(props) => props.theme.color.main.l3} ;
     width: 100%;
     top:0;
     cursor: default;
     border-spacing: 0;
-    text-align: center;
-    background-color: ${props => props.theme.color.background.l1};
+
+    background: ${(props) => props.theme.color.background.l1};
     font-size: ${(props) => props.theme.fontSize.regularText};
     & thead {
         width: 100%;
@@ -77,31 +71,26 @@ const StyledTable = styled.table`
         position:relative;
         width: 100%;
         overflow: auto;
+        color: ${(props) => props.theme.color.main.l7};
     }
     & th {
-        background-color: ${props => props.theme.color.background.n};
-        color: ${(props) => props.theme.color.lightFont};
-        text-align: center;
-
+        background: ${(props) => props.theme.color.main.l3};
+        color: ${(props) => props.theme.color.background.l1};
+        padding: .3rem .2rem;
+        text-align:center;
     }
     & thead tr {
-        line-height: 7vh;
-        @media ${device.desktopL} { 
-            line-height: 4vh;
-        }
+        line-height: 45px;
     }
 
     & tbody tr {
-        line-height: 5vh;
-        @media ${device.desktopL} { 
-            line-height: 4vh;
-        }
+        line-height: 35px;
     }
 
-    & tbody 
     & td{  
-        border-bottom: 1px solid ${props => props.theme.color.mainLowOp};
-        padding: 1vh 2%;
+        border-bottom: 1px solid ${props => props.theme.color.main.lowOp};
+        padding: .3rem .2rem;
+        text-align: center;
     } 
 `;
 
@@ -110,13 +99,14 @@ interface TableBodyProps {
 }
 
 const StyledTableBody = styled.tbody<TableBodyProps>`
+    padding-bottom: 50px;
 `
 
 const TableHeader = styled.th<HeaderData>`
     width: ${props => props.width};
 `
 
-interface HeaderData {
+export interface HeaderData {
     name?: string;
     width: string;
 }
@@ -124,18 +114,12 @@ interface HeaderData {
 
 
 const RowSelectedStyle = styled.tr<RowProps>`
-    line-height: 5vh;
-    @media ${device.desktopL} { 
-       line-height: 4vh;
-    }
     &:hover {
-     background: ${props => props.picked ? undefined : props.theme.color.main.l5} !important;
-     color: ${props => props.picked ? undefined : props.theme.color.main.d7} !important;
+     background: ${props => props.isSelected ? undefined : props.theme.color.main.l5} !important;
+     color: ${props => props.isSelected ? undefined : props.theme.color.main.d7} !important;
     }
-    opacity: ${(props) => props.picked ? .5 : 1} !important;
-
-    background: ${(props) => props.picked ? props.theme.color.main.l5 : props.selected ? props.theme.color.main.l5 : undefined} !important;
-    color: ${(props) => props.selected ? props.theme.color.main.d7 : undefined} !important;
+    background: ${(props) => props.isSelected ? props.theme.color.main.l1 : undefined} !important;
+    color: ${(props) => props.isSelected ? props.theme.color.main.l7 : undefined} !important;
 `
 
 const opacity = keyframes`
@@ -152,9 +136,8 @@ const LoadingIconBlur = styled.div<SizeProps>`
     top:0;
     animation-name: ${opacity};
     animation-duration: 0.5s;
-    background: ${props => props.theme.color.mainLowOp};
+    background: ${props => props.theme.color.main.lowOp};
     position: sticky;
-    opacity: .4;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -178,39 +161,48 @@ const LoadingIconInsideBox = styled.div`
     justify-content: center;
     top: 50%;`
 
-const ButtonsBox = styled.div`
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5vh;
-    margin-top: 10vh;
-`
-const StyledCoolSearchBar = styled(CoolSearchBar)`
-    margin-bottom: 3vh;
+const SearchBarBox = styled.div`
+    margin-bottom: 20px;
+    min-width: 250px;
+    width: 20%;
+    max-width: 100%;
 `
 
-export function CoolTable({ width, height, headers, data, setPage, contextOptions, isLoading = false, sideButtons, page, searchKey, setSearchKey, selectedIds, onPick }: {
-    width?: number, height?: number, size?: SizeEnum, headers: HeaderData[], data?: Page<any>, page?: number,
+export function CoolTable({ id, headers, data, setPage, contextOptions, isLoading, page, searchKey, setSearchKey }: {
+    id: string, headers: HeaderData[], data?: Page<any>, page?: number,
     setPage?: React.Dispatch<React.SetStateAction<number>>, contextOptions?: ContextOption[], isLoading?: boolean,
-    sideButtons?: JSX.Element[], searchKey?: string, setSearchKey?: React.Dispatch<SetStateAction<string>>, selectedIds?: string[], onPick?: (user: User) => void
+    searchKey?: string, setSearchKey?: React.Dispatch<SetStateAction<string>>
 }) {
 
 
     const [contextMenuProps, setContextMenuProps] = useState<ContextMenuPosition>({ top: 0, left: 0, visible: false })
-    const [selectedElement, setSelectedElement] = useState<string>('')
-    const clearContext = useRecoilValue<boolean>(clearContextAtom)
+    const [selectedElements, setSelectedElements] = useState<string[]>([])
+    const { clearContext } = useMisc()
+    const { t } = useTranslation()
 
     useEffect(() => {
         setContextMenuProps({ visible: false, top: 0, left: 0 })
-        setSelectedElement('')
+        setSelectedElements([])
     }, [clearContext, data?.page])
 
 
+    const onSelect = (id: string) => {
+        if (selectedElements.includes(id)) {
+            setSelectedElements((oldValue) => oldValue.filter((elementId) => elementId !== id))
+        } else {
+            setSelectedElements((oldValue) => [id, ...oldValue])
+        }
+    }
     const onOpenContextMenu = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, id: string) => {
         if (contextOptions) {
             e.preventDefault()
-            setSelectedElement(id)
-            setContextMenuProps({ top: e.clientY, left: e.clientX, visible: true })
+            if (!selectedElements.includes(id)) {
+                setSelectedElements([id])
+            }
+            setContextMenuProps({
+                top: e.clientY, left: e.clientX, visible: true, nOptions: contextOptions.length,
+                invertedX: e.clientX > window.innerWidth / 2, invertedY: e.clientY > innerHeight / 2
+            })
         }
     }
 
@@ -218,16 +210,18 @@ export function CoolTable({ width, height, headers, data, setPage, contextOption
 
 
     return (
-        <MainBox widthProp={width} heightProp={height}>
-            <TableWithPagBox widthProp={width} heightProp={height}>
+        <MainBox>
+            <TableWithPagBox>
                 {searchKey !== undefined && setSearchKey ?
-                    <StyledCoolSearchBar key='search_input' id='search' value={searchKey} setValue={setSearchKey} />
+                    <SearchBarBox>
+                        <CoolTextInput key='search_input' id='search' iconType={IconTypeEnum.SEARCH} value={searchKey} setValue={setSearchKey} />
+                    </SearchBarBox>
                     :
                     undefined
                 }
                 <TableBox contextVisible={contextMenuProps.visible}>
                     {isLoading ?
-                        <LoadingIconBlur widthProp={width} heightProp={height}>
+                        <LoadingIconBlur>
                             <LoadingIconBox>
                                 <LoadingIconInsideBox>
                                     <PulseLoader size={30} color={theme.color.background.l1} />
@@ -241,17 +235,17 @@ export function CoolTable({ width, height, headers, data, setPage, contextOption
                             <tr>
                                 {headers.map((header) =>
                                     <TableHeader width={header.width} key={`key_${header.name}`}>
-                                        {header.name}
+                                        {t(`table.${id}.${header.name}`)}
                                     </TableHeader>
                                 )}
                             </tr>
                         </thead>
                         <StyledTableBody isLoading={true}>
-                            {data ? data.content.map((element: any) => {
-                                const isPicked = selectedIds?.includes(element.id)
-                                return <RowSelectedStyle key={`element_${element.id}`} selected={selectedElement === element.id} picked={isPicked}
+                            {data?.content ? data.content.map((element) => {
+                                const isSelected = selectedElements?.includes(element.id)
+                                return <RowSelectedStyle key={`element_${element.id}`} isSelected={isSelected}
                                     onContextMenu={(e) => { onOpenContextMenu(e, element.id) }}
-                                    onClick={onPick && !isPicked ? (e) => onPick(element) : undefined}>
+                                    onClick={() => onSelect(element.id)}>
                                     {headers.map((header) =>
                                         <td key={`element_${element.id}_${header.name}`}>{header.name ? element[header.name] : ''}</td>
                                     )}
@@ -261,19 +255,17 @@ export function CoolTable({ width, height, headers, data, setPage, contextOption
                         </StyledTableBody>
                     </StyledTable>
                 </TableBox>
-                {setPage && page !== undefined && data && data.totalPages > 0 ?
-                    <CoolPagination page={page} setPage={setPage} totalPages={data.totalPages} isLoading={isLoading} />
+                {setPage && page !== undefined ?
+                    <CoolPagination page={page} setPage={setPage} totalPages={data?.totalPages ? data?.totalPages : 0} isLoading={isLoading} />
                     :
                     undefined
                 }
                 {contextOptions ?
-                    <CoolContextMenu top={contextMenuProps.top} left={contextMenuProps.left} visible={contextMenuProps.visible} options={contextOptions} selectedElement={selectedElement}></CoolContextMenu>
+                    <CoolContextMenu top={contextMenuProps.top} left={contextMenuProps.left} visible={contextMenuProps.visible}
+                        invertedX={contextMenuProps.invertedX} invertedY={contextMenuProps.invertedY} options={contextOptions} selectedElements={selectedElements}></CoolContextMenu>
                     : undefined
                 }
             </TableWithPagBox>
-            <ButtonsBox>
-                {sideButtons?.map((button) => button)}
-            </ButtonsBox>
         </MainBox>
     )
 }

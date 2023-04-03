@@ -1,24 +1,37 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { CoolButton } from '../components/atom/CoolButton';
-import { ActivitiesTable } from '../components/organism/ActivitiesTable';
+import { ButtonStyleEnum, CoolButton } from '../components/atom/CoolButton';
+import { ContextOption } from '../components/atom/CoolContextOption';
+import { IconTypeEnum } from '../components/atom/CoolIcon';
+import { ScreenFrame } from '../components/molecule/ScreenFrame';
+import { ModalType } from '../components/organism/CoolModal';
 import { CoolTable } from '../components/organism/CoolTable';
 import { useApi } from '../hooks/useApi';
+import { useMisc } from '../hooks/useMisc';
 import { useModal } from '../hooks/useModal';
-import { reloadActivitiesAtom, snackAtom } from '../recoil/mainAtoms';
 import { Test } from '../types/entities';
-import { ButtonStyleEnum, ContextOption, IconTypeEnum, ModalType, Page } from '../types/types';
+import { Page } from '../types/types';
 
 
 const MainBox = styled.div`
-    display: flex;
-    width: 100%;
-    gap: 5vh;
-    margin-top: 5vh;
-    align-items: center;
+    display:flex;
+    gap: 20px;
+    max-height: 950px;
+    height: 100%;
+`;
+
+const TableBox = styled.div`
+    display:flex;
+    width: 80%;
     justify-content: center;
-    flex-direction: column;
+`;
+
+const SideButtonsBox = styled.div`
+    display:flex;
+    width: 20%;
+    min-width: 200px;
+    padding-top: 70px;
+    justify-content: center;
 `;
 
 export function Activities() {
@@ -26,20 +39,19 @@ export function Activities() {
     const headers = [{ name: 'name', width: '80%' }, { name: 'size', width: '20%' }]
 
 
-    const { getActivities, deleteActivity } = useApi();
+    const { getActivities, deleteActivities } = useApi();
 
     const [page, setPage] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [data, setData] = useState<Page<Test> | undefined>(undefined)
-
+    const { reloadActivitiesFlag, setReloadActivitiesFlag } = useMisc()
+    const [searchKey, setSearchKey] = useState<string>('')
     const { setConfirmationModalProps, setModalProps } = useModal()
 
-    const [opensnack, setopensnack] = useRecoilState(snackAtom)
-    const [reloadActivities, setReloadActivities] = useRecoilState(reloadActivitiesAtom)
 
     useEffect(() => {
         onGetData()
-    }, [page, reloadActivities])
+    }, [page, reloadActivitiesFlag])
 
     const onGetData = async () => {
         setIsLoading(() => true)
@@ -51,9 +63,9 @@ export function Activities() {
         setIsLoading(() => false)
     }
 
-    const onDeleteActivity = async (id: string) => {
-        await deleteActivity(id)
-        setReloadActivities((old) => !old)
+    const onDeleteActivities = async (ids: string[]) => {
+        await deleteActivities(ids)
+        setReloadActivitiesFlag((old) => !old)
     }
 
     const onCreateActivity = () => {
@@ -69,28 +81,31 @@ export function Activities() {
     const contextOptions: ContextOption[] = [{
         type: IconTypeEnum.EDIT,
         label: 'Edit',
-        onClick: (id: string) => {
-            onUpdateActivity(id)
+        onClick: (ids: string[]) => {
+            onUpdateActivity(ids[0])
         }
     }, {
         type: IconTypeEnum.DELETE,
         label: 'Delete',
-        onClick: (id: string) => {
-            setConfirmationModalProps({ visible: true, params: { elementId: id, body: 'Are you sure you want to delete this activity?', onConfirm: () => onDeleteActivity(id) } })
+        multi: true,
+        onClick: (ids: string[]) => {
+            setConfirmationModalProps({ visible: true, params: { body: 'Are you sure you want to delete this activity?', onConfirm: () => onDeleteActivities(ids) } })
         }
     }]
 
-    const sideButtons = [<CoolButton key={'sideButton_create'} clickFun={() => onCreateActivity()} type={IconTypeEnum.ADD} style={ButtonStyleEnum.FILLED}>
-        <>{'Create activity'}</>
-    </CoolButton>
-        ,
-    ]
-
-
     return (
-        <MainBox>
-            <ActivitiesTable width={75} height={70} headers={headers} data={data} page={page} setPage={setPage} isLoading={isLoading}
-                contextOptions={contextOptions} sideButtons={sideButtons} />
-        </MainBox>
+        <ScreenFrame>
+            <MainBox>
+                <TableBox>
+                    <CoolTable id='activities' headers={headers} data={data} page={page} setPage={setPage} isLoading={isLoading}
+                        contextOptions={contextOptions} searchKey={searchKey} setSearchKey={setSearchKey} />
+                </TableBox>
+                <SideButtonsBox>
+                    <CoolButton key={'sideButton_create'} onClick={() => onCreateActivity()} iconType={IconTypeEnum.ADD} style={ButtonStyleEnum.FILLED}>
+                        <>{'Create activity'}</>
+                    </CoolButton>
+                </SideButtonsBox>
+            </MainBox>
+        </ScreenFrame>
     )
 }

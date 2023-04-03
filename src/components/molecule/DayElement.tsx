@@ -2,11 +2,14 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
-import { ButtonStyleEnum, IconTypeEnum, ModalType, SizeEnum } from '../../types/types';
+import { SizeEnum } from '../../types/types';
 import { Task } from '../../types/entities';
 import { CoolIconButton } from '../atom/CoolIconButon';
 import { conf } from './../../conf'
 import { TaskArea } from '../organism/TaskArea';
+import { ButtonStyleEnum } from '../atom/CoolButton';
+import { IconTypeEnum } from '../atom/CoolIcon';
+import { ModalType } from '../organism/CoolModal';
 
 
 const getWeekdayLabel = (date: Date) => {
@@ -61,11 +64,11 @@ const MainBox = styled.div<StyleProps>`
     display:flex;
     flex-direction: column ;
     width: 100%;
+    min-width: 150px;
     justify-content: center;
     padding-top: 2vh;
     box-sizing: border-box;
     flex-grow: 1;
-    flex-shrink: 1;
     flex-basis: 0;
     background-color: ${props => props.theme.color.background.l1};
     
@@ -146,7 +149,7 @@ export function DayElement({ date, tasks, selectedTasks, setSelectedTasks }: {
             </DateLabel>
             <TaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             <AddButtonBox>
-                <CoolIconButton buttonStyle={ButtonStyleEnum.OUTLINE} type={IconTypeEnum.ADD} size={SizeEnum.S} clickFun={() => openModal()} />
+                <CoolIconButton style={ButtonStyleEnum.OUTLINED} type={IconTypeEnum.ADD} size={SizeEnum.S} onClick={() => openModal()} />
             </AddButtonBox>
         </MainBox >
     )

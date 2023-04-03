@@ -1,45 +1,62 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { IconTypeEnum, SizeEnum } from '../../types/types';
-import { device } from '../../StyledTheme';
-import { ButtonBase } from '../bases/ButtonBase';
 import { CoolIcon } from './CoolIcon';
-import { useRecoilState } from 'recoil';
-import { snackAtom, SnackAtomProps } from '../../recoil/mainAtoms';
 import { ThemeColors } from '../../styled';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import { device } from '../../StyledTheme';
 
 
 interface CoolStyledSnackbarProps {
+  color?: keyof ThemeColors
 }
 
 const showSnackAnimation = keyframes`
-  0%   {top:110%;}
-  10%   {top:85%}
-  80%   {top:85%}
-
-  90%   {top:110%}
+  0%   {bottom:-100px;}
+  10%   {bottom:20px}
+  80%   {bottom:20px}
+  90%   {bottom:-100px}
 
 `
 const CoolStyledSnackbar = styled.div<CoolStyledSnackbarProps>`
-position: absolute;
-    background-color: ${props => props.theme.color.lightBackground};
+    position: absolute;
+    background-color: ${props => props.theme.color.background.l3};
     display: flex;
+    border-radius: 14px;
+    border: ${props => `2px solid ${props.theme.color[props.color ? props.color : 'main'].l3}}`};
+    display: flex;
+    box-sizing: border-box;
+    gap: 4px;
     align-items: center;
-    gap: 5%;
-    padding: 1vh 2%;
-    width: 25%;
-    height: 10vh;
-    top:110%;
-    z-index: 6;
-    left: 3%;
+    justify-content: space-around;
+    overflow: hidden;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 24px;
+    flex-grow: 1;
+    max-width: 500px;
+    font-size: ${props => props.theme.fontSize.buttonText};
+    min-height: 70px;
+    height: 70px;
+    bottom: -100px;
+    z-index: 50;
+    left: 30px;
+    @media ${device.tablet} { 
+        left: 0;
+        right: 0;
+        min-height: 90px;
+        height: 90px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
     &.fadeIn {
-        animation: ${showSnackAnimation} 2s;
+        animation: ${showSnackAnimation} 3s;
         animation-timing-function: ease-in-out;
     }
-
     & svg {
         font-size: 1.5rem;
-        color: ${props => props.color ? props.theme.color[props.color as keyof ThemeColors] : undefined};
+        min-width: 25px;
+        color: ${props => props.theme.color[props.color ? props.color : 'main'].n};
     }
 
 `;
@@ -49,32 +66,28 @@ position: absolute;
 
 export function CoolSnackbar() {
 
-    const [snackProps, setSnackProps] = useRecoilState<SnackAtomProps>(snackAtom)
+  const { snackbarProps, setSnackbarProps } = useSnackbar()
 
-    const [isVisible, setIsVisible] = useState<boolean>(false)
+  useEffect(() => {
+    if (snackbarProps.visible) {
+      setTimeout(() => {
+        setSnackbarProps({ visible: false })
+      }, 3000);
+    }
+  }, [snackbarProps.visible])
 
 
-
-    useEffect(() => {
-        if (snackProps.visible) {
-            setTimeout(() => {
-                setSnackProps({ visible: false })
-            }, 2000);
+  return (
+    snackbarProps.visible ?
+      <CoolStyledSnackbar color={snackbarProps.color} className={snackbarProps.visible ? 'fadeIn ' : ''}>
+        {snackbarProps.iconType ?
+          <CoolIcon type={snackbarProps.iconType} />
+          :
+          undefined
         }
-    }, [snackProps.visible])
-
-
-    return (
-        snackProps.visible ?
-            <CoolStyledSnackbar color={snackProps.color} className={snackProps.visible ? 'fadeIn ' : ''}>
-                {snackProps.icon ?
-                    <CoolIcon type={snackProps.icon} />
-                    :
-                    undefined
-                }
-                <p>{snackProps.text}</p>
-            </CoolStyledSnackbar>
-            :
-            <></>
-    )
+        <p>{snackbarProps.text}</p>
+      </CoolStyledSnackbar>
+      :
+      <></>
+  )
 }

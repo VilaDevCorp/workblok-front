@@ -5,9 +5,12 @@ import styled from 'styled-components';
 const MainBox = styled.div`
     display:flex;
     flex-direction: column;
-    padding: 1% 2%;
-    height:90vh;
+    max-width: 1600px;
+    height: calc(100vh - 100px);
+    margin: auto;
+    padding: 4vh 5vw;
     box-sizing: border-box;
+    overflow: auto;
 `;
 const Title = styled.h1`
     font-size: ${props => props.theme.fontSize.h1};

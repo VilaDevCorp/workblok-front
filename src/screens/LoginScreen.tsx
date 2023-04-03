@@ -1,17 +1,15 @@
-import React, { FC, ReactNode, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
 import styled, { useTheme } from 'styled-components';
-import { ButtonBase } from '../components/bases/ButtonBase';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../hooks/useAuth';
 import loginImg from './../../public/loginImg.png';
-import { FaSignInAlt } from 'react-icons/fa'
-import { TextInputBase, TextInputTypeEnum } from '../components/bases/TextInputBase';
+import { TextInputTypeEnum } from '../components/bases/TextInputBase';
 import { CoolTextInput } from '../components/atom/CoolTextInput';
-import { CoolFormElement } from '../components/atom/CoolFormElement';
 import { CoolButton } from '../components/atom/CoolButton';
-import { IconTypeEnum } from '../types/types';
+import { CoolForm } from '../components/organism/CoolForm';
+import { IconTypeEnum } from '../components/atom/CoolIcon';
+import { useMisc } from '../hooks/useMisc';
 
 const MainBox = styled.div`
     display: flex;
@@ -19,7 +17,7 @@ const MainBox = styled.div`
     top: 0;
     background: ${props => props.theme.color.main.n};
     box-sizing: border-box;
-    z-index: 80;
+    z-index: 100;
     padding: 1% 2%;
     width: 100%;
     height: 100%;
@@ -58,8 +56,8 @@ const LoginButton = styled(CoolButton)`
 
 export function LoginScreen() {
 
-    const { login, logout, fakeDelay } = useApi()
-    const authInfo = useAuth()
+    const { logout, fakeDelay } = useApi()
+    const auth = useAuth()
     const navigate = useNavigate()
     const theme = useTheme()
 
@@ -71,34 +69,45 @@ export function LoginScreen() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [showScreen, setShowScreen] = useState<boolean>(false)
     const [isHidden, setIsHidden] = useState<boolean>(false)
+    const { setReloadUserInfoFlag } = useMisc()
+
 
 
     useEffect(() => {
-        if (renderNum.current === 0) {
-            if (authInfo.isAuth) {
+        if (auth.csrfToken) {
+            setIsHidden(true)
+            setTimeout(() => {
                 setShowScreen(false)
-            } else {
-                setShowScreen(true)
-            }
-            renderNum.current = ++renderNum.current
+            }, 2000);
         } else {
-            if (isHidden) {
-                setTimeout(() => {
-                    setShowScreen(false)
-                }, 2000);
-            }
+            setShowScreen(true)
+            setTimeout(() => {
+                setIsHidden(false)
+            }, 5);
+
         }
-    }, [isHidden])
+
+        // if (renderNum.current === 0) {
+        //     renderNum.current = ++renderNum.current
+        // } else {
+        //     if (isHidden) {
+        //         setTimeout(() => {
+        //             setShowScreen(false)
+        //         }, 2000);
+        //     }
+        // }
+
+    }, [auth.csrfToken])
 
 
     const onLogin = async () => {
         if (mail !== '' && password !== '') {
             setIsLoading(true)
             try {
-                await authInfo.login(mail, password)
-
-                setIsHidden(true)
+                await auth.authenticate(mail, password)
+                setReloadUserInfoFlag((old) => !old)
                 navigate('/')
+                setIsHidden(true)
             } catch (e) {
                 setIsLoading(false)
             }
@@ -111,14 +120,12 @@ export function LoginScreen() {
             <MainBox className={isHidden ? 'hidden' : ''}>
                 <LoginBox>
                     <img src={loginImg} alt='Logo login' />
-                    <CoolFormElement label='Email'>
-                        <CoolTextInput id={'mail'} value={mail} setValue={setMail} />
-
-                    </CoolFormElement>
-                    <CoolFormElement label='Contraseña'>
-                        <CoolTextInput id={'password'} value={password} setValue={setPassword} type={TextInputTypeEnum.PASSWORD} />
-                    </CoolFormElement>
-                    <LoginButton clickFun={() => onLogin()} type={IconTypeEnum.LOGIN} ></LoginButton>
+                    <CoolForm formFields={[{
+                        id: 'mail', formElement: <CoolTextInput id={'mail'} value={mail} setValue={setMail} />
+                    }, {
+                        id: 'password', formElement: <CoolTextInput id={'password'} value={password} setValue={setPassword} type={TextInputTypeEnum.PASSWORD} />
+                    }]} id={'loginForm'} nColumns={1}></CoolForm>
+                    <LoginButton onClick={() => onLogin()} iconType={IconTypeEnum.LOGIN} ></LoginButton>
                 </LoginBox>
             </MainBox>
             : <></>

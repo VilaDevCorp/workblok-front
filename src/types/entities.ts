@@ -1,9 +1,9 @@
-import { ActivityIconTypeEnum } from "./types";
+import { ActivityIconTypeEnum } from "../components/atom/ActivityIcon";
 
 export interface User {
-  id?: string;
-  name?: string;
-  pass?: string;
+  id: string;
+  userName: string;
+  dans: number;
 }
 
 export interface Rol {
@@ -23,6 +23,12 @@ export interface Activity {
   name: string;
   icon?: ActivityIconTypeEnum;
   size:number
+}
+
+export interface RegisterUserForm {
+  username: string
+  mail:string
+  password: string
 }
 
 export interface CreateActivityForm {

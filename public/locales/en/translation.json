@@ -1,0 +1,308 @@
+{
+  "action": {
+    "delete": "Eliminar"
+  },
+  "form": {
+    "testForm": {
+      "name": "Nombre",
+      "lastname": "Apellidos",
+      "town": "Población",
+      "hasEmail": "Tiene email"
+    }
+  },
+  "button": {
+    "seeProperties": "Ver propiedades",
+    "editProperties": "Editar propiedades",
+    "contact": "Contáctanos",
+    "consellos": "Consellos",
+    "users": "Usuarios",
+    "issues": "Incidencias",
+    "files": "Arquivos",
+    "logs": "Logs",
+    "login": "Acceder",
+    "closeSession": "Pechar sesión",
+    "createConsello": "Crear consello",
+    "communication": "Comunicación",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "next": "Seguinte",
+    "back": "Atrás",
+    "close": "Close",
+    "createUser": "Crear usuario",
+    "exportUsers": "Exportar usuarios",
+    "importUsers": "Importar usuarios",
+    "deleteFeature": "Borrar elemento",
+    "nextState": "Avanzar estado",
+    "download": "Descargar",
+    "createIssue": "Crear incidencia",
+    "uploadFile": "Subir arquivo"
+  },
+  "menu": {
+    "info": "Información",
+    "news": "Noticias",
+    "admin": "Administración",
+    "map": "Mapa"
+  },
+  "label": {
+    "sendMessageTo": "Enviar mensaxe a",
+    "sendMail": "Enviar email",
+    "sendSMS": "Enviar SMS",
+    "map": "Mapa",
+    "seeMap": "Ver mapa",
+    "membersOf": "Membros de ",
+    "abastecementoBuilding": "Obras de abastecemento",
+    "saneamientoBuilding": "Obras de saneamiento",
+    "sostementoBuilding": "Obras de sostemento de espazos públicos rurais",
+    "selectOption": "Seleccione unha opción",
+    "logState": {
+      "login": "Acceso",
+      "send_sms": "Correos enviados",
+      "send_mail": "SMS enviados"
+    }
+  },
+  "message": {
+    "confirmationDelete": "¿Desexa borrar este elemento?",
+    "confirmationNextState": "¿Desexa avanzar o estado da incidencia?",
+    "selectConsello": "Seleccione un consello",
+    "notAvailableMap": "Mapa non dispoñible para o consello e tipo de obra seleccionados",
+    "adminArea": "Área restrinxida a administradores",
+    "registerArea": "Debe estar rexistrado para acceder aquí"
+  },
+  "booleanResponse": {
+    "true": "Sí",
+    "false": "No",
+    "inactive": "Todos"
+  },
+  "confirmationModal": {
+    "title": "Confirmar borrado",
+    "description": "¿Desea confirmar el borrado del elemento? Esta operación no puede deshacerse",
+    "cancelBut": "Cancelar",
+    "confirmBut": "Confirmar"
+  },
+  "filters": {
+    "rotulo": "Rótulo"
+  },
+  "issueState": {
+    "open": "En espera",
+    "inProgress": "En progreso",
+    "closed": "Cerrada"
+  },
+  "sidebar": {
+    "planning": "Planning",
+    "activities": "Activities"
+  },
+  "table": {
+    "activities": {
+      "name": "Name",
+      "size": "Size"
+    },
+    "issues": {
+      "title": "Título",
+      "description": "Descrición",
+      "formattedStatus": "Estado"
+    },
+    "files": {
+      "displayName": "Nome",
+      "name": "Documento",
+      "buildingType": "Tipo de obra",
+      "size": "Tamaño"
+    },
+    "users": {
+      "firstName": "Nome",
+      "lastName": "Apelidos",
+      "email": "Correo"
+    },
+    "logs": {
+      "actionType": "Tipo de accion",
+      "status": "Estado",
+      "createdAt": "Data",
+      "formattedData": "Información"
+    }
+  },
+  "map": {
+    "headers": {
+      "filters": "Filtros",
+      "draw": "Dibujo",
+      "layers": "Capas",
+      "data": "Datos"
+    }
+  },
+  "createModal": {
+    "title": "Modificar propiedades",
+    "description": "Añada un elemento al mapa",
+    "saveBut": "Guardar"
+  },
+  "propertiesModal": {
+    "title": "Lista de propiedades"
+  },
+  "states": {
+    "drawing": "Dibujando",
+    "idle": "Selección"
+  },
+  "general": {
+    "filters": "Filtros",
+    "layers": "Capas"
+  },
+  "properties": {
+    "referenciaCatastral": "Ref. catastral",
+    "disponible": "Disponible",
+    "marcaTemporal": "Marca temporal",
+    "encuestadora": "Encuestadora",
+    "date": "Fecha",
+    "titular": "Titular",
+    "nombreFiscal": "Nombre fiscal",
+    "nif": "NIF",
+    "rotulo": "Rótulo",
+    "formaJuridica": "Forma jurídica",
+    "actividad": "Actividad",
+    "detalle": "Detalle",
+    "noRespondrePend": "No respondre pend.",
+    "nTrabajadoresFijos": "Nº trabajadores fijos",
+    "nTrabajadoresEventuales": "Nº trabajadores eventuales",
+    "tipoEstablecimiento": "Tipo establecimiento",
+    "codVia": "Cód. vía",
+    "nombreVia": "Nombre vía",
+    "tipoVia": "Tipo vía",
+    "numero": "Número",
+    "bajoPiso": "Bajo/Piso",
+    "nPiso": "Nº piso",
+    "municipio": "Municipio",
+    "codPostal": "Código postal",
+    "zona": "Zona",
+    "zonaOtros": "Zona otros",
+    "totalEstablecimientos": "Total establecimientos",
+    "personaContacto": "Persona contacto",
+    "telefonoFijo": "Teléfono fijo",
+    "telefonoMovil": "Teléfono móvil",
+    "email": "Email",
+    "web": "Web",
+    "hasFacebook": "¿Tiene Facebook?",
+    "facebook": "Nombre de Facebook",
+    "hasInstagram": "¿Tiene Instagram?",
+    "instagram": "Nombre de Instagram",
+    "hasWhatsapp": "¿Tiene Whatsapp?",
+    "whatsapp": "Nombre de Whatsapp",
+    "otrasRedes": "Otras redes",
+    "hardwareTpv": "Hardware gestión TPV",
+    "hardwarePc": "Hardware gestión PC",
+    "noHardware": "No hardware de gestión",
+    "datafono": "Datáfono para pagos",
+    "accesoInternet": "Acceso internet",
+    "erp": "ERP",
+    "crm": "CRM",
+    "nombreSoftwarePend": "Nombre ERP/CRM",
+    "sistemaFidelizacion": "Sistema de fidelización",
+    "wifiClientes": "Wifi clientes",
+    "invierteRrrs": "Invierte en RRSS",
+    "estrategiaMarketing": "Estrategia de marketing",
+    "cloud": "Cloud",
+    "ciberseguridad": "Sistemas ciberseguridad",
+    "ciberseguridadDetalles": "Detalles sistemas ciberseguridad",
+    "pagoTarjeta": "Pago con tarjeta",
+    "pagoBizum": "Pago con Bizum",
+    "pagoOtros": "Otros medios de pago",
+    "contadorPasoExterior": "Contador auto. de paso y acceso exterior",
+    "contadorPasoInterior": "Contador auto. de paso y acceso interior",
+    "controlAforo": "Control auto. de aforo",
+    "controlRecorridos": "Control auto. de recorridos",
+    "otrosSistemasControl": "Otros sistemas de control",
+    "monitoresPromocionales": "Monitores promocionales",
+    "tipoMonitoresPromocionales": "Tipo de monitores promocionales",
+    "tiendaVirtual": "Tienda online",
+    "tiendaVirtualPlataformaCompartida": "Tienda online en plataforma compartida",
+    "plataformaCompartidaNombre": "Nombre de la plataforma compartida",
+    "tiendaVirtualPropiaSistema": "Sistema de tienda online propia",
+    "mediosPagoTiendaOnline": "Medios pago en tienda online",
+    "otrosMediosPagoOnline": "Otros medios de pago online",
+    "inversionesTecnologia": "Inversiones en tecnología",
+    "inversionesTeconologiaDetalles": "Detalles de inversiones en tecnología",
+    "previsionInversiones": "Previsión de inversiones a corto plazo",
+    "previsionInversionesDetalles": "Detalles de previsión de inversiones a corto plazo",
+    "accionesTecnologiaPrevistas": "Acciones en tecnología previstas",
+    "otrasAccionesPrevistas": "Otras acciones previstas",
+    "necesariaFormacion": "¿Considera necesaria formación para puesto de trabajo?",
+    "tipoFormacion": "¿Qué tipo de formación considera necesaria?",
+    "previsionIncorporacionPersonal": "Previsión de incorporación de personal",
+    "perfilesIncorporaciones": "Perfiles de incorporaciones previstas",
+    "interesCentroComercial": "Interés en formar parte de centro comercial online",
+    "suscritoInfo": "Suscrito a boletín de información",
+    "observaciones": "Observaciones",
+    "cnae": "CNAE"
+  },
+  "propertiesBox": {
+    "openProperties": "Mostrar propiedades",
+    "modifyProperties": "Modificar propiedades",
+    "delete": "Eliminar"
+  },
+  "forms": {
+    "subject": "Asunto",
+    "message": "Mensaxe",
+    "name": "Nome",
+    "lastName": "Apelidos",
+    "password": "Contrasinal",
+    "mail": "Correo",
+    "phone": "Móbil",
+    "rol": "Rol",
+    "csvFile": "Arquivo CSV",
+    "description": "Descrición",
+    "consello": "Consello",
+    "file": "Arquivo",
+    "buildingType": "Tipo de obra",
+    "draw": "Dibuxo",
+    "title": {
+      "newConsello": "Crear novo consello",
+      "editConsello": "Editar consello",
+      "newUser": "Crear novo usuario",
+      "editUser": "Editar usuario",
+      "newIssue": "Crear nova incidencia",
+      "editIssue": "Editar incidencia",
+      "uploadFile": "Subir arquivo"
+    },
+    "login": {
+      "welcome": "Bienvenido a",
+      "email": "Correo electrónico",
+      "userEmail": "Usuario o Correo Electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "login": "Iniciar Sesión",
+      "writeEmailToVerifyIdentity": "Indícanos tu correo electrónico para verificar tu identidad",
+      "sendEmail": "Enviar correo",
+      "enterVerificationCode": "Introduce el código que has recibido en tu correo",
+      "newPassword": "Nueva contraseña",
+      "confirmNewPassword": "Confirmar nueva contraseña",
+      "inputCode": "Introduce el código"
+    },
+    "register": {
+      "signUp": "Regístrate",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "signUpButton": "Registrarse"
+    },
+    "error": {
+      "loginError": "Error al iniciar sesión",
+      "registerError": "Error al registrarse",
+      "invalidEmail": "O email non é válido",
+      "invalidPhone": "O teléfono non é válido",
+      "notEmpty": "O campo non pode estar vacío",
+      "minLength8": "A lonxitude mínima requerida é 8",
+      "invalidAuthCode": "Introduce un código numérico de 6 dígitos",
+      "noNumbers": "Debe conter polo menos un número",
+      "upperLowerCase": "Debe conter polo menos unha maiúscula e unha minúscula",
+      "differentPasswords": "Las contraseñas no coinciden",
+      "validationError": "Existen erros no formulario",
+      "internalError": "Ocurriu un erro no proceso",
+      "mailOrPhoneRepeated": "O correo ou o teléfono xa está sendo usado por outro usuario"
+    },
+    "actions": {
+      "send": "Enviar",
+      "resend": "Volver a enviar",
+      "restorePassword": "Restaurar contraseña"
+    },
+    "questions": {
+      "forgottenPassword": "¿Has olvidado tu contraseña?",
+      "receivedCodeQuestion": "¿No has recibido ningún código?"
+    }
+  }
+}

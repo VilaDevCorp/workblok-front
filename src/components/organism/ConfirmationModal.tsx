@@ -1,31 +1,35 @@
-import { useRecoilState } from 'recoil';
-import { isLoading } from '../../recoil/mainAtoms';
 import { ModalBase } from './../bases/ModalBase';
-import { IconTypeEnum, ModalButton, SizeEnum } from '../../types/types';
+import { SizeEnum } from '../../types/types';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
+import { useTranslation } from 'react-i18next';
+import { useMisc } from '../../hooks/useMisc';
+import { CoolButton, ButtonStyleEnum } from '../atom/CoolButton';
+import { IconTypeEnum } from '../atom/CoolIcon';
 
 
 const StyledText = styled.p`
-    font-size: ${props => props.theme.fontSize.title};
-    color: ${props => props.theme.color.lightFont};
+    font-size: ${props => props.theme.fontSize.h2};
+    color: ${props => props.theme.color.main.d4};
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     margin: 0;
+    width: 100%;
 `;
 
 
 export function ConfirmationModal() {
 
-    const {confirmationModalProps, setConfirmationModalProps} = useModal()
+    const { confirmationModalProps, setConfirmationModalProps } = useModal()
+    const { setIsLoading } = useMisc()
+    const { t } = useTranslation()
 
-    const [isLoadingState, setIsLoadingState] = useRecoilState<boolean>(isLoading)
 
     const onConfirm = async () => {
-        setIsLoadingState(() => true)
+        setIsLoading(() => true)
         const onConfirm = confirmationModalProps.params?.onConfirm
         try {
             if (onConfirm) {
@@ -35,7 +39,7 @@ export function ConfirmationModal() {
         } catch (e) {
         }
         finally {
-            setIsLoadingState(() => false)
+            setIsLoading(() => false)
         }
     }
 
@@ -43,16 +47,16 @@ export function ConfirmationModal() {
         setConfirmationModalProps(() => { return { visible: false } })
     }
 
-    const buttons: ModalButton[] = [
-        { type: IconTypeEnum.CANCEL, onClick: onClear, label:'Cancel' },
-        { type: IconTypeEnum.CONFIRM, onClick: onConfirm, label:'Confirm' },
-
+    const buttons: JSX.Element[] = [
+        <CoolButton style={ButtonStyleEnum.OUTLINED} iconType={IconTypeEnum.DONWLOAD} onClick={() => onClear()}>{t('button.download')}</CoolButton>,
+        <CoolButton style={ButtonStyleEnum.OUTLINED} iconType={IconTypeEnum.CANCEL} onClick={() => onClear()}>{t('button.cancel')}</CoolButton>,
+        <CoolButton style={ButtonStyleEnum.FILLED} iconType={IconTypeEnum.CONFIRM} onClick={() => onConfirm()}>{t('button.confirm')}</CoolButton>
     ]
 
 
     return (
         confirmationModalProps.visible ?
-            <ModalBase title={confirmationModalProps.title} size={SizeEnum.S} buttons={buttons} onClose={() => { onClear() }}>
+            <ModalBase title={confirmationModalProps.title} size={SizeEnum.XS} buttons={buttons} onClose={() => { onClear() }}>
                 {confirmationModalProps.params?.body ?
                     <StyledText>
                         {confirmationModalProps.params.body}

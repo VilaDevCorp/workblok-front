@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import { AiFillDelete } from 'react-icons/ai';
-import { FaRunning } from 'react-icons/fa';
 import { MdAddCircleOutline } from 'react-icons/md';
 import styled from 'styled-components';
 

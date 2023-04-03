@@ -1,16 +1,18 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { Rol, User } from '../types/entities';
-import { RolEnum } from '../types/types';
-import { useApi } from './useApi';
-import { useNavigate } from 'react-router-dom';
+import { conf } from '../conf';
+import { User } from '../types/entities';
+import { useMisc } from './useMisc';
+
+interface LoginResult {
+  csrf: string
+}
 
 export interface AuthContext {
-  isAuth: boolean
-  user?: User
-  id?: string,
-  login: (user: string, password: string) => void,
+  user?: User,
+  csrfToken?: string,
+  login: (user: string, password: string) => Promise<LoginResult>,
+  authenticate: (username: string, password: string) => void,
   logout: () => void,
-  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>,
   isCompletedLoad: boolean
 }
 
@@ -27,88 +29,128 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
-  const [isAuth, setIsAuth] = useState(true)
-  const [authChange, setAuthChange] = useState(false)
-  const [rol, setRol] = useState<Rol | undefined>(undefined)
-  const [id, setId] = useState<string | undefined>(undefined)
   const [user, setUser] = useState<User | undefined>(undefined)
-  const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(false)
-  const { fakeDelay } = useApi()
-
-
-
+  const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(true)
+  const { reloadUserInfoFlag } = useMisc()
+  const [csrfToken, setCsrfToken] = useState<string>('')
 
   useEffect(() => {
-    setUser({id: 'a7c467ce-6062-11ed-9f5a-9822efc702f8', name: 'davidvilas'})
-    reloadUserInfo()
-  }, [authChange])
+    loadCsrf()
+  }, [])
 
-  const login = async () => {
-    let user: User | undefined = undefined
+  useEffect(() => {
+    if (csrfToken) {
+      reloadUserInfo()
+    }
+  }, [csrfToken])
+
+  const login = async (user: string, password: string) => {
+    const url = `${conf.mainApiUrl}public/login`
+    const options: RequestInit = {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({ username: user, password }),
+      headers: new Headers({
+        'content-type': 'application/json',
+      })
+    }
     try {
-      await fakeDelay(500)
-      user = { id: '123' }
+      const res = await fetch(url, options)
+      if (!res.ok) {
+        throw new Error(JSON.stringify(res))
+      }
+      const result = await res.json()
+      return result
     } catch (e) {
-      cleanUserParams()
+      throw Error('Error al realizar el login')
     }
-    if (user !== undefined) {
-      setUserParams(user)
-    } else {
-      cleanUserParams()
-    }
-    setAuthChange((old) => !old)
   }
 
-  const logout = async () => {
-    let user: User | undefined = undefined
+  const authenticate = async (username: string, password: string) => {
     try {
-      await fakeDelay(500)
+      const result = await login(username, password)
+      setCsrfToken(result.csrf)
+      localStorage.setItem('csrfToken', result.csrf)
     } catch (e) {
       cleanUserParams()
     }
+    // if (user !== undefined) {
+    //   setUser(user)
+    // } else {
+    //   cleanUserParams()
+    // }
+  }
+
+  const logout = () => {
     cleanUserParams()
-    setAuthChange((old) => !old)
   }
 
+  const self = async () => {
+    if (csrfToken) {
+
+      const url = `${conf.mainApiUrl}private/self`
+      const options: RequestInit = {
+        method: 'GET',
+        headers: new Headers({
+          'X-API-CSRF': csrfToken ? csrfToken : ''
+        }),
+        credentials: 'include'
+      }
+      try {
+        const res = await fetch(url, options)
+        if (!res.ok) {
+          throw new Error(JSON.stringify(res))
+        }
+        const result = await res.json()
+        return result
+      } catch (e) {
+        throw Error('Error al realizar el login')
+      }
+    } else {
+      throw Error('Error al realizar el login')
+    }
+  }
+
+
+  const loadCsrf = () => {
+    if (!csrfToken) {
+      const csrf = localStorage.getItem('csrfToken')
+      if (csrf) {
+        setCsrfToken(csrf)
+      }
+    }
+  }
 
   const reloadUserInfo = async () => {
     setIsCompletedLoad(() => false)
-    let user: User | undefined = undefined
+    let ownUser: User | undefined = undefined
     try {
-      await fakeDelay(500)
-      // user = {id:'1'}
-      user = undefined
+      const ownUser = await self()
+      if (ownUser !== undefined) {
+        setUser(ownUser)
+      } else {
+        cleanUserParams()
+      }
     } catch (e) {
-      cleanUserParams()
-    }
-    if (user !== undefined) {
-      setUserParams(user)
-    } else {
       cleanUserParams()
     }
     setIsCompletedLoad(() => true)
   }
 
-  const setUserParams = async (user: User) => {
-    if (user !== undefined) {
-      setIsAuth(() => true)
-      setId(() => user.id)
-    }
-  }
 
   const cleanUserParams = async () => {
-    setIsAuth(() => false)
-    setId(() => undefined)
+    localStorage.setItem("csrfToken", "")
+    setCsrfToken('')
+    setUser(undefined)
   }
 
 
   const value: AuthContext = {
-    isAuth,
     user,
-    id,
+    csrfToken,
     login,
+    authenticate,
     logout,
-    setIsAuth,
     isCompletedLoad
   }
 

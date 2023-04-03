@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { AiFillDelete } from 'react-icons/ai';
-import { FaRunning } from 'react-icons/fa';
-import { useRecoilState } from 'recoil';
+import React from 'react';
 import styled from 'styled-components';
 import { ValueGradient } from '../../StyledTheme';
-import { Activity, Task } from '../../types/entities';
+import { Task } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 
 interface TaskProps {

@@ -2,24 +2,24 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 
 
-const size = {
-  mobileS: '320px',
-  mobileM: '375px',
-  mobileL: '425px',
-  tablet: '768px',
-  laptop: '1024px',
-  desktop: '1700px',
-  desktopL: '1950px'
+export const screenSize = {
+  mobileS: 320,
+  mobileM: 375,
+  mobileL: 425,
+  tablet: 768,
+  laptop: 1024,
+  desktop: 1700,
+  desktopL: 1950
 }
 
 export const device = {
-  mobileS: `(min-width: ${size.mobileS})`,
-  mobileM: `(min-width: ${size.mobileM})`,
-  mobileL: `(min-width: ${size.mobileL})`,
-  tablet: `(min-width: ${size.tablet})`,
-  laptop: `(min-width: ${size.laptop})`,
-  desktop: `(min-width: ${size.desktop})`,
-  desktopL: `(min-width: ${size.desktop})`
+  mobileS: `(max-width: ${screenSize.mobileS}px)`,
+  mobileM: `(max-width: ${screenSize.mobileM}px)`,
+  mobileL: `(max-width: ${screenSize.mobileL}px)`,
+  tablet: `(max-width: ${screenSize.tablet}px)`,
+  laptop: `(max-width: ${screenSize.laptop}px)`,
+  desktop: `(max-width: ${screenSize.desktop}px)`,
+  desktopL: `(max-width: ${screenSize.desktop}px)`
 };
 
 export interface ColorShades {
@@ -38,6 +38,7 @@ export interface ColorShades {
   l5?: string;
   l6?: string;
   l7?: string;
+  lowOp?:string;
 }
 
 export interface ValueGradient {
@@ -63,10 +64,11 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
     d3: '#061117',
     d4: '#060F14',
     d5: '#050C11',
-
+    lowOp: '#0918204a',
   }
 
   const main: ColorShades = {
+    l7: '#DCE9F0',
     l6: '#82ABC3',
     l5: '#6998B4',
     l4: '#5387A5',
@@ -81,6 +83,7 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
     d5: '#092434',
     d6: '#071D2A',
     d7: '#05161F',
+    lowOp: '#12496968',
   }
 
   const second: ColorShades = {
@@ -156,12 +159,12 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
 
   const regularText = '.9rem'
   const highText = '1.1rem'
+  const buttonText = '.9rem'
   const title = '1.2rem'
-  const buttonLabel = '1.3rem'
   const h1 = '1.6rem'
   const h2 = '1.2rem'
 
-  const fontSize = { regularText, h1, buttonLabel, highText, h2, title }
+  const fontSize = { regularText, h1, highText, h2, title, buttonText }
 
   const value: DefaultTheme = {
     color,

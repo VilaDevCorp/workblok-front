@@ -1,18 +1,18 @@
-import React, { ReactNode } from 'react';
-import { ModalType } from '../../types/types';
-import { useRecoilState } from 'recoil';
-import { OtherModal } from './OtherModal';
 import { useModal } from '../../hooks/useModal';
 import { SelectActivityModal } from './SelectActivityModal';
 import { CreateActivityModal } from './CreateActivityModal';
 
+export enum ModalType {
+    SELECT_ACTIVITY,
+    CREATE_ACTIVITY
+}
 
 const getModalComponent = (modalType?: ModalType): JSX.Element => {
     switch (modalType) {
         case ModalType.SELECT_ACTIVITY:
-            return <SelectActivityModal />
+            return <SelectActivityModal/>
         case ModalType.CREATE_ACTIVITY:
-            return <CreateActivityModal />
+            return <CreateActivityModal/>
         default:
             return <></>
     }
@@ -21,7 +21,7 @@ const getModalComponent = (modalType?: ModalType): JSX.Element => {
 
 export function CoolModal() {
 
-    const { modalProps, setModalProps } = useModal()
+    const { modalProps } = useModal()
 
     return (
         modalProps.visible ?

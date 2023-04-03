@@ -1,16 +1,17 @@
-import { useRecoilState } from 'recoil';
 import { ModalBase } from '../bases/ModalBase';
-import { ButtonTypeEnum, IconTypeEnum, ModalButton, Page, SizeEnum } from '../../types/types';
+import { Page, SizeEnum } from '../../types/types';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
 import { CoolTextInput } from '../atom/CoolTextInput';
 import { useEffect, useState } from 'react';
 import { ActivityArea } from './ActivityArea';
 import { Activity } from '../../types/entities';
-import { CoolIcon } from '../atom/CoolIcon';
+import { CoolIcon, IconTypeEnum } from '../atom/CoolIcon';
 import { useApi } from '../../hooks/useApi';
 import { CoolPagination } from '../molecule/CoolPagination';
 import { useAuth } from '../../hooks/useAuth';
+import { CoolButton } from '../atom/CoolButton';
+import { useTranslation } from 'react-i18next';
 
 
 const MainBox = styled.div`
@@ -42,15 +43,13 @@ const SearchBox = styled.div`
     justify-content: center;
 `
 
-
-
-
 export function SelectActivityModal() {
 
     const { modalProps, setModalProps } = useModal()
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { t } = useTranslation()
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
     const [selectedActivities, setSelectedActivities] = useState<string[]>([])
@@ -81,16 +80,14 @@ export function SelectActivityModal() {
 
     }
 
-
     const onClear = () => {
         setSelectedActivities([])
         setModalProps({ visible: false })
     }
 
-    const buttons: ModalButton[] = [
-        { type: IconTypeEnum.CANCEL, onClick: onClear, label: 'Cancel' },
-        { type: IconTypeEnum.CONFIRM, onClick: onConfirm, label: 'Confirm' },
-
+    const buttons = [
+        <CoolButton onClick={() => onClear()} iconType={IconTypeEnum.CANCEL}>{t('button.cancel')}</CoolButton>,
+        <CoolButton onClick={() => onConfirm()} iconType={IconTypeEnum.CONFIRM}>{t('button.confirm')}</CoolButton>
     ]
 
 
@@ -98,8 +95,7 @@ export function SelectActivityModal() {
         <ModalBase size={SizeEnum.M_VERTICAL} buttons={buttons} onClose={() => { onClear() }}>
             <MainBox>
                 <SearchBox>
-                    <CoolIcon type={IconTypeEnum.SEARCH} />
-                    <CoolTextInput id='searchText' setValue={setSearchText} value={searchText} isDark />
+                    <CoolTextInput id='searchText' iconType={IconTypeEnum.SEARCH} setValue={setSearchText} value={searchText}/>
                 </SearchBox>
                 <ActivityBox>
                     <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />

@@ -33,7 +33,7 @@ interface ThemeFontSizes {
   regularText: string;
   title: string;
   highText: string;
-  buttonLabel: string;
+  buttonText: string;
   h1: string;
   h2: string;
 }

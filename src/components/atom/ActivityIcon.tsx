@@ -3,8 +3,16 @@ import { GiBoxingGlove, GiWeightLiftingUp } from 'react-icons/gi';
 import { IoMdFootball } from 'react-icons/io';
 import { FaFootballBall, FaRunning } from 'react-icons/fa';
 import { MdDirectionsWalk, MdOutlineDirectionsBike } from 'react-icons/md';
-import { ActivityIconTypeEnum } from '../../types/types';
 
+export enum ActivityIconTypeEnum {
+    RUNNING = 'running',
+    LIFTING = 'lifting',
+    BIKE = 'bike',
+    FOOTBALL = 'football',
+    BOXING = 'boxing',
+    RUGBY = 'rugby',
+    WALK = 'walk'
+}
 
 export function ActivityIcon({ type }: { type?: ActivityIconTypeEnum }) {
 

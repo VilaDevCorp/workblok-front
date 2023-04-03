@@ -14,14 +14,14 @@ const MainBox = styled.div`
 
 const MenuElement = styled.a`
     text-decoration: none;
-    color: ${props => props.theme.color.lightFont};
+    color: ${props => props.theme.color.main.l7};
     font-size: ${props => props.theme.fontSize.title};
     &:hover {
-        color: ${props => props.theme.color.main.n};    
+        color: ${props => props.theme.color.main.l5};    
     }
 `;
 
-export function HeaderMenu() {
+export function TopMenu() {
 
     const navigate = useNavigate()
 
