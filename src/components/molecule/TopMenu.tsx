@@ -3,15 +3,6 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 
-const MainBox = styled.div`
-    width: 50%;
-    padding: 1vh 5%;
-    height: 10vh;
-    display: flex;
-    gap: 10%;
-    align-items: center;
-`;
-
 const MenuElement = styled.a`
     text-decoration: none;
     color: ${props => props.theme.color.main.l7};
@@ -26,13 +17,13 @@ export function TopMenu() {
     const navigate = useNavigate()
 
     return (
-        <MainBox>
-            <MenuElement href='#' onClick={()=>navigate('/')}>
+        <div className='w-1/2 py-2 px-8 h-10 flex gap-8 items-center'>
+            <a className='text-lightFont-100 text-xl hover:text-primary-400 cursor-pointer' href='#' onClick={() => navigate('/')}>
                 {'Planning'}
-            </MenuElement>
-            <MenuElement href='#' onClick={()=>navigate('/activities')}>
+            </a>
+            <a className='text-lightFont-100 text-xl hover:text-primary-400 cursor-pointer' onClick={() => navigate('/activities')}>
                 {'Activities'}
-            </MenuElement>
-        </MainBox>
+            </a>
+        </div>
     )
 }

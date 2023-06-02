@@ -1,24 +1,23 @@
 import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
 import StatusCode from 'status-code-enum';
-import { Activity, CreateActivityForm, CreateTaskForm, RegisterUserForm, Task, Test, UpdateActivityForm, UpdateTaskForm, User } from '../types/entities';
+import { Activity, CompleteTaskForm, CreateActivityForm, CreateTaskForm, RegisterUserForm, Task, Test, UpdateActivityForm, User } from '../types/entities';
 import { Page } from '../types/types';
 import { conf } from './../conf'
 import { useAuth } from './useAuth';
 
 export interface ApiContext {
     register: (user: RegisterUserForm) => void
-    logout: () => void
     fakeDelay: (delay: number) => void
     createActivity: (activity: CreateActivityForm) => Promise<void>
     updateActivity: (activity: UpdateActivityForm) => Promise<void>
     getActivity: (id: string) => Promise<Activity>
-    getActivities: (page: number, search: string) => Promise<Page<Activity>>
+    getActivities: (page: number, name: string) => Promise<Page<Activity>>
     deleteActivities: (ids: string[]) => Promise<void>
     createTask: (task: CreateTaskForm) => Promise<void>
-    updateTask: (task: UpdateTaskForm) => Promise<void>
     deleteTask: (id: string) => Promise<void>
     getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>,
+    completeTasks: (form:CompleteTaskForm) => Promise<void>
     updateUserDans: (userId: string, isAdd: boolean, value: number) => Promise<void>,
     getUser: (id: string) => Promise<User>
 }
@@ -73,32 +72,15 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
 
-    const logout = async () => {
-        const url = `${conf.mainApiUrl}public/user/logout`
-        // const options: RequestInit = {
-        //     credentials: 'include',
-        //     method: 'POST',
-        //     headers: new Headers({
-        //         'content-type': 'application/json',
-        //     })
-        // }
-        // try {
-        //     const res = await fetch(url, options)
-        //     if (!res.ok) {
-        //         throw new Error(JSON.stringify(res))
-        //     }
-        // } catch (e) {
-        //     throw Error('Error al cerrar sesión')
-        // }
-    }
-
     const createActivity = async (activity: CreateActivityForm): Promise<void> => {
         const url = `${conf.mainApiUrl}private/activity`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'POST',
             body: JSON.stringify(activity),
             headers: new Headers({
                 'content-type': 'application/json',
+                'X-API-CSRF': csrfToken ? csrfToken : '',
             })
         }
         try {
@@ -114,9 +96,11 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const updateActivity = async (activity: UpdateActivityForm): Promise<void> => {
         const url = `${conf.mainApiUrl}private/activity`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'PUT',
             body: JSON.stringify(activity),
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -134,8 +118,10 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const getActivity = async (id: string): Promise<Activity> => {
         const url = `${conf.mainApiUrl}private/activity/${id}`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'GET',
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -146,7 +132,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error(JSON.stringify(res))
             }
             const resObject = await res.json()
-            result = resObject
+            result = resObject.obj
         } catch (e) {
             throw Error('Error getting the activity')
         }
@@ -158,11 +144,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
 
-    const getActivities = async (page: number, search: string): Promise<Page<Activity>> => {
-        const url = `${conf.mainApiUrl}private/activity?page=${page}&search=${search}`
+    const getActivities = async (page: number, name: string): Promise<Page<Activity>> => {
+        const url = `${conf.mainApiUrl}private/activity/search`
         const options: RequestInit = {
             credentials: 'include',
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({ page, name, pageSize: 10 }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
@@ -175,7 +162,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error(JSON.stringify(res))
             }
             const resObject = await res.json()
-            result = resObject
+            result = resObject.obj
         } catch (e) {
             throw Error('Error al obtener las actividades')
         }
@@ -185,9 +172,11 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const deleteActivities = async (ids: string[]): Promise<void> => {
         const url = `${conf.mainApiUrl}private/activity`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'DELETE',
-            body: JSON.stringify({ ids: ids }),
+            body: JSON.stringify({ activityIds: ids }),
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -204,9 +193,11 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const createTask = async (task: CreateTaskForm): Promise<void> => {
         const url = `${conf.mainApiUrl}private/task`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'POST',
             body: JSON.stringify(task),
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -220,12 +211,14 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const updateTask = async (task: UpdateTaskForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/task`
+    const completeTasks = async (form: CompleteTaskForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/task/complete`
         const options: RequestInit = {
-            method: 'PUT',
-            body: JSON.stringify(task),
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify(form),
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -235,19 +228,22 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error(JSON.stringify(res))
             }
         } catch (e) {
-            throw Error('Error updating the task')
+            throw Error('Error creating the task')
         }
     }
+
 
     const getUserTasks = async (userId: string, startDate: Date): Promise<Task[]> => {
         const dateStr = moment(startDate).format(conf.dateUrlFormat)
         console.log(conf.dateUrlFormat)
         console.log(dateStr)
-        const url = `${conf.mainApiUrl}private/user/${userId}/tasks/${encodeURIComponent(dateStr)}`
+        const url = `${conf.mainApiUrl}private/task/search`
         const options: RequestInit = {
             credentials: 'include',
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({ userId: userId, lowerDate: moment(startDate).format(conf.dateInputFormat), upperDate: moment(startDate).add(7, 'days').format(conf.dateInputFormat) }),
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -258,7 +254,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error(JSON.stringify(res))
             }
             const resObject = await res.json()
-            result = resObject
+            result = resObject.obj.content
         } catch (e) {
             throw Error('Error obtaining user tasks')
         }
@@ -268,8 +264,10 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const deleteTask = async (id: string): Promise<void> => {
         const url = `${conf.mainApiUrl}private/task/${id}`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'DELETE',
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -286,8 +284,10 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const getUser = async (id: string): Promise<User> => {
         const url = `${conf.mainApiUrl}private/user/${id}`
         const options: RequestInit = {
+            credentials: 'include',
             method: 'GET',
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -315,6 +315,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
             credentials: 'include',
             method: 'PATCH',
             headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
             })
         }
@@ -334,7 +335,6 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const value: ApiContext = {
         register,
-        logout,
         fakeDelay,
         createActivity,
         updateActivity,
@@ -342,8 +342,8 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         getActivities,
         deleteActivities,
         createTask,
-        updateTask,
         deleteTask,
+        completeTasks,
         getUserTasks,
         getUser,
         updateUserDans

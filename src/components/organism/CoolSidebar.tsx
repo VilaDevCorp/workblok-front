@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components'
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { useMisc } from '../../hooks/useMisc';
-import { useModal } from '../../hooks/useModal';
+import { useClickOutside } from '../../hooks//useClickOutside';
+import { useMisc } from '../../hooks//useMisc';
+import { useModal } from '../../hooks//useModal';
 import { SizeEnum } from '../../types/types';
 import { CoolButton } from '../atom/CoolButton';
 import { IconTypeEnum } from '../atom/CoolIcon';
@@ -61,7 +61,7 @@ export function CoolSidebar({ options = [] }: { options?: JSX.Element[] }) {
     const [visibleSidebar, setVisibleSidebar] = useState(false)
     const { t } = useTranslation()
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-    useClickOutside(wrapperRef, () => setOpenSidebar(false));
+    // useClickOutside(wrapperRef, () => setOpenSidebar(false));
     
     useEffect(() => {
         if (openSidebar) {

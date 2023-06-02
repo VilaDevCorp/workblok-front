@@ -1,44 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ActivityIcon, ActivityIconTypeEnum } from '../atom/ActivityIcon';
+import { ActivityIcon, ActivityType, activities } from '../atom/ActivityIcon';
 
-const MainBox = styled.div`
-    display: flex;
-    gap: 5%;
-    width: 250px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-`;
-
-interface IconProps {
-    isSelected?: boolean
-}
-
-const IconOption = styled.div<IconProps>`
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    
-    cursor: default;
-    font-size: ${props => props.theme.fontSize.h1};
-    opacity: ${props => props.isSelected ? 1 : .5};
-    border-radius: 60%;
-`
 export function IconSelector({ icon, setIcon }: {
-    icon: ActivityIconTypeEnum | undefined, setIcon: React.Dispatch<React.SetStateAction<ActivityIconTypeEnum | undefined>>
+    icon: ActivityType | undefined, setIcon: React.Dispatch<React.SetStateAction<ActivityType | undefined>>
 }) {
 
     return (
-        <MainBox>
-            {Object.values(ActivityIconTypeEnum).map((iconOption) => <IconOption isSelected={icon === iconOption}
-                onClick={() => setIcon(iconOption as ActivityIconTypeEnum)}>
-                <ActivityIcon type={iconOption as ActivityIconTypeEnum} />
-            </IconOption>
+        <div className='flex gap-4 w-full items-center flex-wrap max-h-[150px] overflow-y-auto'>
+            {activities.map((iconOption) =>
+                <div key={`${iconOption}_icon`} className={`w-[35px] h-[35px] flex justify-center items-center text-lightFont-500 cursor-default text-2xl ${icon === iconOption ? ' opacity-100 ' : ' opacity-30 '} rounded-full`}
+                    onClick={() => setIcon(iconOption as ActivityType)}>
+                    <ActivityIcon type={iconOption as ActivityType} />
+                </div>
             )}
-        </MainBox >
+        </div>
     )
 }

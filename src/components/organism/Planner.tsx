@@ -7,31 +7,22 @@ import { useMisc } from '../../hooks/useMisc';
 import { Task } from '../../types/entities';
 import { ActivityOptions } from '../molecule/ActivityOptions';
 import { DayElement } from '../molecule/DayElement';
+import { SelectActivityModal } from './SelectActivityModal';
+import { VilaModal } from '../ui/VilaModal';
+import { VilaButton } from '../ui/VilaButton';
 
-const MainBox = styled.div`
-    display:flex;    
-    width: 100%;
-    position: relative;
-    color: ${props => props.theme.color.lightFont};
-    flex-direction: column;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-`;
-const Schedule = styled.div`
-    display:flex;    
-    flex-direction: row;
-    flex-grow: 1;
-    overflow:auto;
-`
 
-export function WeekPlanner({ startDate }: { startDate: Date }) {
+export function Planner({ startDate }: { startDate: Date }) {
 
     const { getUserTasks } = useApi()
-    const { user, id } = useAuth()
+    const { user } = useAuth()
     const [datesArray, setDatesArray] = useState<Date[]>([])
     const [tasks, setTasks] = useState<Task[][]>([])
+    const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-    const {reloadTasksFlag} = useMisc()
+    const { reloadTasksFlag } = useMisc()
+    const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
+
 
     useEffect(() => {
         const startMoment = moment(startDate)
@@ -50,9 +41,9 @@ export function WeekPlanner({ startDate }: { startDate: Date }) {
     }, [startDate, reloadTasksFlag])
 
     const onGetTasks = async () => {
-        if (id) {
+        if (user) {
             const weekTasks: Task[][] = [[], [], [], [], [], [], []]
-            const tasks = await getUserTasks(id, startDate)
+            const tasks = await getUserTasks(user.id, startDate)
             const startDateMoment = moment(startDate)
             tasks.forEach((task) => {
                 const dueMoment = moment(task.dueDate)
@@ -62,13 +53,25 @@ export function WeekPlanner({ startDate }: { startDate: Date }) {
         }
     }
 
+    const onOpenSelectActivityModal = (date: Date) => {
+        setSelectActivityDate(date)
+        setVisibleSelectActivityModal(true)
+    }
+
+    const onCloseSelectActivityModal = () => {
+        setSelectActivityDate(undefined)
+        setVisibleSelectActivityModal(false)
+    }
+
     return (
-        <MainBox>
-            <Schedule>
-                {datesArray.map((date, index) => <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
-                    selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />)}
-            </Schedule>
+        <div className='flex w-full h-[75vh] max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
+            <div className='flex flex-grow overflow-hidden'>
+                {datesArray.map((date, index) =>
+                    <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
+                        selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)}
+            </div>
             <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
-        </MainBox>
+            {visibleSelectActivityModal && <SelectActivityModal date={selectActivityDate} onClose={onCloseSelectActivityModal} />}
+        </div>
     )
 }

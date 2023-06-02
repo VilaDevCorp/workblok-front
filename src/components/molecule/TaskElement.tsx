@@ -1,71 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ValueGradient } from '../../StyledTheme';
 import { Task } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
-
-interface TaskProps {
-    isCompleted?: boolean
-}
-const MainBox = styled.div<TaskProps>`
-    border: 1px solid ${props => props.theme.color.background.l2};
-    border-radius: 12px;
-    min-height: 60px;
-    gap: 3%;
-    color: ${props => props.theme.color.lightFont};
-    overflow: hidden;
-    align-items: flex-start;
-    padding: 2vh 5%;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: ${props => props.isCompleted ? props.theme.color.completedGreen : props.theme.color.background.l3};
-    cursor: pointer;
-    
-    &:hover {
-        border-color: ${props => props.theme.color.highlightColor};
-
-    }
-    transition: background .3s;
-    &.isSelected {
-        border-color: ${props => props.theme.color.highlightColor};
-        transition: background .3s;
-        background-color: ${props => props.theme.color.main.n};
-    }
-`;
-
-const ActivityInfo = styled.div`
-display: flex;
+import { ValueGradient, stylesVars } from './../../utils/stylesVars'
 
 
-`
+// const ActivityInfo = styled.div`
+// display: flex;
 
-const ActivityIconBox = styled.span`
-    font-size: ${props => props.theme.fontSize.title};
-    height: 3vh;    
-    margin-right: 2%;
-`
 
-const ActivityName = styled.div`
-    font-size: ${props => props.theme.fontSize.regularText};
-`
+// `
 
-interface SizeLabelProps {
-    size?: number
-}
 
-const ActivitySize = styled.span<SizeLabelProps>`
-    border: 1px solid;
-    margin-right: 10%;
-    margin-bottom: 5%;
-    display: flex;
-    width: 20px;
-    height: 20px;
-    font-size: ${props => props.theme.fontSize.h2};
-    justify-content: center;
-    border-radius: 60px;
-    border-color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
-    color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
-`
 
 export function TaskElement({ task, selectedActivities, setSelectedActivities }: {
     task: Task, selectedActivities: string[],
@@ -85,18 +31,23 @@ export function TaskElement({ task, selectedActivities, setSelectedActivities }:
     }
 
     const isSelected = selectedActivities.includes(task.id)
-
     return (
-        <MainBox onClick={() => onSelect()} isCompleted={task.completed} className={isSelected ? 'isSelected' : ''}>
-            <ActivityInfo>
-                <ActivityIconBox>
-                    <ActivityIcon type={task.activity.icon} />
-                </ActivityIconBox>
-                <ActivitySize size={task.activity.size}>{task.activity.size}</ActivitySize>
-            </ActivityInfo>
-            <ActivityName>
-                {task.activity.name}
-            </ActivityName>
-        </MainBox>
+        <div className={`border rounded-lg border-primary-900 bg-primary-400 opacity-80 min-h-[60px] overflow-hidden 
+            cursor-pointer w-full flex items-center gap-2 px-2 py-1  ${task.completed ? ' !bg-completedGreen ' : ''}
+            ${isSelected ? ' !opacity-100 border-background-100' : ''} hover:!opacity-100 shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] `} onClick={() => onSelect()} >
+            <div className='flex flex-col gap-2'>
+                {task.edges.activity.icon !== undefined &&
+                    <span className='text-lg'>
+                        <ActivityIcon type={task.edges.activity.icon} />
+                    </span>}
+                <span className={`border flex w-[20px] h-[20px] items-center justify-center rounded-full`} style={{
+                    borderColor: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient],
+                    color: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient]
+                }}>{task.edges.activity.size}</span>
+            </div>
+            <div>
+                {task.edges.activity.name}
+            </div>
+        </div>
     )
 }

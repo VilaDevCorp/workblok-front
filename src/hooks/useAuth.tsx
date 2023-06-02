@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (csrfToken) {
       reloadUserInfo()
     }
-  }, [csrfToken])
+  }, [csrfToken, reloadUserInfoFlag])
 
   const login = async (user: string, password: string) => {
     const url = `${conf.mainApiUrl}public/login`
@@ -69,8 +69,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const authenticate = async (username: string, password: string) => {
     try {
       const result = await login(username, password)
-      setCsrfToken(result.csrf)
-      localStorage.setItem('csrfToken', result.csrf)
+      setCsrfToken(result.obj.csrf)
+      localStorage.setItem('csrfToken', result.obj.csrf)
     } catch (e) {
       cleanUserParams()
     }
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           throw new Error(JSON.stringify(res))
         }
         const result = await res.json()
-        return result
+        return result.obj
       } catch (e) {
         throw Error('Error al realizar el login')
       }

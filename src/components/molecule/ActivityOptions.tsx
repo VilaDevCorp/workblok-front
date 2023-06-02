@@ -1,50 +1,31 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useApi } from '../../hooks/useApi';
-import { useMisc } from '../../hooks/useMisc';
-import { useModal } from '../../hooks/useModal';
+import { useApi } from '../../hooks//useApi';
+import { useMisc } from '../../hooks//useMisc';
+import { useModal } from '../../hooks//useModal';
 import { SizeEnum } from '../../types/types';
-import { IconTypeEnum } from '../atom/CoolIcon';
-import { CoolIconButton } from '../atom/CoolIconButon';
+import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 
 export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
     const { setConfirmationModalProps } = useModal()
-    const { updateTask, deleteTask, updateUserDans } = useApi()
-    const { setReloadTasksFlag, setReloadUserInfoFlag } = useMisc()
-
-    const MainBox = styled.div`
-        display: flex;
-        position: absolute;
-        justify-content: flex-start;
-        padding: .5vh 2%;
-        align-items: center;
-        bottom: -11vh;
-        border-radius: 12px;
-        width: 20%;
-        gap: 5%;
-        height: 8vh;
-        background-color: transparent;
-    `;
+    const { deleteTask, completeTasks } = useApi()
+    const { triggerReloadTasks, triggerReloadUserInfo } = useMisc()
 
     const isActivities: boolean = selectedTasks ? selectedTasks.length > 0 : false
 
     const onCompleteTasks = async () => {
-        await Promise.all(selectedTasks.map(async (task) => {
-            await updateTask({ id: task, completed: true })
-        }))
+        await completeTasks({ taskIds: selectedTasks, isCompleted: true })
         setSelectedTasks([])
-        setReloadTasksFlag((old) => !old)
-        setReloadUserInfoFlag((old) => !old)
+        triggerReloadTasks()
+        triggerReloadUserInfo()
     }
 
     const onUncompleteTasks = async () => {
-        await Promise.all(selectedTasks.map(async (task) => {
-            await updateTask({ id: task, completed: false })
-        }))
+        await completeTasks({ taskIds: selectedTasks, isCompleted: false })
         setSelectedTasks([])
-        setReloadTasksFlag((old) => !old)
-        setReloadUserInfoFlag((old) => !old)
+        triggerReloadTasks()
+        triggerReloadUserInfo()
     }
 
     const deleteTasks = async () => {
@@ -52,7 +33,7 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
             await deleteTask(task)
         }))
         setSelectedTasks([])
-        setReloadTasksFlag((old) => !old)
+        triggerReloadTasks()
     }
 
     const onDeleteActivity = () => {
@@ -60,10 +41,10 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
     }
 
     return (
-        <MainBox>
-            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.CONFIRM} onClick={onCompleteTasks}></CoolIconButton>
-            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.CANCEL} onClick={onUncompleteTasks}></CoolIconButton>
-            <CoolIconButton disabled={!isActivities} size={SizeEnum.S} type={IconTypeEnum.DELETE} onClick={onDeleteActivity}></CoolIconButton>
-        </MainBox>
+        <div className={`flex justify-start items-center rounded-lg w-[200px] gap-2`}>
+            <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'confirm'} onClick={onCompleteTasks}></VilaButtonIcon>
+            <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'cancel'} onClick={onUncompleteTasks}></VilaButtonIcon>
+            <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'delete'} onClick={onDeleteActivity}></VilaButtonIcon>
+        </div>
     )
 }

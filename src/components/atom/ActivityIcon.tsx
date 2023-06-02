@@ -4,40 +4,37 @@ import { IoMdFootball } from 'react-icons/io';
 import { FaFootballBall, FaRunning } from 'react-icons/fa';
 import { MdDirectionsWalk, MdOutlineDirectionsBike } from 'react-icons/md';
 
-export enum ActivityIconTypeEnum {
-    RUNNING = 'running',
-    LIFTING = 'lifting',
-    BIKE = 'bike',
-    FOOTBALL = 'football',
-    BOXING = 'boxing',
-    RUGBY = 'rugby',
-    WALK = 'walk'
-}
+export const activities = ['running', 'lifting', 'bike', 'football', 'boxing', 'rugby', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk'];
 
-export function ActivityIcon({ type }: { type?: ActivityIconTypeEnum }) {
+
+export type ActivityType = typeof activities[number]
+
+export function ActivityIcon({ type }: { type?: ActivityType }) {
 
     const getIcon = (): JSX.Element => {
         switch (type) {
-            case ActivityIconTypeEnum.RUNNING:
-                return <BiRun />
-            case ActivityIconTypeEnum.BOXING:
-                return <GiBoxingGlove />
-            case ActivityIconTypeEnum.FOOTBALL:
-                return <IoMdFootball />
-            case ActivityIconTypeEnum.RUGBY:
-                return <FaFootballBall />
-            case ActivityIconTypeEnum.BIKE:
-                return <MdOutlineDirectionsBike />
-            case ActivityIconTypeEnum.LIFTING:
-                return <GiWeightLiftingUp />
-            case ActivityIconTypeEnum.WALK:
-                return <MdDirectionsWalk />
+            case 'running':
+                return <BiRun />;
+            case 'boxing':
+                return <GiBoxingGlove />;
+            case 'football':
+                return <IoMdFootball />;
+            case 'rugby':
+                return <FaFootballBall />;
+            case 'bike':
+                return <MdOutlineDirectionsBike />;
+            case 'lifting':
+                return <GiWeightLiftingUp />;
+            case 'walk':
+                return <MdDirectionsWalk />;
             default:
-                return <></>
+                return <></>;
         }
     }
 
     return (
-        getIcon()
+        <span className='flex justify-center items'>
+            {getIcon()}
+        </span>
     )
 }

@@ -1,6 +1,4 @@
 import Body from './Body';
-import { CoolLoading } from './components/atom/CoolLoading';
-import GlobalStyle from './globalStyles';
 import { ApiProvider } from './hooks/useApi';
 import { AuthProvider } from './hooks/useAuth';
 import { MiscProvider } from './hooks/useMisc';
@@ -8,6 +6,7 @@ import { ModalProvider } from './hooks/useModal';
 import { ScreenProvider } from './hooks/useScreen';
 import { SnackbarProvider } from './hooks/useSnackbar';
 import { StyledTheme } from './StyledTheme';
+import '../src/index.css'; // replace with the name of your tailwind css file
 
 
 function App() {
@@ -19,8 +18,6 @@ function App() {
             <ApiProvider>
               <ModalProvider>
                 <StyledTheme>
-                  <GlobalStyle />
-                  <CoolLoading />
                   <Body />
                 </StyledTheme>
               </ModalProvider>

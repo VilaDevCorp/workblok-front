@@ -1,106 +1,85 @@
-import { ModalBase } from '../bases/ModalBase';
-import { SizeEnum } from '../../types/types';
-import styled from 'styled-components';
-import { useModal } from '../../hooks/useModal';
-import { CoolTextInput } from '../atom/CoolTextInput';
 import { useEffect, useState } from 'react';
-import { CoolTextArea } from '../atom/CoolTextArea';
-import { useApi } from '../../hooks/useApi';
-import { useAuth } from '../../hooks/useAuth';
+import { useApi } from '../../hooks//useApi';
+import { useAuth } from '../../hooks//useAuth';
 import { SizeSelector } from '../molecule/SizeSelector';
 import { IconSelector } from '../molecule/IconSelector';
-import { useMisc } from '../../hooks/useMisc';
-import { ActivityIconTypeEnum } from '../atom/ActivityIcon';
-import { CoolButton } from '../atom/CoolButton';
-import { IconTypeEnum } from '../atom/CoolIcon';
-import { CoolForm } from './CoolForm';
+import { useMisc } from '../../hooks//useMisc';
 import { useTranslation } from 'react-i18next';
+import { VilaButton } from '../ui/VilaButton';
+import { VilaModal } from '../ui/VilaModal';
+import { VilaForm } from '../ui/VilaForm';
+import { VilaTextInput } from '../ui/VilaTextInput';
+import { ActivityType } from '../atom/ActivityIcon';
+import { VilaTextArea } from '../ui/VilaTextArea';
+import { useValidator } from '../../hooks/useValidator';
+import { notEmptyValidator } from '../../hooks/useValidator';
 
 
-const StyledText = styled.p`
-    font-size: ${props => props.theme.fontSize.title};
-    color: ${props => props.theme.color.lightFont};
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin: 0;
-`;
+export function CreateActivityModal({ activityId, onClose }: { activityId?: string, onClose: () => void }) {
 
-
-export function CreateActivityModal() {
-
-    const { modalProps, setModalProps } = useModal()
     const [id, setId] = useState<string>('')
     const [name, setName] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [icon, setIcon] = useState<ActivityIconTypeEnum | undefined>(undefined)
-    const [size, setSize] = useState<string>('')
+    const [icon, setIcon] = useState<ActivityType | undefined>(undefined)
+    const [size, setSize] = useState<number | undefined>(undefined)
     const { createActivity, getActivity, updateActivity } = useApi()
     const { user } = useAuth()
-    const { setIsLoading, setReloadActivitiesFlag } = useMisc()
-    const {t} = useTranslation()
+    const { setIsLoading, triggerReloadActivities } = useMisc()
+    const { t } = useTranslation()
+
+    const [sizeDirty, sizeError, sizeMessage, sizeValidate] = useValidator(size ? size.toString() : '', [notEmptyValidator])
 
     useEffect(() => {
         onGetActivity()
-    }, [modalProps.visible])
+    }, [])
 
 
     const onGetActivity = async () => {
-        if (modalProps.params?.elementId) {
-            const activity = await getActivity(modalProps.params?.elementId)
+        if (activityId) {
+            const activity = await getActivity(activityId)
             setId(activity.id)
             setName(activity.name)
-            setSize(activity.size.toString())
+            setSize(activity.size)
+            setDescription(activity.description)
             setIcon(activity.icon ? activity.icon : undefined)
         }
     }
 
     const onConfirm = async () => {
         setIsLoading(() => true)
+        const sizeValid = sizeValidate()
         try {
-            if (id) {
-                await updateActivity({ id, name, size: Number.parseInt(size), icon: icon })
+            if (id && sizeValid) {
+                await updateActivity({ id, name, size: size!, icon: icon, description })
             } else {
                 if (user?.id) {
-                    await createActivity({ name, size: Number.parseInt(size), userId: user.id, icon: icon })
+                    await createActivity({ name, size: size!, userId: user.id, icon: icon, description })
                 }
-            } setReloadActivitiesFlag((old) => !old)
+            } triggerReloadActivities()
         } catch (e) {
         }
         finally {
-            onClear()
             setIsLoading(() => false)
+            onClose()
         }
     }
 
-    const onClear = () => {
-        setModalProps(() => { return { visible: false } })
-    }
-
-    const buttons = [
-        <CoolButton onClick={() => onClear()} iconType={IconTypeEnum.CANCEL}>{t('button.cancel')}</CoolButton>,
-        <CoolButton onClick={() => onConfirm()} iconType={IconTypeEnum.CONFIRM}>{t('button.confirm')}</CoolButton>
-    ]
-
     return (
-        <ModalBase size={SizeEnum.M} buttons={buttons} onClose={() => { onClear() }}>
-            {/* <CoolModalFormFrame title={id ? 'Update activity' : 'Create new activity'}> */}
-            <CoolForm id='createActivityForm' nColumns={2} formFields={[
+        <VilaModal onClose={onClose} hasHeader title={`${activityId ? 'Edit activity' : 'Create activity'}`} size='m-squared'
+            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' style={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            <VilaForm nColumns={2} fields={[
                 {
-                    id: 'name', formElement: <CoolTextInput id='name' value={name} setValue={setName} />
+                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} />
                 },
                 {
-                    id: 'description', formElement: <CoolTextArea id='description' value={description} setValue={setDescription} />
+                    label: 'Size', input: <SizeSelector setSize={setSize} size={size} />
                 },
                 {
-                    id: 'icon', formElement: <IconSelector setIcon={setIcon} icon={icon} />
+                    label: 'Description', input: <VilaTextArea value={description} setValue={setDescription} />
                 },
                 {
-                    id: 'size', formElement: <SizeSelector setSize={setSize} size={size} />
+                    label: 'Icon', input: <IconSelector setIcon={setIcon} icon={icon} />
                 }]} />
-        </ModalBase >
+        </VilaModal >
     )
 }
-

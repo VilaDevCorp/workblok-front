@@ -23,7 +23,4 @@ export interface Page<T> {
   totalPages: number;
   content: T[];
 }
-
-
-
-
+export type ThemeColors = 'primary'|'seconday'

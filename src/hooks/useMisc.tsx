@@ -4,13 +4,13 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 export interface MiscContext {
   isLoading: boolean,
   clearContext: boolean,
-  setClearContext: React.Dispatch<React.SetStateAction<boolean>>,
+  triggerClearContext: () => void,
   reloadUserInfoFlag: boolean,
-  setReloadUserInfoFlag: React.Dispatch<React.SetStateAction<boolean>>,
+  triggerReloadUserInfo: () => void,
   reloadTasksFlag: boolean,
-  setReloadTasksFlag: React.Dispatch<React.SetStateAction<boolean>>,
+  triggerReloadTasks: () => void,
   reloadActivitiesFlag: boolean,
-  setReloadActivitiesFlag: React.Dispatch<React.SetStateAction<boolean>>,
+  triggerReloadActivities: () => void,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   openSidebar: boolean,
   setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>,
@@ -41,9 +41,24 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
   //This state blocks the sidebar when its doing the open/close animation
   const [blockedSidebar, setBlockedSidebar] = useState<boolean>(false)
 
+  const triggerReloadUserInfo = () => {
+    setReloadUserInfoFlag((old) => !old)
+  }
+  const triggerReloadTasks = () => {
+    setReloadTasksFlag((old) => !old)
+  }
+  const triggerReloadActivities = () => {
+    setReloadActivitiesFlag((old) => !old)
+  }
+
+  const triggerClearContext = () => {
+    setClearContext((old) => !old)
+  }
+
+
   const value: MiscContext = {
-    isLoading, setIsLoading, clearContext, setClearContext, reloadUserInfoFlag, setReloadUserInfoFlag, reloadTasksFlag, setReloadTasksFlag,
-    reloadActivitiesFlag, setReloadActivitiesFlag, openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar
+    isLoading, setIsLoading, clearContext, triggerClearContext, reloadUserInfoFlag, triggerReloadUserInfo, reloadTasksFlag, triggerReloadTasks,
+    reloadActivitiesFlag, triggerReloadActivities, openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar
   }
 
   return (

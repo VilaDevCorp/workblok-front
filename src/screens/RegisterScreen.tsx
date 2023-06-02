@@ -4,11 +4,6 @@ import styled, { useTheme } from 'styled-components';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../hooks/useAuth';
 import loginImg from './../../public/loginImg.png';
-import { TextInputTypeEnum } from '../components/bases/TextInputBase';
-import { CoolTextInput } from '../components/atom/CoolTextInput';
-import { CoolButton } from '../components/atom/CoolButton';
-import { CoolForm } from '../components/organism/CoolForm';
-import { IconTypeEnum } from '../components/atom/CoolIcon';
 
 const MainBox = styled.div`
     display: flex;
@@ -34,7 +29,7 @@ const LoginBox = styled.div`
     gap: 2vh;
     box-sizing: border-box;
     padding: 1% 2%;
-    background-color: ${props => props.theme.color.background.n};
+    /* background-color: ${props => props.theme.color.background.n}; */
     width: 30%;
     padding: 10vh 0;
     height: 100vh;
@@ -48,14 +43,14 @@ const LoginBox = styled.div`
     }
 `;
 
-const LoginButton = styled(CoolButton)`
-    margin-top: 3vh;
-`;
+// const LoginButton = styled(CoolButton)`
+//     margin-top: 3vh;
+// `;
 
 
 export function RegisterScreen() {
 
-    const { login, logout, register } = useApi()
+    const { register } = useApi()
     const authInfo = useAuth()
     const navigate = useNavigate()
     const theme = useTheme()
@@ -79,19 +74,19 @@ export function RegisterScreen() {
         // }
     }
 
-    return (
-        <MainBox>
-            <LoginBox>
-                <img src={loginImg} alt='Logo login' />
-                <CoolForm formFields={[{
-                    id: 'username', formElement: <CoolTextInput id={'username'} value={username} setValue={setUsername} />
-                }, {
-                    id: 'mail', formElement: <CoolTextInput id={'mail'} value={mail} setValue={setMail} />
-                }, {
-                    id: 'password', formElement: <CoolTextInput id={'password'} value={password} setValue={setPassword} type={TextInputTypeEnum.PASSWORD} />
-                }]} id={'loginForm'} nColumns={1}></CoolForm>
-                <LoginButton onClick={() => onRegister()} iconType={IconTypeEnum.LOGIN} ></LoginButton>
-            </LoginBox>
-        </MainBox>
+    return (<></>
+        // <MainBox>
+        //     <LoginBox>
+        //         <img src={loginImg} alt='Logo login' />
+        //         <CoolForm formFields={[{
+        //             id: 'username', formElement: <CoolTextInput id={'username'} value={username} setValue={setUsername} />
+        //         }, {
+        //             id: 'mail', formElement: <CoolTextInput id={'mail'} value={mail} setValue={setMail} />
+        //         }, {
+        //             id: 'password', formElement: <CoolTextInput id={'password'} value={password} setValue={setPassword} type={TextInputTypeEnum.PASSWORD} />
+        //         }]} id={'loginForm'} nColumns={1}></CoolForm>
+        //         <LoginButton onClick={() => onRegister()} iconType={IconTypeEnum.LOGIN} ></LoginButton>
+        //     </LoginBox>
+        // </MainBox>
     )
 }

@@ -1,8 +1,8 @@
-import { ActivityIconTypeEnum } from "../components/atom/ActivityIcon";
+import { ActivityType } from "../components/atom/ActivityIcon";
 
 export interface User {
   id: string;
-  userName: string;
+  username: string;
   dans: number;
 }
 
@@ -21,48 +21,53 @@ export interface Test {
 export interface Activity {
   id: string;
   name: string;
-  icon?: ActivityIconTypeEnum;
-  size:number
+  description: string;
+  icon?: ActivityType;
+  size: number;
 }
 
 export interface RegisterUserForm {
-  username: string
-  mail:string
-  password: string
+  username: string;
+  mail: string;
+  password: string;
+  description: string;
 }
 
 export interface CreateActivityForm {
-  name: string
-  size: number
-  icon?: ActivityIconTypeEnum
-  userId: string
+  name: string;
+  size: number;
+  description: string;
+  icon?: ActivityType;
+  userId: string;
 }
 
 export interface UpdateActivityForm {
-  id:string
-  name: string
-  icon?: ActivityIconTypeEnum
-  size: number
+  id: string;
+  name: string;
+  description: string;
+  icon?: ActivityType;
+  size: number;
 }
 
 export interface Task {
   id: string;
+  dueDate: Date;
+  userId: string;
+  completed: boolean;
+  edges: TaskEdges;
+}
+
+interface TaskEdges {
   activity: Activity;
-  dueDate: Date
-  userId:string;
-  completed:boolean
 }
 
 export interface CreateTaskForm {
-  activityId: string
-  dueDate: string
-  userId: string
+  activityId: string;
+  dueDate: string;
+  userId: string;
 }
 
-export interface UpdateTaskForm {
-  id:string
-  completed:boolean;
+export interface CompleteTaskForm {
+  taskIds: string[];
+  isCompleted: boolean;
 }
-
-
-

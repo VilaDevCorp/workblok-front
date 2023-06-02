@@ -38,16 +38,9 @@ export interface ColorShades {
   l5?: string;
   l6?: string;
   l7?: string;
-  lowOp?:string;
+  lowOp?: string;
 }
 
-export interface ValueGradient {
-  1?: string;
-  2?: string;
-  3?: string;
-  4?: string;
-  5?: string;
-}
 
 export const StyledTheme = ({ children }: { children: ReactNode }) => {
 
@@ -100,13 +93,6 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
     d5: '',
   }
 
-  const taskSize: ValueGradient = {
-    1: '#55d745',
-    2: '#95da30',
-    3: '#e1de18',
-    4: '#df8021',
-    5: '#D93030',
-  }
 
 
   //   const background.n = '#091820'
@@ -154,7 +140,7 @@ export const StyledTheme = ({ children }: { children: ReactNode }) => {
   const color = {
     background, main, second, highlightColor, modalBackground,
     mainLowOp, lightFont, darkFont, button, buttonHoverDark, inactive, hoverInputDark, hoverInputLight, inputDark, inputLight, danger, darkFontLowOp, highlightColorLowOp,
-    buttonHoverLight, grey, lightGrey, taskSize, completedGreen
+    buttonHoverLight, grey, lightGrey, completedGreen
   }
 
   const regularText = '.9rem'

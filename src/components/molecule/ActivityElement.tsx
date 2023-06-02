@@ -1,69 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ValueGradient } from '../../StyledTheme';
 import { Activity } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
+import { stylesVars, ValueGradient } from '../../utils/stylesVars'
 
-const MainBox = styled.div`
-    border: 1px solid ${props => props.theme.color.background.n};
-    border-radius: 12px;
-    min-height: 60px;
-    display: flex;
-    gap: 3%;
-    color: ${props => props.theme.color.lightFont};
-    overflow: hidden;
-    align-items: flex-start;
-    padding: 2vh 5%;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: ${props => props.theme.color.background.l2};
-    cursor: pointer;
-    
-    &:hover {
-        border-color: ${props => props.theme.color.highlightColor};
-
-    }
-    transition: background .3s;
-    &.isSelected {
-        border-color: ${props => props.theme.color.highlightColor};
-        transition: background .3s;
-        background-color: ${props => props.theme.color.main.n};
-    }
-`;
-
-const ActivityInfo = styled.div`
-    display: flex;
-    width: 20%;
-`
-
-const ActivityIconBox = styled.span`
-    font-size: ${props => props.theme.fontSize.title};
-    height: 3vh;    
-    margin-right: 2%;
-`
-
-const ActivityName = styled.div`
-    font-size: ${props => props.theme.fontSize.regularText};
-    width: 80%;
-`
-
-interface SizeLabelProps {
-    size?: number
-}
-
-const ActivitySize = styled.span<SizeLabelProps>`
-    border: 1px solid;
-    margin-right: 10%;
-    margin-bottom: 5%;
-    display: flex;
-    width: 20px;
-    height: 20px;
-    font-size: ${props => props.theme.fontSize.h2};
-    justify-content: center;
-    border-radius: 60px;
-    border-color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
-    color: ${props => props.size ? props.theme.color.taskSize[props.size as keyof ValueGradient] : undefined};
-`
 
 export function ActivityElement({ id, activity, selectedActivities, setSelectedActivities }: {
     id: string, activity: Activity, selectedActivities: string[],
@@ -85,17 +25,14 @@ export function ActivityElement({ id, activity, selectedActivities, setSelectedA
     const isSelected = selectedActivities.includes(id)
 
     return (
-        <MainBox onClick={() => onSelect()} className={isSelected ? 'isSelected' : ''}>
-            <ActivityInfo>
-                <ActivityIconBox>
-                    <ActivityIcon type={activity.icon} />
-                </ActivityIconBox>
-                <ActivitySize size={activity.size}>{activity.size}</ActivitySize>
-            </ActivityInfo>
-
-            <ActivityName>
+        <div className={`rounded-lg min-h-[50px] flex gap-4 text-lightFont-500 overflow-hidden items-center py-2 px-3 w-full box-border bg-background-400 cursor-pointer ${isSelected ? 'bg-primary-500' : ''} `} onClick={() => onSelect()}>
+            <div className='flex gap-2 w-[60px] justify-end text-lg'>
+                <ActivityIcon type={activity.icon} />
+                <span className={`border flex w-[25px] h-[25px] justify-center rounded-full items-center px-1 py-1`} style={{ borderColor: stylesVars.taskSize[activity.size as keyof ValueGradient], color: stylesVars.taskSize[activity.size as keyof ValueGradient] }}>{activity.size}</span>
+            </div>
+            <span className=''>
                 {activity.name}
-            </ActivityName>
-        </MainBox>
+            </span>
+        </div>
     )
 }

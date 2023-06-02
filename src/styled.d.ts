@@ -26,7 +26,6 @@ export interface ThemeColors {
   hoverInputDark: string;
   grey:string;
   lightGrey:string;
-  taskSize: ValueGradient
 }
 
 interface ThemeFontSizes {
@@ -40,7 +39,7 @@ interface ThemeFontSizes {
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    color: ThemeColors;
-    fontSize: ThemeFontSizes;
+    color?: ThemeColors;
+    fontSize?: ThemeFontSizes;
   }
 }

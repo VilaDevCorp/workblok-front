@@ -1,73 +1,9 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks//useAuth';
 import { SizeEnum } from '../../types/types';
-import { CoolIcon, IconTypeEnum } from '../atom/CoolIcon';
-import { ButtonStyleEnum, CoolButton } from '../atom/CoolButton';
-import { CoolIconButton } from '../atom/CoolIconButon';
-import { device } from '../../StyledTheme';
-
-
-const MainBox = styled.div`
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    max-width: 360px;
-    gap: 15px;
-`;
-
-const UserInfo = styled.div`
-    display: flex;
-    max-width: 220px;        
-    @media ${device.tablet} {
-        max-width: 150px;        
-    };
-    @media ${device.mobileM} {
-        max-width: 110px;        
-    };
-    overflow: hidden;
-    gap: 10px;
-    white-space: nowrap;
-    font-size: ${props => props.theme.fontSize.highText};
-    flex-direction: column;
-`
-const UserName = styled.div`
-    display: flex;
-    align-items: center;
-    color: ${props => props.theme.color.main.l7};
-`;
-
-const UserIcon = styled.div`
-    color: ${props => props.theme.color.main.l7};
-    border-radius: 60px;
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-`;
-
-const UserCoins = styled.div`
-    display: flex;
-    width:100%;
-    color: ${props => props.theme.color.highlightColor};
-`
-
-const CoinsIcon = styled.div`
-    border-radius: 60px;
-    width: 25px;
-    height: 25px;
-    border: none;   
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    box-sizing: border-box;
-`;
-
+import { ButtonStyleEnum } from '../atom/CoolButton';
+import { VilaIcon } from '../ui/VilaIcon';
+import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 
 
 export function HeaderUser() {
@@ -81,22 +17,18 @@ export function HeaderUser() {
     }
 
     return (
-        <MainBox>
-            <UserInfo>
-                <UserName>
-                    <UserIcon>
-                        <CoolIcon type={IconTypeEnum.USER} />
-                    </UserIcon>
-                    {user?.userName}
-                </UserName>
-                <UserCoins>
-                    <CoinsIcon>
-                        <CoolIcon type={IconTypeEnum.COINS} />
-                    </CoinsIcon>
+        <div className='ml-auto max-w-[500px] flex items-center gap-4'>
+            <div className='flex max-w-[200px] w-full overflow-hidden gap-2 whitespace-nowrap flex-col'>
+                <div className='flex items-center w-full text-lightFont-500 gap-2 '>
+                    <VilaIcon type={"user"} className='w-6 h-6' />
+                    {user?.username}
+                </div>
+                <div className='flex w-full text-coinIcon gap-2'>
+                    <VilaIcon type={"coin"} className='w-6 h-6' />
                     {user?.dans}
-                </UserCoins>
-            </UserInfo>
-            <CoolIconButton style={ButtonStyleEnum.TRANSPARENT} type={IconTypeEnum.LOGOUT} onClick={onLogout} size={SizeEnum.S} />
-        </MainBox>
+                </div>
+            </div>
+            <VilaButtonIcon style={'transparent'} icon={"logout"} onClick={onLogout} size={'s'} />
+        </div>
     )
 }
