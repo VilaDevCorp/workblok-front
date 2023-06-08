@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks//useAuth';
-import { SizeEnum } from '../../types/types';
-import { ButtonStyleEnum } from '../atom/CoolButton';
 import { VilaIcon } from '../ui/VilaIcon';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 
@@ -13,7 +11,7 @@ export function HeaderUser() {
 
     const onLogout = async () => {
         logout()
-        navigate('/')
+        navigate('/login')
     }
 
     return (

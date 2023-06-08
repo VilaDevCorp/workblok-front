@@ -9,6 +9,10 @@ import { VilaForm } from '../components/ui/VilaForm'
 import { VilaTextInput } from '../components/ui/VilaTextInput';
 import { VilaButton } from '../components/ui/VilaButton';
 import logo from './../../public/logo.svg';
+import { useValidator, notEmptyValidator, emailValidator, minLength8Validator, upperLowerCaseValidator } from '../hooks/useValidator';
+import { ApiError } from '../types/types';
+import StatusCode from 'status-code-enum';
+import { VilaLayout } from '../components/ui/VilaLayout';
 
 
 export function LoginScreen() {
@@ -20,54 +24,48 @@ export function LoginScreen() {
     const [password, setPassword] = useState<string>('')
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [showScreen, setShowScreen] = useState<boolean>(true)
-    const [isHidden, setIsHidden] = useState<boolean>(false)
     const { triggerReloadUserInfo } = useMisc()
 
-
-
-    useEffect(() => {
-        if (auth.csrfToken) {
-            setIsHidden(true)
-            setTimeout(() => {
-                setShowScreen(false)
-            }, 2000);
-        } else {
-            setShowScreen(true)
-            setTimeout(() => {
-                setIsHidden(false)
-            }, 5);
-
-        }
-    }, [auth.csrfToken])
+    const [mailDirty, mailError, mailMessage, mailValidate] = useValidator(mail, [notEmptyValidator]);
+    const [passwordDirty, passwordError, passwordMessage, passwordValidate] = useValidator(password, [notEmptyValidator]);
 
 
     const onLogin = async () => {
-        if (mail !== '' && password !== '') {
+        const mailValid = mailValidate()
+        const passwordValid = passwordValidate()
+
+        if (mailValid && passwordValid) {
             setIsLoading(true)
             try {
                 await auth.authenticate(mail, password)
                 triggerReloadUserInfo()
                 navigate('/')
-                setIsHidden(true)
             } catch (e) {
                 setIsLoading(false)
+                if (e instanceof ApiError) {
+                    if (e.cause === StatusCode.ClientErrorUnauthorized && e.errCode === '002') {
+                        navigate(`/validate/${mail}`)
+                    }
+                }
             }
             setIsLoading(false)
         }
     }
 
+    const linkClasses = 'text-secondary-100  self-start cursor-pointer hover:text-secondary-400'
 
     return (
-        showScreen ?
-            <div className={`flex absolute top-0 bg-background-500 z-50 w-full h-full justify-center items-center transition-opacity ${isHidden ? ' opacity-0' : ''}`}>
-                <div className={`flex w-500px] h-full justify-center items-center flex-col gap-6 `}>
+        <VilaLayout isPublic>
+            <div className={`flex w-full h-full justify-center items-center`}>
+                <div className={`flex w-[500px] h-full justify-center items-center flex-col gap-6 `}>
                     <img src={logo} className='w-[150px] h-[150px]' alt='Logo login' />
-                    <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={setMail} />, label: 'Email' },
-                    { input: <VilaTextInput value={password} setValue={setPassword} type='password' />, label: 'Contraseña' }]} nColumns={1}></VilaForm>
-                    <VilaButton onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Acceder'}</VilaButton>
+                    <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
+                    { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Contraseña' }]} nColumns={1}></VilaForm>
+                    <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
+                    <VilaButton className='!w-full !justify-center' onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
+                    <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>
                 </div>
             </div >
-            : <></>
+        </VilaLayout>
     )
 }

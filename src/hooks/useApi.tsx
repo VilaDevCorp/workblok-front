@@ -1,14 +1,16 @@
 import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
 import StatusCode from 'status-code-enum';
-import { Activity, CompleteTaskForm, CreateActivityForm, CreateTaskForm, RegisterUserForm, Task, Test, UpdateActivityForm, User } from '../types/entities';
-import { Page } from '../types/types';
+import { Activity, CompleteTaskForm, CreateActivityForm, CreateTaskForm, CreateVerificationCodeForm, RegisterUserForm, Task, Test, UpdateActivityForm, User, UseVerificationCodeForm } from '../types/entities';
+import { ApiError, ApiResponse, Page } from '../types/types';
 import { conf } from './../conf'
 import { useAuth } from './useAuth';
 
 export interface ApiContext {
     register: (user: RegisterUserForm) => void
     fakeDelay: (delay: number) => void
+    useVerificationCode: (form: UseVerificationCodeForm) => Promise<void>
+    sendVerificationCode: (form: CreateVerificationCodeForm) => Promise<void>
     createActivity: (activity: CreateActivityForm) => Promise<void>
     updateActivity: (activity: UpdateActivityForm) => Promise<void>
     getActivity: (id: string) => Promise<Activity>
@@ -17,7 +19,7 @@ export interface ApiContext {
     createTask: (task: CreateTaskForm) => Promise<void>
     deleteTask: (id: string) => Promise<void>
     getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>,
-    completeTasks: (form:CompleteTaskForm) => Promise<void>
+    completeTasks: (form: CompleteTaskForm) => Promise<void>
     updateUserDans: (userId: string, isAdd: boolean, value: number) => Promise<void>,
     getUser: (id: string) => Promise<User>
 }
@@ -329,13 +331,54 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const sendVerificationCode = async (form: CreateVerificationCodeForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}public/newVerificationCode`
+        const options: RequestInit = {
+            method: 'POST',
+            body: JSON.stringify(form),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            const resObject: ApiResponse = await res.json()
+            if (!res.ok) {
+                throw new Error()
+            }
+        } catch (e) {
+            throw e
+        }
+    }
 
-
+    const useVerificationCode = async (form: UseVerificationCodeForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}public/useVerificationCode`
+        const options: RequestInit = {
+            method: 'POST',
+            body: JSON.stringify(form),
+            headers: new Headers({
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            const resObject: ApiResponse = await res.json()
+            if (!res.ok) {
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
+            }
+        } catch (e) {
+            throw e
+        }
+    }
 
 
     const value: ApiContext = {
         register,
         fakeDelay,
+        useVerificationCode,
+        sendVerificationCode,
         createActivity,
         updateActivity,
         getActivity,

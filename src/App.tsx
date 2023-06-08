@@ -5,7 +5,6 @@ import { MiscProvider } from './hooks/useMisc';
 import { ModalProvider } from './hooks/useModal';
 import { ScreenProvider } from './hooks/useScreen';
 import { SnackbarProvider } from './hooks/useSnackbar';
-import { StyledTheme } from './StyledTheme';
 import '../src/index.css'; // replace with the name of your tailwind css file
 
 
@@ -17,9 +16,7 @@ function App() {
           <AuthProvider>
             <ApiProvider>
               <ModalProvider>
-                <StyledTheme>
-                  <Body />
-                </StyledTheme>
+                <Body />
               </ModalProvider>
             </ApiProvider>
           </AuthProvider>

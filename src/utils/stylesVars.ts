@@ -1,13 +1,11 @@
-const colors = {
-  main: "#09828b",
-  mainLight: "#09828b30",
-  contrast: "#db504a",
-  red: "#",
-  green: "#",
-  redPink: "#",
-  yellow: "#",
-  lightBlue: "#",
-  lighterBlue: "#",
+export interface ColorsType {
+  success: string;
+  error: string;
+}
+
+const colors: ColorsType = {
+  success: "#256E58",
+  error: "#e73232",
 };
 
 const fonts = {

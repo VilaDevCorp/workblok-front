@@ -1,17 +1,17 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { IconTypeEnum } from '../components/atom/CoolIcon';
-import { ThemeColors } from '../styled';
+import { IconType } from '../components/ui/VilaIcon';
+
+
+type SnackbarColor = 'error' | 'success'
 
 export interface SnackbarContext {
-  snackbarProps: SnackbarProps,
-  setSnackbarProps: React.Dispatch<React.SetStateAction<SnackbarProps>>,
-}
-
-export interface SnackbarProps {
   visible: boolean
-  text?: string
-  iconType?: IconTypeEnum
-  color?: keyof ThemeColors
+  text: string
+  icon?: IconType
+  color?: SnackbarColor
+  onOpen: (text: string, icon?: IconType, color?: SnackbarColor) => void
+  onClose: () => void
+
 }
 
 const SnackbarContext = createContext<SnackbarContext>({} as any)
@@ -27,12 +27,28 @@ export const useSnackbar = () => {
 
 export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
 
-  const [snackbarProps, setSnackbarProps] = useState<SnackbarProps>({ visible: false })
+  const [visible, setVisible] = useState<boolean>(false)
+  const [text, setText] = useState<string>('')
+  const [icon, setIcon] = useState<IconType | undefined>(undefined)
+  const [color, setColor] = useState<SnackbarColor | undefined>(undefined)
 
+  const onOpen = (text: string, icon?: IconType, color?: SnackbarColor) => {
+    setText(text)
+    setIcon(icon)
+    setColor(color)
+    setVisible(true)
+  }
+  const onClose = () => {
+    setVisible(false)
+  }
 
   const value: SnackbarContext = {
-    snackbarProps,
-    setSnackbarProps,
+    visible,
+    text,
+    icon,
+    color,
+    onOpen,
+    onClose
   }
 
   return (

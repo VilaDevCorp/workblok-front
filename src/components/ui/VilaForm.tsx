@@ -9,7 +9,7 @@ export interface FormField {
 export function VilaForm({ nColumns = 1, fields }: { nColumns: number, fields: FormField[] }) {
 
     return (
-        <div className={`flex flex-wrap gap-[25px] `}>
+        <div className={`flex flex-wrap gap-[20px] w-full `}>
             {fields.map((field) =>
                 <VilaField label={field.label} nColumns={nColumns}>
                     {field.input}

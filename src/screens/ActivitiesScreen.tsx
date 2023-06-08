@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ScreenFrame } from '../components/molecule/ScreenFrame';
+import { VilaLayout } from '../components/ui/VilaLayout';
 import { useApi } from '../hooks/useApi';
 import { useMisc } from '../hooks/useMisc';
 import { useModal } from '../hooks/useModal';
@@ -114,7 +114,7 @@ export function ActivitiesScreen() {
     }]
 
     return (
-        <ScreenFrame>
+        <VilaLayout>
             <div className='flex w-full flex-col h-[65vh]'>
                 <VilaTable headers={headers} data={tableData} isLoading={isLoading} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
                     searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
@@ -123,6 +123,6 @@ export function ActivitiesScreen() {
             <>{createActivityModalVisible && <CreateActivityModal activityId={activityForEdit} onClose={() => onCloseCreateActivityModal()} />}</>
             <>{confirmDeleteModalVisible && <ConfirmationModal onClick={() => onDelete()} onClose={() => onCloseDeleteConfirmationModal()} label='These activities will be deleted. Are you sure?' />}</>
 
-        </ScreenFrame>
+        </VilaLayout>
     )
 }

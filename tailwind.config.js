@@ -85,7 +85,8 @@ export default {
         900: "#04090C",
       },
       coinIcon: "#bfb14b",
-      completedGreen: '#256E58',
+      success: '#256E58',
+      error: '#e73232',
       transparent: "#00000000",
     },
     extend: {
@@ -98,10 +99,17 @@ export default {
           "0%": { transform: "scale(1)" },
           "100%": { transform: "scale(0)" },
         },
+        showSnackbar: {
+          "0%": { opacity: 0 },
+          "20%": { opacity: 1 },
+          "80%": { opacity: 1 },
+          "100%": { opacity: 0 },
+        },
       },
       animation: {
         showModal: "showAnimation .1s linear",
         hideModal: "hideAnimation .1s linear",
+        showSnackbar: "showSnackbar 4s linear 1",
       },
     },
   },

@@ -30,7 +30,18 @@ export interface RegisterUserForm {
   username: string;
   mail: string;
   password: string;
-  description: string;
+}
+
+export interface CreateVerificationCodeForm {
+  type: "validate_account" | "recover_password";
+  mail: string;
+}
+
+export interface UseVerificationCodeForm {
+  type: "validate_account" | "recover_password";
+  mail: string;
+  code: string;
+  newPass?: string;
 }
 
 export interface CreateActivityForm {

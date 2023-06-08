@@ -2,15 +2,13 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { conf } from '../conf';
 import { User } from '../types/entities';
 import { useMisc } from './useMisc';
-
-interface LoginResult {
-  csrf: string
-}
+import { ApiError, ApiResponse } from '../types/types';
+import { useSnackbar } from './useSnackbar';
 
 export interface AuthContext {
   user?: User,
   csrfToken?: string,
-  login: (user: string, password: string) => Promise<LoginResult>,
+  login: (user: string, password: string) => Promise<string>,
   authenticate: (username: string, password: string) => void,
   logout: () => void,
   isCompletedLoad: boolean
@@ -30,7 +28,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<User | undefined>(undefined)
-  const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(true)
+  const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(false)
   const { reloadUserInfoFlag } = useMisc()
   const [csrfToken, setCsrfToken] = useState<string>('')
 
@@ -44,48 +42,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [csrfToken, reloadUserInfoFlag])
 
-  const login = async (user: string, password: string) => {
+  interface LoginResponse {
+    csrf: string
+  }
+
+  const login = async (mail: string, password: string): Promise<string> => {
     const url = `${conf.mainApiUrl}public/login`
     const options: RequestInit = {
       method: 'POST',
       credentials: 'include',
-      body: JSON.stringify({ username: user, password }),
+      body: JSON.stringify({ mail, password }),
       headers: new Headers({
         'content-type': 'application/json',
       })
     }
     try {
       const res = await fetch(url, options)
+      const result: ApiResponse = await res.json()
       if (!res.ok) {
-        throw new Error(JSON.stringify(res))
+        throw new ApiError({ cause: res.status, message: result.message, errCode: result.errCode })
       }
-      const result = await res.json()
-      return result
+      console.log(result.obj)
+      return (result.obj as LoginResponse).csrf
     } catch (e) {
-      throw Error('Error al realizar el login')
+      throw e
     }
   }
 
   const authenticate = async (username: string, password: string) => {
     try {
-      const result = await login(username, password)
-      setCsrfToken(result.obj.csrf)
-      localStorage.setItem('csrfToken', result.obj.csrf)
+      const csrf = await login(username, password)
+      setCsrfToken(csrf)
+      localStorage.setItem('csrfToken', csrf)
     } catch (e) {
-      cleanUserParams()
+      throw e
     }
-    // if (user !== undefined) {
-    //   setUser(user)
-    // } else {
-    //   cleanUserParams()
-    // }
   }
 
   const logout = () => {
     cleanUserParams()
   }
 
-  const self = async () => {
+  const self = async (): Promise<User> => {
     if (csrfToken) {
 
       const url = `${conf.mainApiUrl}private/self`
@@ -98,13 +96,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       try {
         const res = await fetch(url, options)
+        const result: ApiResponse = await res.json()
         if (!res.ok) {
-          throw new Error(JSON.stringify(res))
+          throw new ApiError({ cause: res.status, message: result.message, errCode: result.errCode })
         }
-        const result = await res.json()
-        return result.obj
+        return result.obj as User
       } catch (e) {
-        throw Error('Error al realizar el login')
+        throw e
       }
     } else {
       throw Error('Error al realizar el login')
@@ -132,7 +130,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         cleanUserParams()
       }
     } catch (e) {
-      cleanUserParams()
     }
     setIsCompletedLoad(() => true)
   }
