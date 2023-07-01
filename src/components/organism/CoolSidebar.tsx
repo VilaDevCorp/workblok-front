@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components'
 import { useClickOutside } from '../../hooks//useClickOutside';
 import { useMisc } from '../../hooks//useMisc';
-import { useModal } from '../../hooks//useModal';
 import { SizeEnum } from '../../types/types';
-import { CoolButton } from '../atom/CoolButton';
-import { IconTypeEnum } from '../atom/CoolIcon';
-import { CoolIconButton } from '../atom/CoolIconButon';
 
 
 

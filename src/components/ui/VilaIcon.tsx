@@ -5,7 +5,7 @@ import { FiMail } from 'react-icons/fi';
 import { FaRedo, FaRegListAlt, FaSignInAlt, FaUserCircle } from 'react-icons/fa';
 import { MdOutlineCancel } from 'react-icons/md';
 import { RiCoinLine, RiLogoutCircleRLine } from 'react-icons/ri';
-import { IoMdAddCircleOutline, IoMdArrowRoundBack, IoMdArrowRoundForward, IoMdPeople, IoMdPhonePortrait, IoIosMenu, IoMdClose, IoIosAdd } from 'react-icons/io';
+import { IoMdAddCircleOutline, IoMdArrowRoundBack, IoMdArrowRoundForward, IoMdPeople, IoMdPhonePortrait, IoIosMenu, IoMdClose, IoIosAdd, IoIosCalendar, IoIosPlay } from 'react-icons/io';
 import { BiDownload, BiUpload } from 'react-icons/bi';
 import { TbFileAlert } from 'react-icons/tb';
 import { ImWarning } from 'react-icons/im';
@@ -15,7 +15,7 @@ import { GoCheck } from 'react-icons/go';
 export type IconType = "previous" | "next" | "logout" | "cancel" | "confirm" | "close" | "user" | "login" |
     "delete" | "edit" | "add" | "check" | "search" | "mail" | "phone" | "download" | "upload" | "alert" |
     "map" | "pdf" | "meeting" | "log" | "file" | "incidence" | "progress" | "important" | "redo" | "menu" |
-    "unfold" | "fold" | "coin"
+    "unfold" | "fold" | "coin" | "calendar" | "play"
 
 const getIcon = (type: IconType): JSX.Element => {
     switch (type) {
@@ -79,6 +79,10 @@ const getIcon = (type: IconType): JSX.Element => {
             return <AiOutlineDown />
         case "coin":
             return <RiCoinLine />
+        case "calendar":
+            return <IoIosCalendar />
+        case "play":
+            return <IoIosPlay />
         default:
             return <></>
     }

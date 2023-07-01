@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useApi } from '../../hooks/useApi';
 import { useAuth } from '../../hooks/useAuth';
 import { useMisc } from '../../hooks/useMisc';
@@ -8,20 +7,27 @@ import { Task } from '../../types/entities';
 import { ActivityOptions } from '../molecule/ActivityOptions';
 import { DayElement } from '../molecule/DayElement';
 import { SelectActivityModal } from './SelectActivityModal';
-import { VilaModal } from '../ui/VilaModal';
-import { VilaButton } from '../ui/VilaButton';
+import { DateControl } from '../molecule/DateControl';
+import { TemplateSelector } from '../molecule/TemplateSelector';
 
 
-export function Planner({ startDate }: { startDate: Date }) {
+export function Planner() {
 
     const { getUserTasks } = useApi()
     const { user } = useAuth()
     const [datesArray, setDatesArray] = useState<Date[]>([])
+    const [startDate, setStartDate] = useState<Date>()
     const [tasks, setTasks] = useState<Task[][]>([])
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
     const { reloadTasksFlag } = useMisc()
     const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
+
+    useEffect(() => {
+        const startWeekMoment = moment().get('weekday') > 0 ? moment().set('weekday', 1) : moment().subtract(1, 'week').set('weekday', 1)
+        const startDate = moment([startWeekMoment.year(), startWeekMoment.month(), startWeekMoment.date()]).toDate()
+        setStartDate(startDate)
+    }, [])
 
 
     useEffect(() => {
@@ -41,7 +47,7 @@ export function Planner({ startDate }: { startDate: Date }) {
     }, [startDate, reloadTasksFlag])
 
     const onGetTasks = async () => {
-        if (user) {
+        if (user && startDate) {
             const weekTasks: Task[][] = [[], [], [], [], [], [], []]
             const tasks = await getUserTasks(user.id, startDate)
             const startDateMoment = moment(startDate)
@@ -70,7 +76,12 @@ export function Planner({ startDate }: { startDate: Date }) {
                     <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
                         selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)}
             </div>
-            <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
+            <div className='flex justify-between'>
+                <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
+                <TemplateSelector startDate={startDate}/>
+                <DateControl startDate={startDate} setStartDate={setStartDate} />
+            </div>
+
             {visibleSelectActivityModal && <SelectActivityModal date={selectActivityDate} onClose={onCloseSelectActivityModal} />}
         </div>
     )

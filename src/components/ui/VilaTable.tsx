@@ -28,12 +28,12 @@ export function VilaTable(props: Props) {
     const [contextMenuProps, setContextMenuProps] = useState<ContextMenuPosition>({ top: 0, left: 0, visible: false })
     const [selectedElements, setSelectedElements] = useState<Map<number, unknown>>(new Map<number, unknown>())
 
-    const { clearContext, setClearContext} = useMisc()
+    const { clearContext} = useMisc()
 
     const [loadingContainerHeight, setLoadingContainerHeight] = useState<number>()
     const loadingContainer = useRef<HTMLDivElement>(null)
 
-    const tableBodyRef = useRef<HTMLElement | null>(null);
+    const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
 
     useEffect(() => {
         setLoadingContainerHeight(loadingContainer.current?.clientHeight)

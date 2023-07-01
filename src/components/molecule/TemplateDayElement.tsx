@@ -1,18 +1,11 @@
-import moment from 'moment';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { SizeEnum } from '../../types/types';
-import { Task } from '../../types/entities';
-import { conf } from './../../conf'
-import { TaskArea } from '../organism/TaskArea';
+import React from 'react';
+import { TemplateTask } from '../../types/entities';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
-import { SelectActivityModal } from '../organism/SelectActivityModal';
+import { TemplateTaskArea } from '../organism/TemplateTaskArea';
 
 
-const getWeekdayLabel = (date: Date) => {
-    const weekDayNumber = moment(date).get('weekday')
-
-    switch (weekDayNumber) {
+const getWeekdayLabel = (weekDay: number) => {
+    switch (weekDay) {
         case 1:
             return 'Monday'
         case 2:
@@ -32,22 +25,21 @@ const getWeekdayLabel = (date: Date) => {
     }
 }
 
-export function DayElement({ date, tasks, selectedTasks, setSelectedTasks, onCreateTask }: {
-    date: Date, tasks: Task[], selectedTasks: string[],
+export function TemplateDayElement({ weekDay, tasks, selectedTasks, setSelectedTasks, onCreateTask }: {
+    weekDay: number, tasks: TemplateTask[], selectedTasks: string[],
     setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>>, onCreateTask: () => void
 }) {
 
-    const hasSelected = tasks.some((task) => selectedTasks.includes(task.id))
+    const hasSelected = tasks? tasks.some((task) => selectedTasks.includes(task.id)) : false
 
     return (
         <div className={`flex flex-col w-full min-w-[150px] grow basis-0 [&:last-child]:border-r-0 bg-background-400
             [&:last-child]:rounded-r-lg [&:last-child]:rounded-b-lg [&:first-child]:rounded-tl-lg [&:first-child]:rounded-bl-lg hover:opacity-100 
             ${hasSelected ? 'opacity-100' : 'opacity-70'} } `}>
             <div className={`flex w-full flex-col items-center justify-center h-[80px] z-[3] py-5`}>
-                {getWeekdayLabel(date)}
-                <div className={`flex w-full justify-center`}>{date.getDate()}</div>
+                {getWeekdayLabel(weekDay)}
             </div>
-            <TaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
+            <TemplateTaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             <div className={`flex justify-center z-[3] py-2`}>
                 <VilaButtonIcon style={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
             </div>

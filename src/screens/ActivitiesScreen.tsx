@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { VilaLayout } from '../components/ui/VilaLayout';
 import { useApi } from '../hooks/useApi';
 import { useMisc } from '../hooks/useMisc';
-import { useModal } from '../hooks/useModal';
 import { TableCell, VilaTable } from '../components/ui/VilaTable';
 import { VilaPagination } from '../components/ui/VilaPagination';
 import { ContextOption } from '../components/ui/VilaContextMenu';
@@ -18,6 +17,7 @@ export function ActivitiesScreen() {
 
     const { getActivities, deleteActivities } = useApi();
 
+    const firstRender = useRef(true)
     const [page, setPage] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -35,8 +35,11 @@ export function ActivitiesScreen() {
     }, [page, reloadActivitiesFlag])
 
     useEffect(() => {
-        const timer = setTimeout(() => onReloadActivities(), 500)
-        return (() => clearTimeout(timer))
+        if (!firstRender.current) {
+            const timer = setTimeout(() => onReloadActivities(), 500)
+            return (() => clearTimeout(timer))
+        }
+        firstRender.current = false
     }, [searchKey])
 
     const onReloadActivities = () => {
@@ -91,7 +94,7 @@ export function ActivitiesScreen() {
 
     const onCloseDeleteConfirmationModal = () => {
         setActivitiesForDelete([])
-        setConfirmDeleteModalVisible(true)
+        setConfirmDeleteModalVisible(false)
     }
 
 

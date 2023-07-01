@@ -4,6 +4,7 @@ import { User } from '../types/entities';
 import { useMisc } from './useMisc';
 import { ApiError, ApiResponse } from '../types/types';
 import { useSnackbar } from './useSnackbar';
+import { useNavigate } from 'react-router-dom';
 
 export interface AuthContext {
   user?: User,
@@ -39,6 +40,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (csrfToken) {
       reloadUserInfo()
+    } else {
+      setIsCompletedLoad(true)
     }
   }, [csrfToken, reloadUserInfoFlag])
 

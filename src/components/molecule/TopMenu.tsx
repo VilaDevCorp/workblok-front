@@ -3,15 +3,6 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 
-const MenuElement = styled.a`
-    text-decoration: none;
-    color: ${props => props.theme.color.main.l7};
-    font-size: ${props => props.theme.fontSize.title};
-    &:hover {
-        color: ${props => props.theme.color.main.l5};    
-    }
-`;
-
 export function TopMenu() {
 
     const navigate = useNavigate()
@@ -23,6 +14,9 @@ export function TopMenu() {
             </a>
             <a className='text-lightFont-100 text-xl hover:text-primary-400 cursor-pointer' onClick={() => navigate('/activities')}>
                 {'Activities'}
+            </a>
+            <a className='text-lightFont-100 text-xl hover:text-primary-400 cursor-pointer' onClick={() => navigate('/templates')}>
+                {'Templates'}
             </a>
         </div>
     )

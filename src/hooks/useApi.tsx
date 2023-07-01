@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
 import StatusCode from 'status-code-enum';
-import { Activity, CompleteTaskForm, CreateActivityForm, CreateTaskForm, CreateVerificationCodeForm, RegisterUserForm, Task, Test, UpdateActivityForm, User, UseVerificationCodeForm } from '../types/entities';
+import { Activity, ApplyTemplateForm, CompleteTaskForm, CreateActivityForm, CreateTaskForm, CreateTemplateForm, CreateTemplateTaskForm, CreateVerificationCodeForm, RegisterUserForm, Task, Template, Test, UpdateActivityForm, UpdateTemplateForm, User, UseVerificationCodeForm } from '../types/entities';
 import { ApiError, ApiResponse, Page } from '../types/types';
 import { conf } from './../conf'
 import { useAuth } from './useAuth';
@@ -17,12 +17,22 @@ export interface ApiContext {
     getActivities: (page: number, name: string) => Promise<Page<Activity>>
     deleteActivities: (ids: string[]) => Promise<void>
     createTask: (task: CreateTaskForm) => Promise<void>
-    deleteTask: (id: string) => Promise<void>
+    deleteTasks: (ids: string[]) => Promise<void>
     getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>,
     completeTasks: (form: CompleteTaskForm) => Promise<void>
     updateUserDans: (userId: string, isAdd: boolean, value: number) => Promise<void>,
     getUser: (id: string) => Promise<User>
+    createTemplate: (form: CreateTemplateForm) => Promise<void>
+    getTemplates: (page: number, name: string, userId: string) => Promise<Page<Template>>
+    getAllUserTemplates: (userId: string) => Promise<Page<Template>>
+    deleteTemplates: (ids: string[]) => Promise<void>
+    getTemplate: (id: string) => Promise<Template>
+    updateTemplate: (template: UpdateTemplateForm) => Promise<void>
+    createTemplateTask: (templateId: string, task: CreateTemplateTaskForm) => Promise<void>
+    deleteTemplateTasks: (ids: string[]) => Promise<void>
+    applyTemplate: (templateId: string, form: ApplyTemplateForm) => Promise<void>
 }
+
 
 const ApiContext = createContext<ApiContext>({} as any)
 
@@ -263,11 +273,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         return result
     }
 
-    const deleteTask = async (id: string): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/task/${id}`
+    const deleteTasks = async (ids: string[]): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/task`
         const options: RequestInit = {
             credentials: 'include',
             method: 'DELETE',
+            body: JSON.stringify({ taskIds: ids }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
@@ -279,7 +290,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error(JSON.stringify(res))
             }
         } catch (e) {
-            throw Error('Error deleting task')
+            throw Error('Error deleting tasks')
         }
     }
 
@@ -373,6 +384,213 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const createTemplate = async (form: CreateTemplateForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify(form),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error creating the template')
+        }
+    }
+
+    const getTemplates = async (page: number, name: string, userId: string): Promise<Page<Template>> => {
+        const url = `${conf.mainApiUrl}private/template/search`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify({ page, name, pageSize: 10, userId }),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject.obj
+        } catch (e) {
+            throw Error('Error obtaining templates')
+        }
+        return result
+    }
+
+    const getAllUserTemplates = async (userId: string): Promise<Page<Template>> => {
+        const url = `${conf.mainApiUrl}private/template/search`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify({ pageSize: 0, userId }),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        let result = []
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject.obj
+        } catch (e) {
+            throw Error('Error obtaining templates')
+        }
+        return result
+    }
+
+
+    const deleteTemplates = async (ids: string[]): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'DELETE',
+            body: JSON.stringify({ templateIds: ids }),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error deleting templates')
+        }
+    }
+
+
+    const getTemplate = async (id: string): Promise<Template> => {
+        const url = `${conf.mainApiUrl}private/template/${id}`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'GET',
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        let result: Template | undefined = undefined
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+            const resObject = await res.json()
+            result = resObject.obj
+        } catch (e) {
+            throw Error('Error getting the Template')
+        }
+        if (result === undefined) {
+            throw Error('Error getting the Template')
+        }
+
+        return result
+    }
+
+    const updateTemplate = async (template: UpdateTemplateForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'PUT',
+            body: JSON.stringify(template),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error updating the template')
+        }
+    }
+
+    const createTemplateTask = async (templateId: string, task: CreateTemplateTaskForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template/${templateId}/tasks`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify(task),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error creating the task')
+        }
+    }
+
+    const deleteTemplateTasks = async (ids: string[]): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template/tasks`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'DELETE',
+            body: JSON.stringify({ taskIds: ids }),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error deleting template tasks')
+        }
+    }
+
+    const applyTemplate = async (templateId: string, form: ApplyTemplateForm): Promise<void> => {
+        const url = `${conf.mainApiUrl}private/template/${templateId}/apply`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify(form),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            if (!res.ok) {
+                throw new Error(JSON.stringify(res))
+            }
+        } catch (e) {
+            throw Error('Error applying the template')
+        }
+    }
+
+
 
     const value: ApiContext = {
         register,
@@ -385,11 +603,20 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         getActivities,
         deleteActivities,
         createTask,
-        deleteTask,
+        deleteTasks,
         completeTasks,
         getUserTasks,
         getUser,
-        updateUserDans
+        updateUserDans,
+        createTemplate,
+        getTemplate,
+        getTemplates,
+        getAllUserTemplates,
+        deleteTemplates,
+        updateTemplate,
+        deleteTemplateTasks,
+        createTemplateTask,
+        applyTemplate
     }
 
     return (

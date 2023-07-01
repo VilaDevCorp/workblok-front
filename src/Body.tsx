@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { Header } from './components/organism/Header';
 import { useAuth } from './hooks/useAuth';
 import { ActivitiesScreen } from './screens/ActivitiesScreen';
@@ -11,6 +11,7 @@ import { RegisterScreen } from './screens/RegisterScreen';
 import { ValidateAccountScreen } from './screens/ValidateAccountScreen';
 import { VilaSnackbar } from './components/ui/VilaSnackbar';
 import { ForgottenPasswordScreen } from './screens/ForgottenPasswordScreen';
+import { TemplatesScreen } from './screens/TemplatesScreen';
 
 
 function Body() {
@@ -27,6 +28,7 @@ function Body() {
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/activities" element={<ActivitiesScreen />} />
+              <Route path="/templates" element={<TemplatesScreen />} />
               <Route path="/validate/:userMail" element={<ValidateAccountScreen />} />
               <Route path="/recover-password" element={<ForgottenPasswordScreen />} />
             </Routes>

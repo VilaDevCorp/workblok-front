@@ -2,18 +2,18 @@ import { Page } from '../../types/types';
 import { useEffect, useState } from 'react';
 import { ActivityArea } from './ActivityArea';
 import { Activity } from '../../types/entities';
-import { useApi } from '../../hooks//useApi';
-import { useAuth } from '../../hooks//useAuth';
+import { useApi } from '../../hooks/useApi';
+import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { VilaModal } from '../ui/VilaModal';
 import { VilaPagination } from '../ui/VilaPagination';
 import { VilaButton } from '../ui/VilaButton';
 import { VilaTextInput } from '../ui/VilaTextInput';
-import { conf } from './../../conf'
+import { conf } from '../../conf'
 import moment from 'moment';
 import { useMisc } from '../../hooks/useMisc';
 
-export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: () => void }) {
+export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { templateId: string, weekDay?: number, onClose: () => void }) {
 
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(0)
@@ -23,7 +23,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
     const [selectedActivities, setSelectedActivities] = useState<string[]>([])
-    const { getActivities, createTask } = useApi()
+    const { getActivities, createTemplateTask } = useApi()
     const { user } = useAuth()
 
     const onGetActivities = async () => {
@@ -47,13 +47,10 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
             setPage(0)
         }
     }
-
-
-
     const onConfirm = async () => {
         await Promise.all(selectedActivities.map(async (activity) => {
-            if (date && user?.id) {
-                await createTask({ activityId: activity, dueDate: moment(date).format(conf.dateInputFormat), userId: user.id })
+            if (weekDay && user?.id) {
+                await createTemplateTask(templateId, { activityId: activity, weekDay })
                 triggerReloadTasks()
             }
         }))

@@ -82,3 +82,44 @@ export interface CompleteTaskForm {
   taskIds: string[];
   isCompleted: boolean;
 }
+
+interface TemplateEdges {
+  templateTasks: TemplateTask[];
+}
+
+interface TemplateTaskEdges {
+  activity: Activity;
+}
+
+export interface TemplateTask {
+  id: string;
+  weekDay: number;
+  edges: TemplateTaskEdges;
+}
+export interface Template {
+  id: string;
+  name: string;
+  edges: TemplateEdges;
+}
+
+export interface CreateTemplateForm {
+  name: string;
+  tasks: TemplateTask[];
+  userId: string;
+}
+
+export interface UpdateTemplateForm {
+  id: string;
+  name?: string;
+}
+
+export interface CreateTemplateTaskForm {
+  activityId: string;
+  weekDay: number;
+}
+
+export interface ApplyTemplateForm {
+  userId: string;
+  startDate: string;
+}
+

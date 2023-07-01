@@ -27,6 +27,7 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
     const { setIsLoading, triggerReloadActivities } = useMisc()
     const { t } = useTranslation()
 
+    const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
     const [sizeDirty, sizeError, sizeMessage, sizeValidate] = useValidator(size ? size.toString() : '', [notEmptyValidator])
 
     useEffect(() => {
@@ -48,14 +49,18 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
     const onConfirm = async () => {
         setIsLoading(() => true)
         const sizeValid = sizeValidate()
+        const nameValid = nameValidate()
         try {
-            if (id && sizeValid) {
-                await updateActivity({ id, name, size: size!, icon: icon, description })
+            if (id) {
+                if (nameValid && sizeValid) {
+                    await updateActivity({ id, name, size: size!, icon: icon, description })
+                }
             } else {
-                if (user?.id) {
+                if (nameValid && sizeValid && user?.id) {
                     await createActivity({ name, size: size!, userId: user.id, icon: icon, description })
                 }
-            } triggerReloadActivities()
+            }
+            triggerReloadActivities()
         } catch (e) {
         }
         finally {

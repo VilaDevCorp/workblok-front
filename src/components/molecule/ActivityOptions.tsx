@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useApi } from '../../hooks//useApi';
 import { useMisc } from '../../hooks//useMisc';
-import { useModal } from '../../hooks//useModal';
-import { SizeEnum } from '../../types/types';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
+import { ConfirmationModal } from '../organism/ConfirmationModal';
 
 export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
-    const { setConfirmationModalProps } = useModal()
-    const { deleteTask, completeTasks } = useApi()
+    const { deleteTasks, completeTasks } = useApi()
     const { triggerReloadTasks, triggerReloadUserInfo } = useMisc()
+    const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState<boolean>(false)
 
     const isActivities: boolean = selectedTasks ? selectedTasks.length > 0 : false
 
@@ -28,23 +26,22 @@ export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedT
         triggerReloadUserInfo()
     }
 
-    const deleteTasks = async () => {
-        await Promise.all(selectedTasks.map(async (task) => {
-            await deleteTask(task)
-        }))
+    const onConfirmDeleteTasks = async () => {
+        await deleteTasks(selectedTasks)
         setSelectedTasks([])
         triggerReloadTasks()
     }
 
-    const onDeleteActivity = () => {
-        setConfirmationModalProps({ visible: true, params: { body: 'Do you really want to delete these tasks?', onConfirm: deleteTasks } })
+    const onDeleteTasks = async ()=> {
+        setConfirmDeleteModalVisible(true)
     }
 
     return (
         <div className={`flex justify-start items-center rounded-lg w-[200px] gap-2`}>
             <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'confirm'} onClick={onCompleteTasks}></VilaButtonIcon>
             <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'cancel'} onClick={onUncompleteTasks}></VilaButtonIcon>
-            <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'delete'} onClick={onDeleteActivity}></VilaButtonIcon>
+            <VilaButtonIcon disabled={!isActivities} size={'m'} icon={'delete'} onClick={onDeleteTasks}></VilaButtonIcon>
+            <>{confirmDeleteModalVisible && <ConfirmationModal onClick={() => onConfirmDeleteTasks()} onClose={() => setConfirmDeleteModalVisible(false)} label='Do you really want to delete these tasks?' />}</>
         </div>
     )
 }
