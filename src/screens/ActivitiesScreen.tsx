@@ -9,6 +9,11 @@ import { VilaButton } from '../components/ui/VilaButton';
 import { CreateActivityModal } from '../components/organism/CreateActivityModal';
 import { Activity } from '../types/entities';
 import { ConfirmationModal } from '../components/organism/ConfirmationModal';
+import { ApiError } from '../types/types';
+import StatusCode from 'status-code-enum';
+import { useSnackbar } from '../hooks/useSnackbar';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export function ActivitiesScreen() {
 
@@ -16,6 +21,8 @@ export function ActivitiesScreen() {
 
 
     const { getActivities, deleteActivities } = useApi();
+    const snackbar = useSnackbar()
+    const {logout} = useAuth()
 
     const firstRender = useRef(true)
     const [page, setPage] = useState<number>(0)
@@ -50,20 +57,29 @@ export function ActivitiesScreen() {
         }
     }
 
-
-
-
     const onGetActivities = async () => {
         setIsLoading(() => true)
-        const data = await getActivities(page, searchKey)
-        setTotalPages(data.totalPages)
-        const tableData: TableCell[] = []
-        data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, dataElement.size.toString()], realEntity: dataElement }))
-        if (data.content.length < 1 && page > 1) {
-            setPage((old) => old - 1)
+        try {
+            const data = await getActivities(page, searchKey)
+            setTotalPages(data.totalPages)
+            const tableData: TableCell[] = []
+            data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, dataElement.size.toString()], realEntity: dataElement }))
+            if (data.content.length < 1 && page > 1) {
+                setPage((old) => old - 1)
+            }
+            setTableData(tableData)
+            setIsLoading(() => false)
+        } catch (e) {
+            if (e instanceof ApiError) {
+                if (e.cause === StatusCode.ClientErrorForbidden) {
+                    snackbar.onOpen('Your session has expired', 'cancel', 'error')
+                    logout()
+                }
+            } else {
+                snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+            }
+            setIsLoading(false)
         }
-        setTableData(tableData)
-        setIsLoading(() => false)
     }
 
     const onCreateActivity = () => {

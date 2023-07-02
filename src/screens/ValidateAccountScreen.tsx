@@ -35,7 +35,7 @@ export function ValidateAccountScreen() {
             setIsLoading(true)
             try {
                 await useVerificationCode({ code, mail: userMail!, type: 'validate_account' })
-                snackbar.onOpen('Your account has been activated! Now you can', 'check', 'success')
+                snackbar.onOpen('Your account has been activated! Now you can login', 'check', 'success')
                 navigate('/login')
             } catch (e) {
                 if (e instanceof ApiError) {

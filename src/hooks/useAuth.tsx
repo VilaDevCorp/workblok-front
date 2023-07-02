@@ -3,8 +3,6 @@ import { conf } from '../conf';
 import { User } from '../types/entities';
 import { useMisc } from './useMisc';
 import { ApiError, ApiResponse } from '../types/types';
-import { useSnackbar } from './useSnackbar';
-import { useNavigate } from 'react-router-dom';
 
 export interface AuthContext {
   user?: User,

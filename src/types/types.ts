@@ -27,9 +27,9 @@ export type ThemeColors = "primary" | "seconday";
 
 
 
-export interface ApiResponse {
+export interface ApiResponse<T> {
 	message: string      
-	obj:     unknown 
+	obj:     T 
 	err:     string       
 	errCode: string      
 }

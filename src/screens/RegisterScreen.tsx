@@ -1,22 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled, { useTheme } from 'styled-components';
+import { useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
-import { useAuth } from '../hooks/useAuth';
 import { VilaForm } from '../components/ui/VilaForm'
 import { VilaTextInput } from '../components/ui/VilaTextInput';
 import { VilaButton } from '../components/ui/VilaButton';
 import logo from './../../public/logo.svg';
 import { emailValidator, minLength8Validator, notEmptyValidator, upperLowerCaseValidator, useValidator } from '../hooks/useValidator';
 import { VilaLayout } from '../components/ui/VilaLayout';
+import { ApiError } from '../types/types';
+import StatusCode from 'status-code-enum';
+import { useSnackbar } from '../hooks/useSnackbar';
+import { useNavigate } from 'react-router-dom';
 
 
 export function RegisterScreen() {
 
     const { register } = useApi()
-    const authInfo = useAuth()
+    const snackbar = useSnackbar()
     const navigate = useNavigate()
-    const theme = useTheme()
 
     const [username, setUsername] = useState<string>('')
     const [mail, setMail] = useState<string>('')
@@ -54,11 +54,26 @@ export function RegisterScreen() {
             setIsLoading(true)
             try {
                 await register({ username, mail, password })
+                snackbar.onOpen('User succesfully registered', 'check', 'success')
+                navigate("/login")
             } catch (e) {
+                if (e instanceof ApiError) {
+                    if (e.cause === StatusCode.ClientErrorConflict) {
+                        if (e.errCode === 'user') {
+                            snackbar.onOpen('The username is already in use', 'cancel', 'error')
+                        }
+                        if (e.errCode === 'mail') {
+                            snackbar.onOpen('The email is already in use', 'cancel', 'error')
+                        }
+                    } else {
+                        snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+                    }
+                } else {
+                    snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+                }
+            } finally {
                 setIsLoading(false)
             }
-            setIsLoading(false)
-            // }
         }
     }
 

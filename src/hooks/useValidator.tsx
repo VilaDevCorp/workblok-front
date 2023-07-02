@@ -3,29 +3,29 @@ import { useEffect, useState } from "react";
 export function emailValidator(input: string): string {
     const regex =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regex.test(input) ? "" : "form.error.invalidEmail";
+    return regex.test(input) ? "" : "The email is not valid";
 }
 export function phoneValidator(input: string): string {
     const regex = /^[0-9]{9}$/;
-    return regex.test(input) ? "" : "form.error.invalidPhone";
+    return regex.test(input) ? "" : "The phone is not valid";
 }
 export function notEmptyValidator(input: string): string {
-    return input && input.length >= 1 ? "" : "form.error.notEmpty";
+    return input && input.length >= 1 ? "" : "The field cannot be empty";
 }
 export function haveNumbersValidator(input: string): string {
-    return /(?=.*\d).*/.test(input) ? "" : "form.error.noNumbers";
+    return /(?=.*\d).*/.test(input) ? "" : "The field should contain a number";
 }
 export function minLength8Validator(input: string): string {
-    return input.length >= 8 ? "" : "form.error.minLength8";
+    return input.length >= 8 ? "" : "The field cannot be less than 8 char";
 }
 export function authCodeValidator(value: string): string {
-    return /^[0-9]{6}$/.test(value) ? "" : "form.error.invalidAuthCode";
+    return /^[0-9]{6}$/.test(value) ? "" : "The code is not valid";
 }
 
 export function upperLowerCaseValidator(input: string): string {
     return /(?=.*[A-Z])(?=.*[a-z]).*/.test(input)
         ? ""
-        : "form.error.upperLowerCase";
+        : "The field should contain upper and lower case";
 }
 
 export const useValidator = (

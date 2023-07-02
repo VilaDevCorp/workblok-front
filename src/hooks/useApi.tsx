@@ -8,7 +8,6 @@ import { useAuth } from './useAuth';
 
 export interface ApiContext {
     register: (user: RegisterUserForm) => void
-    fakeDelay: (delay: number) => void
     useVerificationCode: (form: UseVerificationCodeForm) => Promise<void>
     sendVerificationCode: (form: CreateVerificationCodeForm) => Promise<void>
     createActivity: (activity: CreateActivityForm) => Promise<void>
@@ -45,15 +44,9 @@ export const useApi = () => {
     }
 }
 
-
-
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const { csrfToken } = useAuth()
-
-    function fakeDelay(delay: number) {
-        return new Promise(res => setTimeout(res, delay));
-    }
 
     const register = async (user: RegisterUserForm) => {
         const url = `${conf.mainApiUrl}public/register`
@@ -67,19 +60,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result = []
         try {
             const res = await fetch(url, options)
-            if (res.status === StatusCode.SuccessCreated) {
-                console.log("Usuario registrado con éxito")
-            } else {
-                if (res.status === StatusCode.ServerErrorInternal) {
-                    console.log("Ha ocurrido un error al realizar la operación")
-                }
-                if (res.status === StatusCode.ClientErrorBadRequest) {
-                    console.log("El formulario enviado en la petición no es correcto")
-                }
-                throw new Error(JSON.stringify(res))
+            const resObject: ApiResponse<unknown> = await res.json()
+            if (!res.ok) {
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            console.log("Ha ocurrido un error al realizar la operación")
+            throw e
         }
     }
 
@@ -97,11 +83,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error creating the activity')
+            throw e
         }
     }
 
@@ -118,11 +105,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error updating the activity')
+            throw e
         }
     }
 
@@ -140,18 +128,14 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result: Activity | undefined = undefined
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Activity> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj
         } catch (e) {
-            throw Error('Error getting the activity')
+            throw e
         }
-        if (result === undefined) {
-            throw Error('Error getting the activity')
-        }
-
         return result
     }
 
@@ -167,16 +151,16 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 'content-type': 'application/json',
             })
         }
-        let result = []
+        let result: any
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj
         } catch (e) {
-            throw Error('Error al obtener las actividades')
+            throw e
         }
         return result
     }
@@ -194,11 +178,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error deleting activities')
+            throw e
         }
     }
 
@@ -215,11 +200,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error creating the task')
+            throw e
         }
     }
 
@@ -236,11 +222,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error creating the task')
+            throw e
         }
     }
 
@@ -259,16 +246,16 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 'content-type': 'application/json',
             })
         }
-        let result = []
+        let result: Task[]
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Page<Task>> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj.content
         } catch (e) {
-            throw Error('Error obtaining user tasks')
+            throw e
         }
         return result
     }
@@ -286,11 +273,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error deleting tasks')
+            throw e
         }
     }
 
@@ -307,18 +295,14 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result: User | undefined = undefined
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<User> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
-            result = resObject
+            result = resObject.obj
         } catch (e) {
-            throw Error('Error getting the user')
+            throw e
         }
-        if (result === undefined) {
-            throw Error('Error getting the user')
-        }
-
         return result
     }
 
@@ -334,11 +318,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error updating user dans')
+            throw e
         }
     }
 
@@ -354,7 +339,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result = []
         try {
             const res = await fetch(url, options)
-            const resObject: ApiResponse = await res.json()
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
                 throw new Error()
             }
@@ -375,7 +360,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result = []
         try {
             const res = await fetch(url, options)
-            const resObject: ApiResponse = await res.json()
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
                 throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
@@ -397,11 +382,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error creating the template')
+            throw e
         }
     }
 
@@ -416,16 +402,16 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 'content-type': 'application/json',
             })
         }
-        let result = []
+        let result: Page<Template>
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Page<Template>> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj
         } catch (e) {
-            throw Error('Error obtaining templates')
+            throw e
         }
         return result
     }
@@ -441,16 +427,16 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
                 'content-type': 'application/json',
             })
         }
-        let result = []
+        let result: Page<Template>
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Page<Template>> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj
         } catch (e) {
-            throw Error('Error obtaining templates')
+            throw e
         }
         return result
     }
@@ -469,11 +455,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Page<Template>> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error deleting templates')
+            throw e
         }
     }
 
@@ -491,18 +478,14 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         let result: Template | undefined = undefined
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<Template> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
-            const resObject = await res.json()
             result = resObject.obj
         } catch (e) {
-            throw Error('Error getting the Template')
+            throw e
         }
-        if (result === undefined) {
-            throw Error('Error getting the Template')
-        }
-
         return result
     }
 
@@ -519,11 +502,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error updating the template')
+            throw e
         }
     }
 
@@ -540,11 +524,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error creating the task')
+            throw e
         }
     }
 
@@ -561,11 +546,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error deleting template tasks')
+            throw e
         }
     }
 
@@ -582,11 +568,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             const res = await fetch(url, options)
+            const resObject: ApiResponse<unknown> = await res.json()
             if (!res.ok) {
-                throw new Error(JSON.stringify(res))
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
             }
         } catch (e) {
-            throw Error('Error applying the template')
+            throw e
         }
     }
 
@@ -594,7 +581,6 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const value: ApiContext = {
         register,
-        fakeDelay,
         useVerificationCode,
         sendVerificationCode,
         createActivity,
