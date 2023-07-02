@@ -23,8 +23,7 @@ export function LoginScreen() {
     const [mail, setMail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { triggerReloadUserInfo } = useMisc()
+    const { setIsLoading, triggerReloadUserInfo } = useMisc()
 
     const [mailDirty, mailError, mailMessage, mailValidate] = useValidator(mail, [notEmptyValidator]);
     const [passwordDirty, passwordError, passwordMessage, passwordValidate] = useValidator(password, [notEmptyValidator]);

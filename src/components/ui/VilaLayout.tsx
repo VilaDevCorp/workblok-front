@@ -3,15 +3,17 @@ import { useAuth } from "../../hooks/useAuth"
 import { Header } from "../organism/Header"
 import logo from './../../../public/logo.svg';
 import { VilaButton } from "./VilaButton";
-import { useEffect } from "react";
+import { useSnackbar } from "../../hooks/useSnackbar";
 
 export function VilaLayout({ title, children, isPublic }: { title?: string, children: JSX.Element | JSX.Element[], isPublic?: boolean }) {
 
 
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
     const navigate = useNavigate()
+    const snackbar = useSnackbar()
 
     return (
+
         (isPublic || user) ?
             <>
                 {!isPublic ?
@@ -32,6 +34,5 @@ export function VilaLayout({ title, children, isPublic }: { title?: string, chil
                 <p className="text-lightFont-500">{'You need an account to access this page'}</p>
                 <VilaButton onClick={() => navigate("/login")} font="lightFont">{'Login'}</VilaButton>
             </div>
-
     )
 }

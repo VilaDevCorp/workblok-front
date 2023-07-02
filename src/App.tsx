@@ -5,6 +5,7 @@ import { MiscProvider } from './hooks/useMisc';
 import { ScreenProvider } from './hooks/useScreen';
 import { SnackbarProvider } from './hooks/useSnackbar';
 import '../src/index.css'; // replace with the name of your tailwind css file
+import { ApiErrorProvider } from './hooks/useApiError';
 
 
 function App() {
@@ -13,9 +14,11 @@ function App() {
       <MiscProvider>
         <SnackbarProvider>
           <AuthProvider>
-            <ApiProvider>
-              <Body />
-            </ApiProvider>
+            <ApiErrorProvider>
+              <ApiProvider>
+                <Body />
+              </ApiProvider>
+            </ApiErrorProvider>
           </AuthProvider>
         </SnackbarProvider>
       </MiscProvider>

@@ -9,6 +9,9 @@ import { VilaForm } from '../ui/VilaForm';
 import { VilaTextInput } from '../ui/VilaTextInput';
 import { useValidator } from '../../hooks/useValidator';
 import { notEmptyValidator } from '../../hooks/useValidator';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import { useApiError } from '../../hooks/useApiError';
+import { useNavigate } from 'react-router-dom';
 
 
 export function CreateTemplateModal({ templateId, onClose }: { templateId?: string, onClose: () => void }) {
@@ -19,8 +22,10 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
     const { user } = useAuth()
     const { setIsLoading, triggerReloadTemplates } = useMisc()
     const { t } = useTranslation()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
     const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
-
+    const snackbar = useSnackbar()
 
     useEffect(() => {
         onGetTemplate()
@@ -28,11 +33,19 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
 
 
     const onGetTemplate = async () => {
-        if (templateId) {
-            const template = await getTemplate(templateId)
-            setId(template.id)
-            setName(template.name)
+        setIsLoading(() => true)
+        try {
+            if (templateId) {
+                const template = await getTemplate(templateId)
+                setId(template.id)
+                setName(template.name)
+            }
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
+
     }
 
     const onConfirm = async () => {
@@ -42,19 +55,24 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
             if (id) {
                 if (nameValid) {
                     await updateTemplate({ id, name })
+                    triggerReloadTemplates()
+                    snackbar.onOpen('Template updated!', 'check', 'success')
+                    onClose()
                 }
             } else {
                 if (nameValid && user?.id) {
                     await createTemplate({ name, userId: user.id, tasks: [] })
+                    triggerReloadTemplates()
+                    snackbar.onOpen('Template created!', 'check', 'success')
+                    onClose()
                 }
             }
-            triggerReloadTemplates()
         } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
-        finally {
-            setIsLoading(() => false)
-            onClose()
-        }
+
     }
 
     return (

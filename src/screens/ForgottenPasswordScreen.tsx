@@ -26,7 +26,7 @@ export function ForgottenPasswordScreen() {
     const [step, setStep] = useState<number>(1)
     const [password, setPassword] = useState<string>('')
     const [repeatPassword, setRepeatPassword] = useState<string>('')
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const {setIsLoading} = useMisc()
     const snackbar = useSnackbar()
     const [mailDirty, mailError, mailMessage, mailValidate] = useValidator(mail, [notEmptyValidator]);
     const [codeDirty, codeError, codeMessage, codeValidate] = useValidator(code, [notEmptyValidator]);

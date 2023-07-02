@@ -11,6 +11,9 @@ import { ConfirmationModal } from '../components/organism/ConfirmationModal';
 import { CreateTemplateModal } from '../components/organism/CreateTemplateModal';
 import { TemplatePlannerModal } from '../components/organism/TemplatePlannerModal';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { useApiError } from '../hooks/useApiError';
+import { useSnackbar } from '../hooks/useSnackbar';
 
 export function TemplatesScreen() {
 
@@ -18,14 +21,17 @@ export function TemplatesScreen() {
 
 
     const { getTemplates, deleteTemplates } = useApi();
-    const {user} = useAuth()
+    const { user } = useAuth()
+    const snackbar = useSnackbar()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
 
     const firstRender = useRef(true)
     const [page, setPage] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoadingTable, setIsLoadingTable] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableCell[]>([])
-    const { reloadTemplatesFlag, triggerReloadTemplates } = useMisc()
+    const { setIsLoading,reloadTemplatesFlag, triggerReloadTemplates } = useMisc()
     const [searchKey, setSearchKey] = useState<string>('')
     const [createTemplateModalVisible, setCreateTemplateModalVisible] = useState<boolean>(false)
     const [plannerTemplateModalVisible, setPlannerTemplateModalVisible] = useState<boolean>(false)
@@ -55,16 +61,21 @@ export function TemplatesScreen() {
     }
 
     const onGetTemplates = async () => {
-        setIsLoading(() => true)
-        const data = await getTemplates(page, searchKey, user?.id!)
-        setTotalPages(data.totalPages)
-        const tableData: TableCell[] = []
-        data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name], realEntity: dataElement }))
-        if (data.content.length < 1 && page > 1) {
-            setPage((old) => old - 1)
+        setIsLoadingTable(() => true)
+        try {
+            const data = await getTemplates(page, searchKey, user?.id!)
+            setTotalPages(data.totalPages)
+            const tableData: TableCell[] = []
+            data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name], realEntity: dataElement }))
+            if (data.content.length < 1 && page > 1) {
+                setPage((old) => old - 1)
+            }
+            setTableData(tableData)
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoadingTable(false)
         }
-        setTableData(tableData)
-        setIsLoading(() => false)
     }
 
     const onCreateTemplate = () => {
@@ -99,10 +110,18 @@ export function TemplatesScreen() {
     }
 
     const onDelete = async () => {
-        await deleteTemplates(templatesForDelete)
-        triggerReloadTemplates()
-        setTemplatesForDelete([])
-        setConfirmDeleteModalVisible(false)
+        setIsLoading(() => true)
+        try {
+            await deleteTemplates(templatesForDelete)
+            triggerReloadTemplates()
+            setTemplatesForDelete([])
+            setConfirmDeleteModalVisible(false)
+            snackbar.onOpen('Templates deleted!', 'delete', 'success')
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const onCloseDeleteConfirmationModal = () => {
@@ -139,7 +158,7 @@ export function TemplatesScreen() {
     return (
         <VilaLayout>
             <div className='flex w-full flex-col h-[65vh]'>
-                <VilaTable headers={headers} data={tableData} isLoading={isLoading} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
+                <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
                     searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
             </div>

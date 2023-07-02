@@ -9,6 +9,9 @@ import { DayElement } from '../molecule/DayElement';
 import { SelectActivityModal } from './SelectActivityModal';
 import { DateControl } from '../molecule/DateControl';
 import { TemplateSelector } from '../molecule/TemplateSelector';
+import { useNavigate } from 'react-router-dom';
+import { useApiError } from '../../hooks/useApiError';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 
 export function Planner() {
@@ -20,8 +23,11 @@ export function Planner() {
     const [tasks, setTasks] = useState<Task[][]>([])
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-    const { reloadTasksFlag } = useMisc()
+    const { setIsLoading, reloadTasksFlag } = useMisc()
     const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
+    const snackbar = useSnackbar()
 
     useEffect(() => {
         const startWeekMoment = moment().get('weekday') > 0 ? moment().set('weekday', 1) : moment().subtract(1, 'week').set('weekday', 1)
@@ -47,15 +53,22 @@ export function Planner() {
     }, [startDate, reloadTasksFlag])
 
     const onGetTasks = async () => {
-        if (user && startDate) {
-            const weekTasks: Task[][] = [[], [], [], [], [], [], []]
-            const tasks = await getUserTasks(user.id, startDate)
-            const startDateMoment = moment(startDate)
-            tasks.forEach((task) => {
-                const dueMoment = moment(task.dueDate)
-                weekTasks[dueMoment.diff(startDateMoment, 'days')].push(task)
-            })
-            setTasks(weekTasks)
+        setIsLoading(true)
+        try {
+            if (user && startDate) {
+                const weekTasks: Task[][] = [[], [], [], [], [], [], []]
+                const tasks = await getUserTasks(user.id, startDate)
+                const startDateMoment = moment(startDate)
+                tasks.forEach((task) => {
+                    const dueMoment = moment(task.dueDate)
+                    weekTasks[dueMoment.diff(startDateMoment, 'days')].push(task)
+                })
+                setTasks(weekTasks)
+            }
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -78,7 +91,7 @@ export function Planner() {
             </div>
             <div className='flex justify-between'>
                 <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
-                <TemplateSelector startDate={startDate}/>
+                <TemplateSelector startDate={startDate} />
                 <DateControl startDate={startDate} setStartDate={setStartDate} />
             </div>
 

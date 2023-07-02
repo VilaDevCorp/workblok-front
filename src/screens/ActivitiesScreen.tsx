@@ -14,6 +14,7 @@ import StatusCode from 'status-code-enum';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApiError } from '../hooks/useApiError';
 
 export function ActivitiesScreen() {
 
@@ -22,14 +23,16 @@ export function ActivitiesScreen() {
 
     const { getActivities, deleteActivities } = useApi();
     const snackbar = useSnackbar()
-    const {logout} = useAuth()
+    const { logout } = useAuth()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
 
     const firstRender = useRef(true)
     const [page, setPage] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoadingTable, setIsLoadingTable] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableCell[]>([])
-    const { reloadActivitiesFlag, triggerReloadActivities } = useMisc()
+    const { setIsLoading, reloadActivitiesFlag, triggerReloadActivities } = useMisc()
     const [searchKey, setSearchKey] = useState<string>('')
     const [createActivityModalVisible, setCreateActivityModalVisible] = useState<boolean>(false)
     const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState<boolean>(false)
@@ -58,7 +61,7 @@ export function ActivitiesScreen() {
     }
 
     const onGetActivities = async () => {
-        setIsLoading(() => true)
+        setIsLoadingTable(() => true)
         try {
             const data = await getActivities(page, searchKey)
             setTotalPages(data.totalPages)
@@ -68,17 +71,10 @@ export function ActivitiesScreen() {
                 setPage((old) => old - 1)
             }
             setTableData(tableData)
-            setIsLoading(() => false)
         } catch (e) {
-            if (e instanceof ApiError) {
-                if (e.cause === StatusCode.ClientErrorForbidden) {
-                    snackbar.onOpen('Your session has expired', 'cancel', 'error')
-                    logout()
-                }
-            } else {
-                snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
-            }
-            setIsLoading(false)
+            setError(e as Error)
+        } finally {
+            setIsLoadingTable(false)
         }
     }
 
@@ -102,10 +98,18 @@ export function ActivitiesScreen() {
     }
 
     const onDelete = async () => {
-        await deleteActivities(activitiesForDelete)
-        triggerReloadActivities()
-        setActivitiesForDelete([])
-        setConfirmDeleteModalVisible(false)
+        setIsLoading(() => true)
+        try {
+            await deleteActivities(activitiesForDelete)
+            triggerReloadActivities()
+            setActivitiesForDelete([])
+            setConfirmDeleteModalVisible(false)
+            snackbar.onOpen('Activities deleted!', 'delete', 'success')
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const onCloseDeleteConfirmationModal = () => {
@@ -135,7 +139,7 @@ export function ActivitiesScreen() {
     return (
         <VilaLayout>
             <div className='flex w-full flex-col h-[65vh]'>
-                <VilaTable headers={headers} data={tableData} isLoading={isLoading} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
+                <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
                     searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
             </div>

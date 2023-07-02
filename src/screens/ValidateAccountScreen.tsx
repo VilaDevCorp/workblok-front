@@ -24,8 +24,7 @@ export function ValidateAccountScreen() {
     const [code, setCode] = useState<string>('')
     const { userMail } = useParams();
 
-
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const {setIsLoading} = useMisc()
     const snackbar = useSnackbar()
     const [codeDirty, codeError, codeMessage, codeValidate] = useValidator(code, [notEmptyValidator]);
 

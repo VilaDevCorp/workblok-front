@@ -12,23 +12,37 @@ import { VilaTextInput } from '../ui/VilaTextInput';
 import { conf } from '../../conf'
 import moment from 'moment';
 import { useMisc } from '../../hooks/useMisc';
+import { useNavigate } from 'react-router-dom';
+import { useApiError } from '../../hooks/useApiError';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { templateId: string, weekDay?: number, onClose: () => void }) {
 
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(0)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     const { t } = useTranslation()
-    const { triggerReloadTasks } = useMisc()
+    const { setIsLoading, triggerReloadTasks } = useMisc()
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
     const [selectedActivities, setSelectedActivities] = useState<string[]>([])
     const { getActivities, createTemplateTask } = useApi()
     const { user } = useAuth()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
+    const snackbar = useSnackbar()
+
 
     const onGetActivities = async () => {
-        const activityPage = await getActivities(page, searchText)
-        setActivityPage(activityPage)
+        setIsLoading(true)
+        try {
+            const activityPage = await getActivities(page, searchText)
+            setActivityPage(activityPage)
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
+
     }
 
     useEffect(() => {
@@ -48,14 +62,21 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
         }
     }
     const onConfirm = async () => {
-        await Promise.all(selectedActivities.map(async (activity) => {
-            if (weekDay && user?.id) {
-                await createTemplateTask(templateId, { activityId: activity, weekDay })
-                triggerReloadTasks()
-            }
-        }))
+        setIsLoading(() => true)
+        try {
+            await Promise.all(selectedActivities.map(async (activity) => {
+                if (weekDay && user?.id) {
+                    await createTemplateTask(templateId, { activityId: activity, weekDay })
+                    triggerReloadTasks()
+                    snackbar.onOpen('Tasks added!', 'check', 'success')
+                }
+            }))
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
         onClose()
-
     }
 
     return (

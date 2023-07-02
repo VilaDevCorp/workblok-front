@@ -13,6 +13,9 @@ import { ActivityType } from '../atom/ActivityIcon';
 import { VilaTextArea } from '../ui/VilaTextArea';
 import { useValidator } from '../../hooks/useValidator';
 import { notEmptyValidator } from '../../hooks/useValidator';
+import { useApiError } from '../../hooks/useApiError';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 
 export function CreateActivityModal({ activityId, onClose }: { activityId?: string, onClose: () => void }) {
@@ -26,6 +29,9 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
     const { user } = useAuth()
     const { setIsLoading, triggerReloadActivities } = useMisc()
     const { t } = useTranslation()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
+    const snackbar = useSnackbar()
 
     const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
     const [sizeDirty, sizeError, sizeMessage, sizeValidate] = useValidator(size ? size.toString() : '', [notEmptyValidator])
@@ -36,13 +42,20 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
 
 
     const onGetActivity = async () => {
-        if (activityId) {
-            const activity = await getActivity(activityId)
-            setId(activity.id)
-            setName(activity.name)
-            setSize(activity.size)
-            setDescription(activity.description)
-            setIcon(activity.icon ? activity.icon : undefined)
+        setIsLoading(() => true)
+        try {
+            if (activityId) {
+                const activity = await getActivity(activityId)
+                setId(activity.id)
+                setName(activity.name)
+                setSize(activity.size)
+                setDescription(activity.description)
+                setIcon(activity.icon ? activity.icon : undefined)
+            }
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -54,18 +67,22 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
             if (id) {
                 if (nameValid && sizeValid) {
                     await updateActivity({ id, name, size: size!, icon: icon, description })
+                    triggerReloadActivities()
+                    snackbar.onOpen('Activity updated!', 'check', 'success')
+                    onClose()
                 }
             } else {
                 if (nameValid && sizeValid && user?.id) {
                     await createActivity({ name, size: size!, userId: user.id, icon: icon, description })
+                    triggerReloadActivities()
+                    snackbar.onOpen('Activity created!', 'check', 'success')
+                    onClose()
                 }
             }
-            triggerReloadActivities()
         } catch (e) {
-        }
-        finally {
-            setIsLoading(() => false)
-            onClose()
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
     }
 

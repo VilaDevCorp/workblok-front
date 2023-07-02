@@ -15,10 +15,6 @@ export function TemplatePlanner({ templateId, tasks, setTasks }: { templateId: s
     const [selectActivityWeekDay, setSelectActivityWeekDay] = useState<number | undefined>(undefined)
 
 
-    useEffect(() => {
-
-    }, [])
-
     const onOpenSelectActivityModal = (weekDay: number) => {
         setSelectActivityWeekDay(weekDay)
         setVisibleSelectActivityModal(true)

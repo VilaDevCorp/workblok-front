@@ -9,6 +9,9 @@ import { TemplatePlanner } from './TemplatePlanner';
 import { VilaTextInput } from '../ui/VilaTextInput';
 import { VilaField } from '../ui/VilaField';
 import { TemplateTask } from '../../types/entities';
+import { useNavigate } from 'react-router-dom';
+import { useApiError } from '../../hooks/useApiError';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 
 export function TemplatePlannerModal({ templateId, onClose }: { templateId?: string, onClose: () => void }) {
@@ -21,6 +24,11 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
     const { user } = useAuth()
     const { reloadTasksFlag } = useMisc()
     const { t } = useTranslation()
+    const { setIsLoading, triggerReloadActivities } = useMisc()
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
+    const snackbar = useSnackbar()
+
 
     useEffect(() => {
         onGetTemplate()
@@ -28,14 +36,25 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
 
 
     const onGetTemplate = async () => {
-        if (templateId) {
-            const template = await getTemplate(templateId)
-            setId(template.id)
-            setName(template.name)
-            const newTasks:TemplateTask[][] = [[], [], [], [], [], [], []]
-            template.edges.templateTasks.forEach((task) => newTasks[task.weekDay - 1].push(task))
-            setTasks(newTasks)
+        setIsLoading(() => true)
+        try {
+            if (templateId) {
+                const template = await getTemplate(templateId)
+                setId(template.id)
+                setName(template.name)
+                const newTasks: TemplateTask[][] = [[], [], [], [], [], [], []]
+                template.edges.templateTasks ?
+                    template.edges.templateTasks.forEach(
+                        (task) => newTasks[task.weekDay - 1].push(task))
+                    : undefined
+                setTasks(newTasks)
+            }
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
         }
+
     }
 
     return (

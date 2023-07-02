@@ -10,6 +10,7 @@ import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { useNavigate } from 'react-router-dom';
+import { useMisc } from '../hooks/useMisc';
 
 
 export function RegisterScreen() {
@@ -17,13 +18,12 @@ export function RegisterScreen() {
     const { register } = useApi()
     const snackbar = useSnackbar()
     const navigate = useNavigate()
+    const {setIsLoading} = useMisc()
 
     const [username, setUsername] = useState<string>('')
     const [mail, setMail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [repeatPassword, setRepeatPassword] = useState<string>('')
-
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [usernameDirty, usernameError, usernameMessage, usernameValidate] = useValidator(username, [notEmptyValidator])
     const [mailDirty, mailError, mailMessage, mailValidate] = useValidator(mail, [notEmptyValidator, emailValidator]);

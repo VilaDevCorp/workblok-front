@@ -3,36 +3,66 @@ import { useApi } from '../../hooks//useApi';
 import { useMisc } from '../../hooks//useMisc';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 import { ConfirmationModal } from '../organism/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { useApiError } from '../../hooks/useApiError';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 export function ActivityOptions({ selectedTasks, setSelectedTasks }: { selectedTasks: string[], setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>> }) {
 
     const { deleteTasks, completeTasks } = useApi()
-    const { triggerReloadTasks, triggerReloadUserInfo } = useMisc()
+    const { setIsLoading, triggerReloadTasks, triggerReloadUserInfo } = useMisc()
     const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState<boolean>(false)
+    const navigate = useNavigate()
+    const { setError } = useApiError({ navigate })
+    const snackbar = useSnackbar()
 
     const isActivities: boolean = selectedTasks ? selectedTasks.length > 0 : false
 
     const onCompleteTasks = async () => {
-        await completeTasks({ taskIds: selectedTasks, isCompleted: true })
-        setSelectedTasks([])
-        triggerReloadTasks()
-        triggerReloadUserInfo()
+        setIsLoading(() => true)
+        try {
+            await completeTasks({ taskIds: selectedTasks, isCompleted: true })
+            setSelectedTasks([])
+            triggerReloadTasks()
+            triggerReloadUserInfo()
+            snackbar.onOpen('Tasks completed!', 'check', 'success')
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
+
     }
 
     const onUncompleteTasks = async () => {
-        await completeTasks({ taskIds: selectedTasks, isCompleted: false })
-        setSelectedTasks([])
-        triggerReloadTasks()
-        triggerReloadUserInfo()
+        setIsLoading(() => true)
+        try {
+            await completeTasks({ taskIds: selectedTasks, isCompleted: false })
+            setSelectedTasks([])
+            triggerReloadTasks()
+            triggerReloadUserInfo()
+            snackbar.onOpen('Tasks uncompleted!', 'cancel', 'success')
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const onConfirmDeleteTasks = async () => {
-        await deleteTasks(selectedTasks)
-        setSelectedTasks([])
-        triggerReloadTasks()
+        setIsLoading(() => true)
+        try {
+            await deleteTasks(selectedTasks)
+            setSelectedTasks([])
+            triggerReloadTasks()
+            snackbar.onOpen('Tasks deleted!', 'delete', 'success')
+        } catch (e) {
+            setError(e as Error)
+        } finally {
+            setIsLoading(false)
+        }
     }
-
-    const onDeleteTasks = async ()=> {
+    const onDeleteTasks = async () => {
         setConfirmDeleteModalVisible(true)
     }
 
