@@ -113,7 +113,7 @@ export function VilaTable(props: Props) {
                     </thead>
                     <tbody ref={tableBodyRef} className='text-lightFont-500'>
                         {props.data && props.data.map((element, index) => {
-                            return <tr key={`table_element_${index}`} className={`cursor-default border-b border-background-400  
+                            return <tr key={`table_element_${index}`} className={`leading-[40px] cursor-default border-b border-background-400  
                             ${selectedElements.has(index) ? ' bg-background-300 text-lightFont-500' : ' hover:bg-background-400 hover:text-lightFont-500 '}`}
                                 onContextMenu={(e) => { onOpenContextMenu(e, index) }}
                                 onClick={() => onSelect(index)}>

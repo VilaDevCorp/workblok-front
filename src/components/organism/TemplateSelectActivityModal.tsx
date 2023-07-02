@@ -81,7 +81,8 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
 
     return (
         <VilaModal onClose={onClose} hasHeader title='Select activity' size='m-longer'
-            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' style={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>,
+            <VilaButton font='lightFont' style={'filled'} disabled={selectedActivities.length < 1} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <div className='flex flex-col w-full h-full overflow-hidden gap-4'>
                 <VilaTextInput icon='search' setValue={setSearchText} value={searchText} />
                 <div className='flex flex-col w-full h-[500px] overflow-y-auto overflow-x-hidden items-center gap-2'>

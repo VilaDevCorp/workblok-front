@@ -33,7 +33,7 @@ export function ActivityIcon({ type }: { type?: ActivityType }) {
     }
 
     return (
-        <span className='flex justify-center items'>
+        <span className='flex justify-center items-center'>
             {getIcon()}
         </span>
     )

@@ -18,7 +18,9 @@ export function VilaSelect({ noEmpty = false, disabled = false, ...props }: Prop
     const [isFocused, setIsFocused] = useState(false)
 
     return (
-        <select className={`outline-none rounded-lg text-lightFont-500 py-3 px-3 bg-background-300 border border-transparent ${isFocused ? ' bg-background-400 !border-primary-500 ' : ''} ${disabled ? 'brightness-50 ' : 'hover:bg-background-400 '}`}
+        <select className={`outline-none rounded-lg h-[50px] text-lightFont-500 py-3 px-3 bg-background-300 
+            border border-transparent ${isFocused ? ' bg-background-400 !border-primary-500 ' : ''} 
+            ${disabled ? 'brightness-50 ' : 'hover:bg-background-400 '}`}
             onChange={(e) => props.setValue(e.target.value)} value={props.value} disabled={disabled}
             onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} >
             {!noEmpty && <option value={""}>{props.emptyLabel}</option>}
