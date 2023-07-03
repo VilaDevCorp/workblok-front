@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     try {
       const res = await fetch(url, options)
-      const result: ApiResponse = await res.json()
+      const result: ApiResponse<unknown> = await res.json()
       if (!res.ok) {
         throw new ApiError({ cause: res.status, message: result.message, errCode: result.errCode })
       }
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       try {
         const res = await fetch(url, options)
-        const result: ApiResponse = await res.json()
+        const result: ApiResponse<unknown> = await res.json()
         if (!res.ok) {
           throw new ApiError({ cause: res.status, message: result.message, errCode: result.errCode })
         }

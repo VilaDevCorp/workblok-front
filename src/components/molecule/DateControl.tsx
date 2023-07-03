@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 import moment from 'moment';
+import { useMisc } from '../../hooks/useMisc';
 
 export function DateControl({ startDate, setStartDate }: { startDate: Date | undefined, setStartDate: React.Dispatch<React.SetStateAction<Date | undefined>> }) {
+
+    const { setSavedDate } = useMisc()
+
+    useEffect(() => {
+        setSavedDate(startDate)
+    }, [startDate])
+
 
     const onPreviousWeek = () => {
         setStartDate((oldValue) => moment(oldValue).subtract(7, 'days').toDate())

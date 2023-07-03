@@ -23,16 +23,20 @@ export function Planner() {
     const [tasks, setTasks] = useState<Task[][]>([])
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-    const { setIsLoading, reloadTasksFlag } = useMisc()
+    const { setIsLoading, reloadTasksFlag, savedDate, setSavedDate } = useMisc()
     const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
 
     useEffect(() => {
-        const startWeekMoment = moment().get('weekday') > 0 ? moment().set('weekday', 1) : moment().subtract(1, 'week').set('weekday', 1)
-        const startDate = moment([startWeekMoment.year(), startWeekMoment.month(), startWeekMoment.date()]).toDate()
-        setStartDate(startDate)
+        if (savedDate) {
+            setStartDate(savedDate)
+        } else {
+            const startWeekMoment = moment().get('weekday') > 0 ? moment().set('weekday', 1) : moment().subtract(1, 'week').set('weekday', 1)
+            const startDate = moment([startWeekMoment.year(), startWeekMoment.month(), startWeekMoment.date()]).toDate()
+            setStartDate(startDate)
+        }
     }, [])
 
 

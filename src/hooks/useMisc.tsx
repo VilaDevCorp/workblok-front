@@ -18,6 +18,8 @@ export interface MiscContext {
   setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>,
   blockedSidebar: boolean,
   setBlockedSidebar: React.Dispatch<React.SetStateAction<boolean>>,
+  savedDate: Date|undefined,
+  setSavedDate: React.Dispatch<React.SetStateAction<Date|undefined>>,
 }
 
 const MiscContext = createContext<MiscContext>({} as any)
@@ -43,6 +45,7 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
   const [openSidebar, setOpenSidebar] = useState<boolean>(false)
   //This state blocks the sidebar when its doing the open/close animation
   const [blockedSidebar, setBlockedSidebar] = useState<boolean>(false)
+  const [savedDate, setSavedDate] = useState<Date|undefined>(undefined)
 
   const triggerReloadUserInfo = () => {
     setReloadUserInfoFlag((old) => !old)
@@ -64,7 +67,8 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
 
   const value: MiscContext = {
     isLoading, setIsLoading, clearContext, triggerClearContext, reloadUserInfoFlag, triggerReloadUserInfo, reloadTasksFlag, triggerReloadTasks,
-    reloadActivitiesFlag, triggerReloadActivities, reloadTemplatesFlag, triggerReloadTemplates, openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar
+    reloadActivitiesFlag, triggerReloadActivities, reloadTemplatesFlag, triggerReloadTemplates, openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar,
+    savedDate, setSavedDate
   }
 
   return (
