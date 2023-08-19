@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { createContext, ReactNode, useContext } from 'react';
 import StatusCode from 'status-code-enum';
-import { Activity, ApplyTemplateForm, CompleteTaskForm, CreateActivityForm, CreateTaskForm, CreateTemplateForm, CreateTemplateTaskForm, CreateVerificationCodeForm, RegisterUserForm, Task, Template, Test, UpdateActivityForm, UpdateTemplateForm, User, UseVerificationCodeForm } from '../types/entities';
+import { Activity, ApplyTemplateForm, CompleteTaskForm, CreateActivityForm, CreateTaskForm, CreateTemplateForm, CreateTemplateTaskForm, CreateVerificationCodeForm, RegisterUserForm, StatsForm, StatsResult, Task, Template, Test, UpdateActivityForm, UpdateTemplateForm, User, UseVerificationCodeForm } from '../types/entities';
 import { ApiError, ApiResponse, Page } from '../types/types';
 import { conf } from './../conf'
 import { useAuth } from './useAuth';
@@ -30,6 +30,7 @@ export interface ApiContext {
     createTemplateTask: (templateId: string, task: CreateTemplateTaskForm) => Promise<void>
     deleteTemplateTasks: (ids: string[]) => Promise<void>
     applyTemplate: (templateId: string, form: ApplyTemplateForm) => Promise<void>
+    getStats: (form: StatsForm) => Promise<StatsResult>
 }
 
 
@@ -577,6 +578,31 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getStats = async (form: StatsForm): Promise<StatsResult> => {
+        const url = `${conf.mainApiUrl}private/task/stats`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify(form),
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            const resObject: ApiResponse<StatsResult> = await res.json()
+            if (!res.ok) {
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
+            }
+            return resObject.obj
+        } catch (e) {
+            throw e
+        }
+    }
+
+
+
 
 
     const value: ApiContext = {
@@ -602,7 +628,8 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         updateTemplate,
         deleteTemplateTasks,
         createTemplateTask,
-        applyTemplate
+        applyTemplate,
+        getStats
     }
 
     return (

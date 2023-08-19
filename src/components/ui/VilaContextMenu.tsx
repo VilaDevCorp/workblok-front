@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useClickOutside } from '../../hooks/useClickOutside';
 import { useMisc } from '../../hooks/useMisc';
 import { IconType, VilaIcon } from './VilaIcon';
+import { useClickOutsideContext } from '../../hooks/useClickOutsideContext';
 
 
 export interface ContextMenuPosition {
@@ -49,7 +49,7 @@ export function VilaContextMenu(props: Props) {
 
     const contextRef = useRef<HTMLDivElement | null>(null);
     const { triggerClearContext } = useMisc()
-    useClickOutside(props.tableBodyRef, contextRef, () => triggerClearContext())
+    useClickOutsideContext(props.tableBodyRef, contextRef, () => triggerClearContext())
 
     return (
         <div ref={contextRef} id='table_menu_context' style={{ top: `${props.top - (props.invertedY && props.options.length ? 46 * props.options.length : 0)}px`, left: `${props.left - (props.invertedX && contextRef.current?.clientWidth ? contextRef.current?.clientWidth : 0)}px` }}

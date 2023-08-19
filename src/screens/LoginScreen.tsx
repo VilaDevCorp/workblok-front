@@ -56,7 +56,7 @@ export function LoginScreen() {
     return (
         <VilaLayout isPublic>
             <div className={`flex w-full h-full justify-center items-center`}>
-                <div className={`flex w-[500px] h-full justify-center items-center flex-col gap-6 `}>
+                <div className={`flex w-[500px] h-full px-4 justify-center items-center flex-col gap-6 `}>
                     <img src={logo} className='w-[150px] h-[150px]' alt='Logo login' />
                     <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
                     { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Contraseña' }]} nColumns={1}></VilaForm>

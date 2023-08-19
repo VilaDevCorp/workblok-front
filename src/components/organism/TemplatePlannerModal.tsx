@@ -59,7 +59,7 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
 
     return (
         <VilaModal onClose={onClose} hasHeader title={`Template planner`} size='l'
-            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Close'}</VilaButton>]}>
+            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Close'}</VilaButton>]}>
             <TemplatePlanner templateId={templateId!} tasks={tasks} setTasks={setTasks} />
         </VilaModal >
     )

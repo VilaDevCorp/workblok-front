@@ -26,7 +26,7 @@ export function HeaderUser() {
                     {user?.dans}
                 </div>
             </div>
-            <VilaButtonIcon style={'transparent'} icon={"logout"} onClick={onLogout} size={'s'} />
+            <VilaButtonIcon buttonStyle={'transparent'} icon={"logout"} onClick={onLogout} size={'s'} />
         </div>
     )
 }

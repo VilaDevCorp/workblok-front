@@ -49,7 +49,7 @@ export function DayElement({ date, tasks, selectedTasks, setSelectedTasks, onCre
             </div>
             <TaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             <div className={`flex justify-center z-[3] py-2`}>
-                <VilaButtonIcon style={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
+                <VilaButtonIcon buttonStyle={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
             </div>
         </div >
     )

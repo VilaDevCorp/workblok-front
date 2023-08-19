@@ -12,6 +12,7 @@ import { ValidateAccountScreen } from './screens/ValidateAccountScreen';
 import { VilaSnackbar } from './components/ui/VilaSnackbar';
 import { ForgottenPasswordScreen } from './screens/ForgottenPasswordScreen';
 import { TemplatesScreen } from './screens/TemplatesScreen';
+import { StatsScreen } from './screens/StatsScreen';
 
 
 function Body() {
@@ -29,6 +30,7 @@ function Body() {
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/activities" element={<ActivitiesScreen />} />
               <Route path="/templates" element={<TemplatesScreen />} />
+              <Route path="/stats" element={<StatsScreen />} />
               <Route path="/validate/:userMail" element={<ValidateAccountScreen />} />
               <Route path="/recover-password" element={<ForgottenPasswordScreen />} />
             </Routes>

@@ -55,7 +55,7 @@ export function TemplateSelector({ startDate }: { startDate: Date | undefined })
 
 
     return (
-        <div className={`flex justify-start items-center rounded-lg w-[200px] gap-2`}>
+        <div className={`flex justify-center items-center rounded-lg w-[200px] gap-2`}>
             <div className='flex gap-2'>
             </div>
             <VilaSelect options={templates} value={selectedTemplate} setValue={setSelectedTemplate} emptyLabel='Select a template to apply' />

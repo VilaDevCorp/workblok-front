@@ -9,7 +9,7 @@ const getSize = (size?: ModalSize): string => {
         case 'l':
             return 'w-11/12 h-[95%] max-h-[1000px] max-w-2000'
         case 'm-longer':
-            return 'w-2/5 h-5/6 max-h-[800px] max-w-[600px]'
+            return 'lg:w-2/5 lg:h-5/6 max-h-[800px] sm:max-w-[600px]'
         case 'm-fluid-h':
             return 'w-2/5 max-h-[800px] max-w-[600px]'
         case 'm-squared':
@@ -49,11 +49,11 @@ export function VilaModal(props: Props) {
 
     return (
         <div className="w-full top-0 left-0 h-screen backdrop-blur-sm flex z-40 max-h-screen justify-center items-center fixed backdrop-contrast-75 " onClick={() => props.onClose()}>
-            <div className={`relative flex rounded-lg flex-col px-3 py-3 bg-background-900 ${getSize(props.size)} `} onClick={(e) => e.stopPropagation()}>
+            <div className={`relative flex rounded-lg flex-col px-3 py-3 bg-background-900 ${getSize(props.size)} w-full `} onClick={(e) => e.stopPropagation()}>
                 {props.hasHeader &&
                     <div className='flex w-full justify-between flex-row ml-auto items-center text-lightFont-500'>
                         {props.title}
-                        <span className='ml-auto'><VilaButtonIcon size={'s'} style={'transparent'} font='lightFont' icon='close' onClick={() => props.onClose()} />
+                        <span className='ml-auto'><VilaButtonIcon size={'s'} buttonStyle={'transparent'} font='lightFont' icon='close' onClick={() => props.onClose()} />
                         </span>
                     </div>}
                 <div className='overflow-y-auto mt-4 mb-4'>

@@ -85,8 +85,8 @@ export default {
         900: "#04090C",
       },
       coinIcon: "#bfb14b",
-      success: '#256E58',
-      error: '#e73232',
+      success: "#256E58",
+      error: "#e73232",
       transparent: "#00000000",
     },
     extend: {
@@ -105,11 +105,21 @@ export default {
           "80%": { opacity: 1 },
           "100%": { opacity: 0 },
         },
+        showSidebarAnimation: {
+          "0%": { left: "-300px" },
+          "100%": { left: 0 },
+        },
+        hideSidebarAnimation: {
+          "0%": { left: 0 },
+          "100%": { left: "-300px" },
+        },
       },
       animation: {
         showModal: "showAnimation .1s linear",
         hideModal: "hideAnimation .1s linear",
         showSnackbar: "showSnackbar 4s linear 1",
+        hideSidebar: "hideSidebarAnimation .3s",
+        showSidebar: "showSidebarAnimation .3s ",
       },
     },
   },

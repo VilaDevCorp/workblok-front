@@ -19,7 +19,7 @@ export function VilaPagination({ page, setPage, totalPages, maxVisiblePages = 10
             startPage = 1
         }
         for (let i = startPage; i < startPage + maxVisiblePages && i < totalPages + 1; i++) {
-            pageButtonArray.push(<VilaButton style={'filled'} key={`page_${i+1}`} font='lightFont' className={`w-10 flex justify-center text-lg h-fit !px-[3px] !py-[3px]`} disabled={page + 1 === i} onClick={() => setPage(i - 1)}>{i.toString()}</VilaButton >)
+            pageButtonArray.push(<VilaButton buttonStyle={'filled'} key={`page_${i+1}`} font='lightFont' className={`w-10 flex justify-center text-lg h-fit !px-[3px] !py-[3px]`} disabled={page + 1 === i} onClick={() => setPage(i - 1)}>{i.toString()}</VilaButton >)
         }
         return pageButtonArray
     }

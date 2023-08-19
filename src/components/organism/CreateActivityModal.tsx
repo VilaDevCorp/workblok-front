@@ -16,6 +16,7 @@ import { notEmptyValidator } from '../../hooks/useValidator';
 import { useApiError } from '../../hooks/useApiError';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import { ScreenWidthEnum, useScreen } from '../../hooks/useScreen';
 
 
 export function CreateActivityModal({ activityId, onClose }: { activityId?: string, onClose: () => void }) {
@@ -32,6 +33,7 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
+    const { screenWidth } = useScreen()
 
     const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
     const [sizeDirty, sizeError, sizeMessage, sizeValidate] = useValidator(size ? size.toString() : '', [notEmptyValidator])
@@ -88,8 +90,8 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
 
     return (
         <VilaModal onClose={onClose} hasHeader title={`${activityId ? 'Edit activity' : 'Create activity'}`} size='m-squared'
-            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' style={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
-            <VilaForm nColumns={2} fields={[
+            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            <VilaForm nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1} fields={[
                 {
                     label: 'Name', input: <VilaTextInput value={name} setValue={setName} />
                 },

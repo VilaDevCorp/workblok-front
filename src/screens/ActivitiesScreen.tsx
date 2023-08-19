@@ -138,10 +138,15 @@ export function ActivitiesScreen() {
 
     return (
         <VilaLayout>
-            <div className='flex w-full flex-col h-[65vh]'>
-                <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
-                    searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
-                <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
+            <div className='flex w-full flex-col gap-4'>
+                <div className='h-[calc(100%-50px)]'>
+                    <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
+                        searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
+                </div>
+                <div className='h-[50px]'>
+                    <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
+                </div>
+
             </div>
             <>{createActivityModalVisible && <CreateActivityModal activityId={activityForEdit} onClose={() => onCloseCreateActivityModal()} />}</>
             <>{confirmDeleteModalVisible && <ConfirmationModal onClick={() => onDelete()} onClose={() => onCloseDeleteConfirmationModal()} label='These activities will be deleted. Are you sure?' />}</>

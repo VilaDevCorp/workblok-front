@@ -77,7 +77,7 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
 
     return (
         <VilaModal onClose={onClose} hasHeader title={`${templateId ? 'Edit template' : 'Create template'}`} size='m-squared'
-            buttons={[<VilaButton style={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' style={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <VilaForm nColumns={1} fields={[
                 {
                     label: 'Name', input: <VilaTextInput value={name} setValue={setName} />

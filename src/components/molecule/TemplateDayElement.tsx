@@ -41,7 +41,7 @@ export function TemplateDayElement({ weekDay, tasks, selectedTasks, setSelectedT
             </div>
             <TemplateTaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             <div className={`flex justify-center z-[3] py-2`}>
-                <VilaButtonIcon style={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
+                <VilaButtonIcon buttonStyle={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
             </div>
         </div >
     )

@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components'
-import { useClickOutside } from '../../hooks//useClickOutside';
-import { useMisc } from '../../hooks//useMisc';
+import { useClickOutside } from '../../hooks/useClickOutside';
+import { useMisc } from '../../hooks/useMisc';
 import { SizeEnum } from '../../types/types';
+import { VilaButton } from './VilaButton';
 
 
 
@@ -18,21 +19,6 @@ const hideSidebarAnimation = keyframes`
 `
 
 const MainBox = styled.div`
-    display: flex;
-    overflow-y: auto;
-    flex-direction: column;
-    background: ${props => props.theme.color.main.l1};
-    box-sizing: border-box;
-    padding: 14px 24px;
-    width: 300px;
-    border-top-right-radius: 14px;
-    border-bottom-right-radius: 14px;
-    z-index: 5;
-    top: 0;
-    left:0;
-    height: 100vh;
-    position: absolute;
-    gap: 40px;
     animation: ${showSidebarAnimation} .3s;
     animation-timing-function: ease-in-out;
     &.closeSidebar {
@@ -40,36 +26,33 @@ const MainBox = styled.div`
         animation-timing-function: ease-in-out;
         left: -300px;
     }
-    & img {
-        height: 100%;
-    }
 `;
 
-const OptionsBox = styled.div`
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-`
+export interface MenuOption {
+    label: string
+    route: string
+}
 
-export function CoolSidebar({ options = [] }: { options?: JSX.Element[] }) {
+export function VilaSidebar({ options = [] }: { options?: MenuOption[] }) {
     const { openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar } = useMisc()
     //This state manages the sidebar visibility
     const [visibleSidebar, setVisibleSidebar] = useState(false)
     const { t } = useTranslation()
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-    // useClickOutside(wrapperRef, () => setOpenSidebar(false));
-    
+    useClickOutside(wrapperRef, () => setOpenSidebar(false));
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (openSidebar) {
             setVisibleSidebar(true)
             setTimeout(() => {
                 setBlockedSidebar(false)
-            }, 500);
+            }, 300);
         } else {
             setTimeout(() => {
                 setVisibleSidebar(false)
                 setBlockedSidebar(false)
-            }, 500);
+            }, 300);
         }
     }, [openSidebar])
 
@@ -80,17 +63,25 @@ export function CoolSidebar({ options = [] }: { options?: JSX.Element[] }) {
         }
     }
 
+    const onGoTo = (route: string) => {
+        if (!blockedSidebar) {
+            setBlockedSidebar(true)
+            setOpenSidebar(false)
+            navigate(route)
+        }
+    }
 
     return (
         visibleSidebar ?
-            <MainBox ref={wrapperRef} className={openSidebar ? '' : 'closeSidebar'} >
-                <CoolButton iconType={IconTypeEnum.CLOSE} onClick={onCloseSidebar}>
-                    {t('button.close')}
-                </CoolButton>
-                <OptionsBox>
-                    {options.map((option) => option)}
-                </OptionsBox>
-            </MainBox>
+            <div className={`flex overflow-y-auto flex-col box-border px-2 py-4 w-[200px] rounded-tr-lg rounded-br-lg z-[5] 
+                top-0 left-0 bg-background-400 h-screen absolute gap-4 text-lightFont-400  ${openSidebar ? 'animate-showSidebar' : 'animate-hideSidebar left-[-300px]'} `} ref={wrapperRef} >
+                <VilaButton icon='close' font='lightFont' buttonStyle={'outlined'} onClick={onCloseSidebar}>
+                    {'Close'}
+                </VilaButton>
+                <div className='flex gap-4 flex-col px-4 text-lg'>
+                    {options.map((option) => <div className='' onClick={() => onGoTo(option.route)}>{option.label}</div>)}
+                </div>
+            </div>
             :
             <></>
     )

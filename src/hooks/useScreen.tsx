@@ -5,6 +5,13 @@ export interface ScreenContext {
   screenWidth: number,
 }
 
+export const ScreenWidthEnum = {
+  s: 425,
+  m: 768,
+  l: 1024,
+  xl: 1440, 
+}
+
 const ScreenContext = createContext<ScreenContext>({} as any)
 
 export const useScreen = () => {

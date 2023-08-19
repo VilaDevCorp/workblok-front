@@ -1,10 +1,8 @@
 import React, { SetStateAction, useEffect, useRef, useState } from 'react';
-// import { ContextMenuPosition, CoolContextMenu } from '../molecule/CoolContextMenu';
 import { PuffLoader, PulseLoader } from 'react-spinners';
 import { useMisc } from '../../hooks//useMisc';
 import { VilaTextInput } from './VilaTextInput';
 import { ContextMenuPosition, ContextOption, VilaContextMenu } from './VilaContextMenu';
-import { useClickOutside } from '../../hooks/useClickOutside';
 
 
 export interface TableCell {
@@ -76,8 +74,8 @@ export function VilaTable(props: Props) {
     }
 
     return (
-        <div className='w-full h-full flex flex-col'>
-            <div className='flex gap-4'>
+        <div className='w-full flex flex-col h-full'>
+            <div className='flex gap-4 flex-col md:flex-row'>
                 {props.searchKey !== undefined && props.setSearchKey ?
                     <div className='min-w-[50%]'>
                         <VilaTextInput icon={'search'} value={props.searchKey} setValue={props.setSearchKey} />
@@ -91,7 +89,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
             </div>
-            <div className='w-full h-screen overflow-auto mt-4 relative' ref={loadingContainer}>
+            <div className='w-full h-full overflow-auto mt-4 relative' ref={loadingContainer}>
                 {props.isLoading &&
                     <div style={{ height: `${loadingContainerHeight}px`, marginTop: `-${loadingContainerHeight}px` }} className={`w-full sticky justify-center items-center flex top-0 bg-background-900 z-10 opacity-80`}>
                         <div className='w-full h-full flex justify-center items-center'>

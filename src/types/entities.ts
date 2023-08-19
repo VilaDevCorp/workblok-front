@@ -123,3 +123,32 @@ export interface ApplyTemplateForm {
   startDate: string;
 }
 
+export interface StatsForm {
+  userId: string;
+  year?: number;
+  month?: number;
+  week?: number;
+}
+
+export interface ActivityStatElement {
+  activityName: string;
+  activityIcon?: string;
+  nTimes: number;
+}
+
+export interface ChartData {
+  name: string;
+  value: number;
+}
+
+export interface StatsResult {
+  scheduledDans?: number;
+  completedDans?: number;
+  completedPercentage?: number;
+  dailyAvgScheduled?: number;
+  dailyAvgCompleted?: number;
+  realStartDate: string;
+  realFinishDate: string;
+  nWeeksOfMonth?: number;
+  activityInfo?: ActivityStatElement[];
+}
