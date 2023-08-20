@@ -1,5 +1,4 @@
-const mainApiUrl = 'http://www.coollocalhost.com:8080/api/'
-// const mainApiUrl = 'https://cabildofuerteventura.notacool.com/api/'
+const mainApiUrl = 'http://localhost:8080/api/'
 
 const dateTimeFormat = 'DD/MM/yyyy HH:mm'
 const dateFormat = 'DD/MM/yyyy'
