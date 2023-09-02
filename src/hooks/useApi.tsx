@@ -48,9 +48,10 @@ export const useApi = () => {
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const { csrfToken } = useAuth()
+    const apiUrl =  import.meta.env.VITE_REACT_APP_API_URL
 
     const register = async (user: RegisterUserForm) => {
-        const url = `${conf.mainApiUrl}public/register`
+        const url = `${apiUrl}public/register`
         const options: RequestInit = {
             method: 'POST',
             body: JSON.stringify(user),
@@ -72,7 +73,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
     const createActivity = async (activity: CreateActivityForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/activity`
+        const url = `${apiUrl}private/activity`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -94,7 +95,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const updateActivity = async (activity: UpdateActivityForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/activity`
+        const url = `${apiUrl}private/activity`
         const options: RequestInit = {
             credentials: 'include',
             method: 'PUT',
@@ -117,7 +118,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
     const getActivity = async (id: string): Promise<Activity> => {
-        const url = `${conf.mainApiUrl}private/activity/${id}`
+        const url = `${apiUrl}private/activity/${id}`
         const options: RequestInit = {
             credentials: 'include',
             method: 'GET',
@@ -142,7 +143,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
     const getActivities = async (page: number, name: string): Promise<Page<Activity>> => {
-        const url = `${conf.mainApiUrl}private/activity/search`
+        const url = `${apiUrl}private/activity/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -167,7 +168,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const deleteActivities = async (ids: string[]): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/activity`
+        const url = `${apiUrl}private/activity`
         const options: RequestInit = {
             credentials: 'include',
             method: 'DELETE',
@@ -189,7 +190,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const createTask = async (task: CreateTaskForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/task`
+        const url = `${apiUrl}private/task`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -211,7 +212,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const completeTasks = async (form: CompleteTaskForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/task/complete`
+        const url = `${apiUrl}private/task/complete`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -237,7 +238,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         const dateStr = moment(startDate).format(conf.dateUrlFormat)
         console.log(conf.dateUrlFormat)
         console.log(dateStr)
-        const url = `${conf.mainApiUrl}private/task/search`
+        const url = `${apiUrl}private/task/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -262,7 +263,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const deleteTasks = async (ids: string[]): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/task`
+        const url = `${apiUrl}private/task`
         const options: RequestInit = {
             credentials: 'include',
             method: 'DELETE',
@@ -284,7 +285,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getUser = async (id: string): Promise<User> => {
-        const url = `${conf.mainApiUrl}private/user/${id}`
+        const url = `${apiUrl}private/user/${id}`
         const options: RequestInit = {
             credentials: 'include',
             method: 'GET',
@@ -308,7 +309,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const updateUserDans = async (userId: string, isAdd: boolean, value: number): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/user/${userId}/dans?add=${isAdd}&value=${value}`
+        const url = `${apiUrl}private/user/${userId}/dans?add=${isAdd}&value=${value}`
         const options: RequestInit = {
             credentials: 'include',
             method: 'PATCH',
@@ -329,7 +330,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const sendVerificationCode = async (form: CreateVerificationCodeForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}public/newVerificationCode`
+        const url = `${apiUrl}public/newVerificationCode`
         const options: RequestInit = {
             method: 'POST',
             body: JSON.stringify(form),
@@ -350,7 +351,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const useVerificationCode = async (form: UseVerificationCodeForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}public/useVerificationCode`
+        const url = `${apiUrl}public/useVerificationCode`
         const options: RequestInit = {
             method: 'POST',
             body: JSON.stringify(form),
@@ -371,7 +372,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const createTemplate = async (form: CreateTemplateForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template`
+        const url = `${apiUrl}private/template`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -393,7 +394,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getTemplates = async (page: number, name: string, userId: string): Promise<Page<Template>> => {
-        const url = `${conf.mainApiUrl}private/template/search`
+        const url = `${apiUrl}private/template/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -418,7 +419,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getAllUserTemplates = async (userId: string): Promise<Page<Template>> => {
-        const url = `${conf.mainApiUrl}private/template/search`
+        const url = `${apiUrl}private/template/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -444,7 +445,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
     const deleteTemplates = async (ids: string[]): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template`
+        const url = `${apiUrl}private/template`
         const options: RequestInit = {
             credentials: 'include',
             method: 'DELETE',
@@ -467,7 +468,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
 
     const getTemplate = async (id: string): Promise<Template> => {
-        const url = `${conf.mainApiUrl}private/template/${id}`
+        const url = `${apiUrl}private/template/${id}`
         const options: RequestInit = {
             credentials: 'include',
             method: 'GET',
@@ -491,7 +492,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const updateTemplate = async (template: UpdateTemplateForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template`
+        const url = `${apiUrl}private/template`
         const options: RequestInit = {
             credentials: 'include',
             method: 'PUT',
@@ -513,7 +514,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const createTemplateTask = async (templateId: string, task: CreateTemplateTaskForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template/${templateId}/tasks`
+        const url = `${apiUrl}private/template/${templateId}/tasks`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -535,7 +536,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const deleteTemplateTasks = async (ids: string[]): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template/tasks`
+        const url = `${apiUrl}private/template/tasks`
         const options: RequestInit = {
             credentials: 'include',
             method: 'DELETE',
@@ -557,7 +558,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const applyTemplate = async (templateId: string, form: ApplyTemplateForm): Promise<void> => {
-        const url = `${conf.mainApiUrl}private/template/${templateId}/apply`
+        const url = `${apiUrl}private/template/${templateId}/apply`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
@@ -579,7 +580,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getStats = async (form: StatsForm): Promise<StatsResult> => {
-        const url = `${conf.mainApiUrl}private/task/stats`
+        const url = `${apiUrl}private/task/stats`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',

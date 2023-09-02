@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(false)
   const { reloadUserInfoFlag } = useMisc()
   const [csrfToken, setCsrfToken] = useState<string>('')
+  const apiUrl =  import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     loadCsrf()
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const login = async (mail: string, password: string): Promise<string> => {
-    const url = `${conf.mainApiUrl}public/login`
+    const url = `${apiUrl}public/login`
     const options: RequestInit = {
       method: 'POST',
       credentials: 'include',
@@ -87,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const self = async (): Promise<User> => {
     if (csrfToken) {
 
-      const url = `${conf.mainApiUrl}private/self`
+      const url = `${apiUrl}private/self`
       const options: RequestInit = {
         method: 'GET',
         headers: new Headers({
