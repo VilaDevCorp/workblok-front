@@ -15,7 +15,7 @@ export function VilaLayout({ title, children, isPublic }: { title?: string, chil
     return (
 
         (isPublic || user) ?
-            <>
+            <div className="min-h-screen w-full px-4 py-4">
                 {!isPublic ?
                     <>
                         <Header />
@@ -27,10 +27,10 @@ export function VilaLayout({ title, children, isPublic }: { title?: string, chil
                     :
                     children
                 }
-            </>
+            </div>
             :
-            <div className={`flex w-[500px] h-full justify-center items-center flex-col gap-6 m-auto`}>
-                <img src={logo} className='w-[150px] h-[150px]' alt='Logo login' />
+            <div className={`flex w-screen h-full justify-center items-center flex-col gap-6 m-auto`}>
+                <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                 <p className="text-lightFont-500">{'You need an account to access this page'}</p>
                 <VilaButton onClick={() => navigate("/login")} font="lightFont">{'Login'}</VilaButton>
             </div>

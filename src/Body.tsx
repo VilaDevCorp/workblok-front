@@ -13,14 +13,26 @@ import { VilaSnackbar } from './components/ui/VilaSnackbar';
 import { ForgottenPasswordScreen } from './screens/ForgottenPasswordScreen';
 import { TemplatesScreen } from './screens/TemplatesScreen';
 import { StatsScreen } from './screens/StatsScreen';
+import { useMisc } from './hooks/useMisc';
+import { CircleLoader, MoonLoader } from 'react-spinners';
+import { useEffect, useState } from 'react';
 
 
 function Body() {
 
   const authInfo = useAuth()
+  const { isLoading } = useMisc()
+  const [innerHeight, setInnerHeight] = useState<number | undefined>(undefined)
+
+
+  useEffect(() => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, [])
+
 
   return (
-    <div className='w-full min-h-screen bg-background-900' >
+    <div className='w-full h-full bg-background-900' >
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
           <>
@@ -38,6 +50,7 @@ function Body() {
           :
           <VilaLoadingScreen />
         }
+        {isLoading && <MoonLoader size={55} color='#5387A5' className='!absolute z-50 right-[50px] bottom-10 ' />}
         <VilaSnackbar />
       </BrowserRouter>
     </div>
