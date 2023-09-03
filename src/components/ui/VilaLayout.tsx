@@ -15,7 +15,7 @@ export function VilaLayout({ title, children, isPublic }: { title?: string, chil
     return (
 
         (isPublic || user) ?
-            <div className="min-h-screen w-full px-4 py-4">
+            <div className={`min-h-full md:min-h-screen w-full px-4 py-4 ${isPublic && 'flex items-center justify-center'} `}>
                 {!isPublic ?
                     <>
                         <Header />
