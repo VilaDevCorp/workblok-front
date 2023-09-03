@@ -32,7 +32,7 @@ function Body() {
 
 
   return (
-    <div className='w-full h-full bg-background-900' >
+    <div className='w-full h-full md:h-screen bg-background-900' >
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
           <>
