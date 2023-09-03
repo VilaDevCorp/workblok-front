@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authenticate = async (username: string, password: string) => {
     try {
-      const csrf = await login(username, password)
+      const csrf = await login(username.toLowerCase().trim(), password)
       setCsrfToken(csrf)
       localStorage.setItem('csrfToken', csrf)
     } catch (e) {
