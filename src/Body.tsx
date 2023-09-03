@@ -14,7 +14,7 @@ import { ForgottenPasswordScreen } from './screens/ForgottenPasswordScreen';
 import { TemplatesScreen } from './screens/TemplatesScreen';
 import { StatsScreen } from './screens/StatsScreen';
 import { useMisc } from './hooks/useMisc';
-import { CircleLoader, MoonLoader } from 'react-spinners';
+import { CircleLoader, MoonLoader, PuffLoader } from 'react-spinners';
 import { useEffect, useState } from 'react';
 
 
@@ -50,7 +50,7 @@ function Body() {
           :
           <VilaLoadingScreen />
         }
-        {isLoading && <MoonLoader size={55} color='#5387A5' className='!absolute z-50 right-[50px] bottom-10 ' />}
+        {isLoading && <PuffLoader size={55} color='#5387A5' className='!absolute z-50 right-[50px] bottom-10 ' />}
         <VilaSnackbar />
       </BrowserRouter>
     </div>

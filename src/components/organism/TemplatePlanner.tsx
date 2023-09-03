@@ -27,7 +27,7 @@ export function TemplatePlanner({ templateId, tasks, setTasks }: { templateId: s
 
     return (
         <div className='flex w-full min-h-[400px] h-[50vh] max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
-            <div className='flex flex-grow overflow-hidden'>
+            <div className='flex flex-grow overflow-auto'>
                 {[1, 2, 3, 4, 5, 6, 7].map((weekDay) =>
                     <TemplateDayElement weekDay={weekDay} tasks={tasks[weekDay-1]}
                         selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(weekDay)} />)}

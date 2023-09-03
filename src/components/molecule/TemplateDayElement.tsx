@@ -18,7 +18,7 @@ const getWeekdayLabel = (weekDay: number) => {
             return 'Friday'
         case 6:
             return 'Saturday'
-        case 0:
+        case 7:
             return 'Sunday'
         default:
             return ''
@@ -34,7 +34,7 @@ export function TemplateDayElement({ weekDay, tasks, selectedTasks, setSelectedT
 
     return (
         <div className={`flex flex-col w-full min-w-[150px] grow basis-0 [&:last-child]:border-r-0 bg-background-400
-            [&:last-child]:rounded-r-lg [&:last-child]:rounded-b-lg [&:first-child]:rounded-tl-lg [&:first-child]:rounded-bl-lg hover:opacity-100 
+            [&:last-child]:rounded-r-lg [&:last-child]:rounded-br-lg [&:first-child]:rounded-tl-lg [&:first-child]:rounded-bl-lg hover:opacity-100 
             ${hasSelected ? 'opacity-100' : 'opacity-70'} } `}>
             <div className={`flex w-full flex-col items-center justify-center h-[80px] z-[3] py-5`}>
                 {getWeekdayLabel(weekDay)}
