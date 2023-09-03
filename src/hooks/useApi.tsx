@@ -236,13 +236,11 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const getUserTasks = async (userId: string, startDate: Date): Promise<Task[]> => {
         const dateStr = moment(startDate).format(conf.dateUrlFormat)
-        console.log(conf.dateUrlFormat)
-        console.log(dateStr)
         const url = `${apiUrl}private/task/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
-            body: JSON.stringify({ userId: userId, lowerDate: moment(startDate).format(conf.dateInputFormat), upperDate: moment(startDate).add(7, 'days').format(conf.dateInputFormat) }),
+            body: JSON.stringify({ userId: userId, lowerDate: moment(startDate).format(conf.dateInputFormat), upperDate: moment(startDate).add(6, 'days').format(conf.dateInputFormat) }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
