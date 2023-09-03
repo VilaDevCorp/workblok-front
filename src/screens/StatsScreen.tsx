@@ -47,13 +47,51 @@ export function StatsScreen() {
     const [stats, setStats] = useState<StatsResult | undefined>(undefined)
     const [customInterval, setCustomInterval] = useState<number | undefined>(1)
     const [year, setYear] = useState<number | undefined>(moment().get('year'))
+    const [yearChanged, setYearChanged] = useState<boolean>(false)
     const [month, setMonth] = useState<number | undefined>(moment().get('month'))
+    const [monthChanged, setMonthChanged] = useState<boolean>(false)
     const [week, setWeek] = useState<number | undefined>()
     const [weekOptions, setWeekOptions] = useState<ToogleOption[]>([])
     const [timeDivision, setTimeDivision] = useState<string>('')
     const [chartData, setChartData] = useState<ChartData[]>([])
     const firstRender = useRef(true)
 
+
+    useEffect(() => {
+        if (!firstRender.current) {
+            onGetStats()
+        }
+    }, [week])
+
+    useEffect(() => {
+        if (!firstRender.current) {
+            setMonth(undefined)
+            setWeek(undefined)
+            onGetStats()
+        }
+    }, [yearChanged])
+
+    useEffect(() => {
+        if (!firstRender.current) {
+            setWeek(undefined)
+            onGetStats()
+        }
+    }, [monthChanged])
+
+    useEffect(() => {
+        onGetStats()
+    }, [week])
+
+    useEffect(() => {
+        if (!firstRender.current) {
+            if (customInterval) {
+                setYear(moment().get('year'))
+                setMonth(moment().get('month'))
+            } else {
+                setYear(undefined)
+            }
+        }
+    }, [customInterval])
 
     useEffect(() => {
         firstRender.current = false
@@ -68,10 +106,10 @@ export function StatsScreen() {
 
         if (moment().isBefore(startMonthDate)) { //If our current date still belong to the previous month last week
             const changedMonth = moment().get('month') === 0 ? 11 : moment().get('month') - 1
-            const changedYear = moment().get('month') === 0 ? moment().get('year') : moment().get('year') - 1
+            const changedYear = moment().get('month') === 0 ? moment().get('year') - 1 : moment().get('year')
             setMonth(changedMonth)
             setYear(changedYear)
-            startMonthDate = moment(`01/${changedMonth}/${changedYear}`,
+            startMonthDate = moment(`01/${changedMonth + 1}/${changedYear}`,
                 conf.dateFormat);
             if (startMonthDate.get('day') !== 1) {
                 let dayOffset = 1                //If its sunday
@@ -91,31 +129,16 @@ export function StatsScreen() {
         } while (nWeek < 5)
     }, [])
 
-    useEffect(() => {
-        if (!firstRender.current) {
-            onGetStats()
-        }
 
-    }, [week])
+    const onChangeYear = (value: number | undefined) => {
+        setYear(value)
+        setYearChanged((old) => !old)
+    }
 
-    useEffect(() => {
-        if (!firstRender.current) {
-            setMonth(undefined)
-            setWeek(undefined)
-            onGetStats()
-        }
-    }, [year])
-
-    useEffect(() => {
-        if (!firstRender.current) {
-            setWeek(undefined)
-            onGetStats()
-        }
-    }, [month])
-
-    useEffect(() => {
-        onGetStats()
-    }, [week])
+    const onChangeMonth = (value: number | undefined) => {
+        setMonth(value)
+        setMonthChanged((old) => !old)
+    }
 
 
     const pieChartColors = [
@@ -130,14 +153,6 @@ export function StatsScreen() {
         '#9E4C62', // Darker Pink
         '#573D64', // Darker Indigo
     ];
-    useEffect(() => {
-        if (customInterval) {
-            setYear(moment().get('year'))
-            setMonth(moment().get('month'))
-        } else {
-            setYear(undefined)
-        }
-    }, [customInterval])
 
 
     const onGetStats = async () => {
@@ -239,8 +254,8 @@ export function StatsScreen() {
                     </div>
                     {year &&
                         <div className='flex gap-10 w-full lg:w-[400px] justify-center'>
-                            <YearSelector value={year} setValue={setYear} />
-                            <VilaSelect noEmpty={false} emptyLabel='All year' options={monthOptions} value={month!=undefined ? month.toString() : ''} setValue={(value) => setMonth(Number.parseInt(value))} />
+                            <YearSelector value={year} setValue={onChangeYear} />
+                            <VilaSelect noEmpty={false} emptyLabel='All year' options={monthOptions} value={month != undefined ? month.toString() : ''} setValue={(value) => onChangeMonth(Number.parseInt(value))} />
                         </div>
                     }
                     {timeDivision &&
