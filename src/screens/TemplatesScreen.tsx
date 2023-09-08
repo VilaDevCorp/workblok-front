@@ -31,7 +31,7 @@ export function TemplatesScreen() {
     const [totalPages, setTotalPages] = useState<number>(0)
     const [isLoadingTable, setIsLoadingTable] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableCell[]>([])
-    const { setIsLoading,reloadTemplatesFlag, triggerReloadTemplates } = useMisc()
+    const { setIsLoading, reloadTemplatesFlag, triggerReloadTemplates } = useMisc()
     const [searchKey, setSearchKey] = useState<string>('')
     const [createTemplateModalVisible, setCreateTemplateModalVisible] = useState<boolean>(false)
     const [plannerTemplateModalVisible, setPlannerTemplateModalVisible] = useState<boolean>(false)
@@ -157,10 +157,14 @@ export function TemplatesScreen() {
 
     return (
         <VilaLayout>
-            <div className='flex w-full flex-col h-[65vh]'>
-                <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
-                    searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
-                <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
+            <div className='flex w-full flex-col gap-4'>
+                <div className='h-[calc(100%-50px)] min-h-[300px]'>
+                    <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
+                        searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
+                </div>
+                <div className='h-[50px]'>
+                    <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
+                </div>
             </div>
             <>{createTemplateModalVisible && <CreateTemplateModal templateId={templateForEdit} onClose={() => onCloseCreateTemplateModal()} />}</>
             <>{plannerTemplateModalVisible && <TemplatePlannerModal templateId={templateForEdit} onClose={() => onClosePlannerTemplateModal()} />}</>

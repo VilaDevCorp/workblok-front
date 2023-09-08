@@ -142,7 +142,7 @@ export function ActivitiesScreen() {
     return (
         <VilaLayout>
             <div className='flex w-full flex-col gap-4'>
-                <div className='h-[calc(100%-50px)]'>
+                <div className='h-[calc(100%-50px)] min-h-[300px]'>
                     <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
                         searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 </div>

@@ -88,7 +88,7 @@ export function Planner() {
 
     return (
         <div className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
-            <div className='flex flex-grow overflow-auto'>
+            <div className='flex flex-grow overflow-auto min-h-[300px]'>
                 {datesArray.map((date, index) =>
                     <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
                         selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)}

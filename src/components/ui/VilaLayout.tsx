@@ -19,7 +19,7 @@ export function VilaLayout({ title, children, isPublic }: { title?: string, chil
                 {!isPublic ?
                     <>
                         <Header />
-                        <div className='flex max-w-[1500px] bg-transparent m-auto py-5 px-2 md:px-4 h-[calc(100vh-132px)]'>
+                        <div className='flex max-w-[1500px] max-h-[900px] bg-transparent m-auto py-5 px-2 md:px-4 h-[calc(100vh-132px)]'>
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </div>
