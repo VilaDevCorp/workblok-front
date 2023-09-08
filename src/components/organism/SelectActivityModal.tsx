@@ -1,4 +1,4 @@
-import { Page } from '../../types/types';
+import { ApiError, Page } from '../../types/types';
 import { useEffect, useState } from 'react';
 import { ActivityArea } from './ActivityArea';
 import { Activity } from '../../types/entities';
@@ -15,6 +15,7 @@ import { useMisc } from '../../hooks/useMisc';
 import { useApiError } from '../../hooks/useApiError';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import StatusCode from 'status-code-enum';
 
 export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: () => void }) {
 
@@ -34,7 +35,10 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const onGetActivities = async () => {
         setIsLoading(() => true)
         try {
-            const activityPage = await getActivities(page, searchText)
+            if (user === undefined) {
+                throw new ApiError({ message: "Not user detected", cause: StatusCode.ClientErrorForbidden })
+            }
+            const activityPage = await getActivities(page, searchText, user.id)
             setActivityPage(activityPage)
         } catch (e) {
             setError(e as Error)
@@ -81,7 +85,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     return (
         <VilaModal onClose={onClose} hasHeader title='Select activity' size='m-longer'
             buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>,
-            <VilaButton disabled={selectedActivities.length<1} font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            <VilaButton disabled={selectedActivities.length < 1} font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <div className='flex flex-col w-full h-full overflow-hidden gap-4'>
                 <VilaTextInput icon='search' setValue={setSearchText} value={searchText} />
                 <div className='flex flex-col w-full h-[500px] overflow-y-auto overflow-x-hidden items-center gap-2'>

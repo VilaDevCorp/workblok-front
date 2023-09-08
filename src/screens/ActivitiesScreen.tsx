@@ -23,7 +23,7 @@ export function ActivitiesScreen() {
 
     const { getActivities, deleteActivities } = useApi();
     const snackbar = useSnackbar()
-    const { logout } = useAuth()
+    const { user, logout } = useAuth()
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
 
@@ -63,7 +63,10 @@ export function ActivitiesScreen() {
     const onGetActivities = async () => {
         setIsLoadingTable(() => true)
         try {
-            const data = await getActivities(page, searchKey)
+            if (user === undefined) {
+                throw new ApiError({ message: "Not user detected", cause: StatusCode.ClientErrorForbidden })
+            }
+            const data = await getActivities(page, searchKey, user?.id)
             setTotalPages(data.totalPages)
             const tableData: TableCell[] = []
             data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, dataElement.size.toString()], realEntity: dataElement }))

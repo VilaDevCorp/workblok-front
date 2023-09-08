@@ -1,4 +1,4 @@
-import { Page } from '../../types/types';
+import { ApiError, Page } from '../../types/types';
 import { useEffect, useState } from 'react';
 import { ActivityArea } from './ActivityArea';
 import { Activity } from '../../types/entities';
@@ -15,6 +15,7 @@ import { useMisc } from '../../hooks/useMisc';
 import { useNavigate } from 'react-router-dom';
 import { useApiError } from '../../hooks/useApiError';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import StatusCode from 'status-code-enum';
 
 export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { templateId: string, weekDay?: number, onClose: () => void }) {
 
@@ -35,7 +36,10 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
     const onGetActivities = async () => {
         setIsLoading(true)
         try {
-            const activityPage = await getActivities(page, searchText)
+            if (user === undefined) {
+                throw new ApiError({ message: "Not user detected", cause: StatusCode.ClientErrorForbidden })
+            }
+            const activityPage = await getActivities(page, searchText, user.id)
             setActivityPage(activityPage)
         } catch (e) {
             setError(e as Error)

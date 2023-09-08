@@ -13,7 +13,7 @@ export interface ApiContext {
     createActivity: (activity: CreateActivityForm) => Promise<void>
     updateActivity: (activity: UpdateActivityForm) => Promise<void>
     getActivity: (id: string) => Promise<Activity>
-    getActivities: (page: number, name: string) => Promise<Page<Activity>>
+    getActivities: (page: number, name: string, userId: string) => Promise<Page<Activity>>
     deleteActivities: (ids: string[]) => Promise<void>
     createTask: (task: CreateTaskForm) => Promise<void>
     deleteTasks: (ids: string[]) => Promise<void>
@@ -48,7 +48,7 @@ export const useApi = () => {
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
     const { csrfToken } = useAuth()
-    const apiUrl =  import.meta.env.VITE_REACT_APP_API_URL
+    const apiUrl = import.meta.env.VITE_REACT_APP_API_URL
 
     const register = async (user: RegisterUserForm) => {
         const url = `${apiUrl}public/register`
@@ -142,12 +142,12 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
 
 
-    const getActivities = async (page: number, name: string): Promise<Page<Activity>> => {
+    const getActivities = async (page: number, name: string, userId: string): Promise<Page<Activity>> => {
         const url = `${apiUrl}private/activity/search`
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
-            body: JSON.stringify({ page, name, pageSize: 10 }),
+            body: JSON.stringify({ page, name, pageSize: 10, userId }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
