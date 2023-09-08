@@ -132,6 +132,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         cleanUserParams()
       }
     } catch (e) {
+      logout()
     }
     setIsCompletedLoad(() => true)
   }
