@@ -86,9 +86,9 @@ export function StatsScreen() {
         if (!firstRender.current) {
             if (customInterval) {
                 setYear(moment().get('year'))
-                setMonth(moment().get('month'))
+                onChangeMonth(moment().get('month'))
             } else {
-                setYear(undefined)
+                onChangeYear(undefined)
             }
         }
     }, [customInterval])
