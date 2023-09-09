@@ -29,7 +29,7 @@ export function VilaLoadingScreen() {
     return (
         <div className='flex bg-background-500 flex-col justify-center items-center w-full h-screen overflow-hidden '>
             <img src={logo} className='w-[200px] h-[200px]' alt='Imagen cargando página' style={{ cursor: 'pointer' }}></img>
-            <PuffLoader color='#124969' loading size={75}  />
+            <PuffLoader color='#124969' loading size={100}  />
         </div>
     )
 }

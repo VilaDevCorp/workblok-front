@@ -7,6 +7,7 @@ import { VilaSnackbar } from './components/ui/VilaSnackbar';
 import { useMisc } from './hooks/useMisc';
 import { PuffLoader } from 'react-spinners';
 import { Suspense, lazy, useEffect, useState } from 'react';
+import { PageLoadingScreen } from './components/organism/PageLoadingScreen';
 
 const LazyActivitiesScreen = lazy(() => import('./screens/ActivitiesScreen').then((module) => ({ default: module.ActivitiesScreen })))
 const LazyRegisterScreen = lazy(() => import('./screens/RegisterScreen').then((module) => ({ default: module.RegisterScreen })));
@@ -32,18 +33,20 @@ function Body() {
     <div className='w-full h-full md:h-screen bg-background-900' >
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
-          <Suspense fallback={<VilaLoadingScreen />}>
-            <Routes>
-              <Route path="/" element={<PlannerScreen />} />
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/register" element={<LazyRegisterScreen />} />
-              <Route path="/activities" element={<LazyActivitiesScreen />} />
-              <Route path="/templates" element={<LazyTemplatesScreen />} />
-              <Route path="/stats" element={<LazyStatsScreen />} />
-              <Route path="/validate/:userMail" element={<LazyValidateAccountScreen />} />
-              <Route path="/recover-password" element={<LazyForgottenPasswordScreen />} />
-            </Routes>
-          </Suspense>
+          <>
+            <Suspense fallback={<PageLoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<PlannerScreen />} />
+                <Route path="/activities" element={<LazyActivitiesScreen />} />
+                <Route path="/templates" element={<LazyTemplatesScreen />} />
+                <Route path="/stats" element={<LazyStatsScreen />} />
+                <Route path="/login" element={<LoginScreen />} />
+                <Route path="/register" element={<Suspense fallback={<PageLoadingScreen isPublic />}><LazyRegisterScreen /></Suspense>} />
+                <Route path="/validate/:userMail" element={<Suspense fallback={<PageLoadingScreen isPublic />}><LazyValidateAccountScreen /></Suspense>} />
+                <Route path="/recover-password" element={<Suspense fallback={<PageLoadingScreen isPublic />}><LazyForgottenPasswordScreen /></Suspense>} />
+              </Routes>
+            </Suspense>
+          </>
           :
           <VilaLoadingScreen />
         }

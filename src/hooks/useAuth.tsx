@@ -64,7 +64,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!res.ok) {
         throw new ApiError({ cause: res.status, message: result.message, errCode: result.errCode })
       }
-      console.log(result.obj)
       return (result.obj as LoginResponse).csrf
     } catch (e) {
       throw e
