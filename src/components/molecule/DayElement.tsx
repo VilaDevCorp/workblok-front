@@ -7,6 +7,7 @@ import { conf } from './../../conf'
 import { TaskArea } from '../organism/TaskArea';
 import { VilaButtonIcon } from '../ui/VilaButtonIcon';
 import { SelectActivityModal } from '../organism/SelectActivityModal';
+import { VilaIcon } from '../ui/VilaIcon';
 
 
 const getWeekdayLabel = (date: Date) => {
@@ -40,17 +41,20 @@ export function DayElement({ date, tasks, selectedTasks, setSelectedTasks, onCre
     const hasSelected = tasks.some((task) => selectedTasks.includes(task.id))
 
     return (
-        <div className={`flex flex-col w-full min-w-[150px] grow basis-0 [&:last-child]:border-r-0 bg-background-400
+        <div className={`flex flex-col w-full min-w-[150px] grow basis-0 [&:last-child]:border-r-0 
             [&:last-child]:rounded-r-lg [&:last-child]:rounded-br-lg [&:first-child]:rounded-tl-lg [&:first-child]:rounded-bl-lg hover:opacity-100 
             ${hasSelected ? 'opacity-100' : 'opacity-70'} } `}>
-            <div className={`flex w-full flex-col items-center justify-center h-[80px] z-[3] py-5`}>
+            <div className={`flex w-full flex-col items-center justify-center h-[80px] z-[3] py-2`}>
                 {getWeekdayLabel(date)}
                 <div className={`flex w-full justify-center`}>{date.getDate()}</div>
             </div>
             <TaskArea tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
-            <div className={`flex justify-center z-[3] py-2`}>
-                <VilaButtonIcon buttonStyle={'outlined'} icon={'add'} size={'s'} onClick={() => onCreateTask()} />
-            </div>
+            <button className={`flex-col rounded-lg outline-none text-4xl transition-all hover:text-6xl 
+                flex justify-center hover:bg-background-300 hover:border-primary-200 border border-transparent items-center grow min-h-[50px] h-max z-[3] w-full text-secondary-300
+                hover:text-success`}
+                onClick={() => onCreateTask()}>
+                <VilaIcon type={'add'} />
+            </button>
         </div >
     )
 }

@@ -12,6 +12,7 @@ import { TemplateSelector } from '../molecule/TemplateSelector';
 import { useNavigate } from 'react-router-dom';
 import { useApiError } from '../../hooks/useApiError';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import { PuffLoader } from 'react-spinners';
 
 
 export function Planner() {
@@ -28,6 +29,7 @@ export function Planner() {
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
+    const [isLoadingPlanner, setIsLoadingPlanner] = useState<boolean>(false)
 
     useEffect(() => {
         if (savedDate) {
@@ -57,7 +59,7 @@ export function Planner() {
     }, [startDate, reloadTasksFlag])
 
     const onGetTasks = async () => {
-        setIsLoading(true)
+        setIsLoadingPlanner(true)
         try {
             if (user && startDate) {
                 const weekTasks: Task[][] = [[], [], [], [], [], [], []]
@@ -72,7 +74,7 @@ export function Planner() {
         } catch (e) {
             setError(e as Error)
         } finally {
-            setIsLoading(false)
+            setIsLoadingPlanner(false)
         }
     }
 
@@ -87,19 +89,26 @@ export function Planner() {
     }
 
     return (
-        <div className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
-            <div className='flex flex-grow overflow-auto min-h-[300px]'>
-                {datesArray.map((date, index) =>
-                    <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
-                        selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)}
+        <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
+            <div style={{scrollbarGutter:'stable'}} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[300px] bg-background-400 rounded-lg gap-2 '>
+                {isLoadingPlanner ?
+                    <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
+                        <PuffLoader color='#124969' loading size={100} />
+                    </article>
+                    :
+                    datesArray.map((date, index) =>
+                        <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
+                            selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)
+
+                }
+
             </div>
             <div className='flex justify-between flex-col gap-6 items-center md:flex-row'>
                 <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
                 <TemplateSelector startDate={startDate} />
                 <DateControl startDate={startDate} setStartDate={setStartDate} />
             </div>
-
             {visibleSelectActivityModal && <SelectActivityModal date={selectActivityDate} onClose={onCloseSelectActivityModal} />}
-        </div>
+        </section >
     )
 }

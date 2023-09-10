@@ -12,6 +12,7 @@ import { useSnackbar } from '../hooks/useSnackbar';
 import { useNavigate } from 'react-router-dom';
 import { useMisc } from '../hooks/useMisc';
 import { ScreenWidthEnum, useScreen } from '../hooks/useScreen';
+import { PublicFormLayout } from '../components/organism/PublicFormLayout';
 
 
 export function RegisterScreen() {
@@ -84,18 +85,16 @@ export function RegisterScreen() {
 
     return (
         <VilaLayout isPublic>
-            <div className={`flex z-50 w-full h-full justify-center items-center`}>
-                <div className={`flex w-[800px] h-full justify-center items-center flex-col gap-6 `}>
-                    <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                    <VilaForm fields={
-                        [{ input: <VilaTextInput value={username} setValue={setUsername} errorMsg={usernameDirty ? usernameMessage : ''} />, label: 'Username' },
-                        { input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Mail' },
-                        { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
-                        { input: <VilaTextInput value={repeatPassword} setValue={setRepeatPassword} type='password' errorMsg={passwordMatchError} />, label: 'Repeat password' }
-                        ]} nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1}></VilaForm>
-                    <VilaButton disabled={disabledButton} onClick={onRegister} font='lightFont' >{'Sign up'}</VilaButton>
-                </div>
-            </div >
+            <PublicFormLayout>
+                <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
+                <VilaForm fields={
+                    [{ input: <VilaTextInput value={username} setValue={setUsername} errorMsg={usernameDirty ? usernameMessage : ''} />, label: 'Username' },
+                    { input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Mail' },
+                    { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
+                    { input: <VilaTextInput value={repeatPassword} setValue={setRepeatPassword} type='password' errorMsg={passwordMatchError} />, label: 'Repeat password' }
+                    ]} nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1}></VilaForm>
+                <VilaButton disabled={disabledButton} onClick={onRegister} font='lightFont' >{'Sign up'}</VilaButton>
+            </PublicFormLayout>
         </VilaLayout>
     )
 }

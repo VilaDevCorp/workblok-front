@@ -14,6 +14,7 @@ import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { VilaLayout } from '../components/ui/VilaLayout';
 import { useSnackbar } from '../hooks/useSnackbar';
+import { PublicFormLayout } from '../components/organism/PublicFormLayout';
 
 
 export function LoginScreen() {
@@ -65,16 +66,14 @@ export function LoginScreen() {
 
     return (
         <VilaLayout isPublic>
-            <div className={`flex w-full h-full justify-center items-center`}>
-                <div className={`flex w-[500px] h-full px-4 justify-center items-center flex-col gap-6 `}>
-                    <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                    <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
-                    { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Contraseña' }]} nColumns={1}></VilaForm>
-                    <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
-                    <VilaButton className='!w-full !justify-center' disabled={disabledButton} onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
-                    <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>
-                </div>
-            </div >
+            <PublicFormLayout>
+                <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
+                <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
+                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Contraseña' }]} nColumns={1}></VilaForm>
+                <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
+                <VilaButton className='!w-full !justify-center' disabled={disabledButton} onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
+                <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>
+            </PublicFormLayout>
         </VilaLayout>
     )
 }

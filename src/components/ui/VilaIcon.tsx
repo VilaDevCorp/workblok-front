@@ -11,6 +11,7 @@ import { TbFileAlert } from 'react-icons/tb';
 import { ImWarning } from 'react-icons/im';
 import { GrInProgress } from 'react-icons/gr';
 import { GoCheck } from 'react-icons/go';
+import { GiTwoCoins } from 'react-icons/gi';
 
 export type IconType = "previous" | "next" | "logout" | "cancel" | "confirm" | "close" | "user" | "login" |
     "delete" | "edit" | "add" | "check" | "search" | "mail" | "phone" | "download" | "upload" | "alert" |
@@ -78,7 +79,7 @@ const getIcon = (type: IconType): JSX.Element => {
         case "unfold":
             return <AiOutlineDown />
         case "coin":
-            return <RiCoinLine />
+            return <GiTwoCoins />
         case "calendar":
             return <IoIosCalendar />
         case "play":

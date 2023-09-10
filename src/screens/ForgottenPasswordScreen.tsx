@@ -14,6 +14,7 @@ import { useSnackbar } from '../hooks/useSnackbar';
 import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { VilaLayout } from '../components/ui/VilaLayout';
+import { PublicFormLayout } from '../components/organism/PublicFormLayout';
 
 
 export function ForgottenPasswordScreen() {
@@ -99,16 +100,16 @@ export function ForgottenPasswordScreen() {
 
     return (
         <VilaLayout isPublic>
-            <div className={`flex w-full h-full justify-center items-center`}>
-                {step === 1 ?
-                    <div className={`flex w-[500px] h-full px-4 justify-center items-center flex-col gap-6 `}>
+            <PublicFormLayout>
+                {false ?
+                    <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your email and we will send you a code for resetting your password in the next screen."}</p>
                         <VilaForm fields={[{ input: < VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' }]} nColumns={1} />
                         <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onSendCode()} font='lightFont' >{'Send code'}</VilaButton>
-                    </div>
+                    </>
                     :
-                    <div className={`flex w-[500px] h-full px-4 justify-center items-center flex-col gap-6 `}>
+                    <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your code and the new password for your account."}</p>
                         <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={() => false} disabled />, label: 'Email' },
@@ -118,9 +119,9 @@ export function ForgottenPasswordScreen() {
                         ]} nColumns={1}></VilaForm>
                         <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onValidate()} font='lightFont' >{'Change password'}</VilaButton>
                         <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't see the code in your email? "}<a className={linkClasses} onClick={() => setStep(1)}>{'Go back'}</a></span>
-                    </div>
+                    </>
                 }
-            </div >
+            </PublicFormLayout >
         </VilaLayout>
     )
 }

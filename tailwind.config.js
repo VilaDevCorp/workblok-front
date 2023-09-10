@@ -88,6 +88,7 @@ export default {
       success: "#256E58",
       error: "#e73232",
       transparent: "#00000000",
+      highlight: "#8db6e3"
     },
     extend: {
       keyframes: {

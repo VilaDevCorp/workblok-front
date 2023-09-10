@@ -27,7 +27,7 @@ export function Header() {
     }
 
     return (
-        <div className='flex w-full h-[100px] px-3 py-2 items-center max-w-[1400px] m-auto'>
+        <header className='flex w-full h-[100px] items-center max-w-[1400px] ml-auto mr-auto'>
             {screenWidth <= 800 &&
                 <VilaButtonIcon icon='menu' buttonStyle='transparent' onClick={() => onOpenSidebar()} />
             }
@@ -39,6 +39,6 @@ export function Header() {
                 <VilaSidebar options={navigationItems} />
             }
             <HeaderUser />
-        </div>
+        </header>
     )
 }

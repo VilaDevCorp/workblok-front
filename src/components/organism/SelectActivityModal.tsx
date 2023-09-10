@@ -1,5 +1,5 @@
 import { ApiError, Page } from '../../types/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityArea } from './ActivityArea';
 import { Activity } from '../../types/entities';
 import { useApi } from '../../hooks//useApi';
@@ -16,6 +16,7 @@ import { useApiError } from '../../hooks/useApiError';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import StatusCode from 'status-code-enum';
+import { PuffLoader } from 'react-spinners';
 
 export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: () => void }) {
 
@@ -23,6 +24,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const [page, setPage] = useState<number>(0)
     const { t } = useTranslation()
     const { setIsLoading, triggerReloadTasks } = useMisc()
+    const firstRender = useRef<boolean>(true)
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
     const [selectedActivities, setSelectedActivities] = useState<string[]>([])
@@ -31,9 +33,10 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
+    const [isLoadingActivities, setIsLoadingActivities] = useState<boolean>(false)
 
     const onGetActivities = async () => {
-        setIsLoading(() => true)
+        setIsLoadingActivities(() => true)
         try {
             if (user === undefined) {
                 throw new ApiError({ message: "Not user detected", cause: StatusCode.ClientErrorForbidden })
@@ -43,17 +46,22 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
         } catch (e) {
             setError(e as Error)
         } finally {
-            setIsLoading(false)
+            setIsLoadingActivities(false)
         }
     }
 
     useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false
+        }
         onGetActivities()
     }, [page])
 
     useEffect(() => {
-        const timer = setTimeout(() => onReloadActivities(), 500)
-        return (() => clearTimeout(timer))
+        if (!firstRender) {
+            const timer = setTimeout(() => onReloadActivities(), 500)
+            return (() => clearTimeout(timer))
+        }
     }, [searchText])
 
     const onReloadActivities = () => {
@@ -88,8 +96,14 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
             <VilaButton disabled={selectedActivities.length < 1} font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <div className='flex flex-col w-full h-full overflow-hidden gap-4'>
                 <VilaTextInput icon='search' setValue={setSearchText} value={searchText} />
-                <div className='flex flex-col w-full h-[500px] overflow-y-auto overflow-x-hidden items-center gap-2'>
-                    <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
+                <div className='flex flex-col w-full h-[300px] overflow-y-auto overflow-x-hidden items-center gap-2'>
+                    {isLoadingActivities ?
+                        <span className='w-full h-full grow flex justify-center items-center'>
+                            <PuffLoader color='#124969' loading size={100} />
+                        </span>
+                        :
+                        <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
+                    }
                 </div>
                 <VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
                     totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} />

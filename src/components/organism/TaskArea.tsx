@@ -8,9 +8,10 @@ export function TaskArea({ tasks, selectedTasks, setSelectedTasks }: {
     setSelectedTasks: React.Dispatch<React.SetStateAction<string[]>>
 }) {
     return (
-        <div className={`flex w-full overflow-y-auto bg-background-300 h-full overflow-x-hidden
-            items-center flex-col gap-[1px] p-[1px]`}>
-            {tasks.map((task) => <TaskElement task={task} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
+        <div className={`relative no-scrollbar w-full overflow-y-auto overflow-x-hidden`}>
+            <div className='w-full fade-out-list flex flex-col gap-[2px]'>
+                {tasks.map((task) => <TaskElement key={task.id} task={task} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
+            </div>
         </div>
     )
 }

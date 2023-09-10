@@ -30,7 +30,7 @@ function Body() {
 
 
   return (
-    <div className='w-full h-full md:h-screen bg-background-900' >
+    <>
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
           <>
@@ -53,7 +53,7 @@ function Body() {
         {isLoading && <PuffLoader size={55} color='#5387A5' className='!absolute z-50 right-[50px] bottom-10 ' />}
         <VilaSnackbar />
       </BrowserRouter>
-    </div>
+    </ >
 
   );
 }
