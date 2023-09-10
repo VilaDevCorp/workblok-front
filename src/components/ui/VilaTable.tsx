@@ -32,6 +32,8 @@ export function VilaTable(props: Props) {
     const loadingContainer = useRef<HTMLDivElement>(null)
 
     const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
+    const tableHeadRef = useRef<HTMLTableSectionElement | null>(null);
+
 
     useEffect(() => {
         setLoadingContainerHeight(loadingContainer.current?.clientHeight)
@@ -66,9 +68,22 @@ export function VilaTable(props: Props) {
             if (!selectedElements.has(index)) {
                 setSelectedElements(new Map<number, unknown>([[index, props.data[index].realEntity]]))
             }
+            let topPosition = 0
+            let leftPosition = 0
+            let invertedX = false
+            let invertedY = false
+            if (tableBodyRef.current && tableHeadRef.current) {
+                topPosition = e.clientY - tableBodyRef.current.getBoundingClientRect().top + tableHeadRef.current.clientHeight
+                leftPosition = e.clientX - tableBodyRef.current.getBoundingClientRect().left
+                invertedX = leftPosition > tableBodyRef.current.getBoundingClientRect().width / 2
+                invertedY = topPosition > tableBodyRef.current.getBoundingClientRect().height / 2
+            }
+            console.log({
+                topPosition, leftPosition, invertedX, invertedY
+            })
             setContextMenuProps({
-                top: e.pageY, left: e.pageX, visible: true, nOptions: props.contextOptions.length,
-                invertedX: e.clientX > window.innerWidth / 2, invertedY: e.clientY > innerHeight / 2
+                top: topPosition, left: leftPosition, visible: true, nOptions: props.contextOptions.length,
+                invertedX, invertedY
             })
         }
     }
@@ -89,7 +104,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
             </div>
-            <div className='w-full h-full overflow-auto mt-4 relative' ref={loadingContainer}>
+            <div className='w-full h-full overflow-auto mt-4 relative' ref={loadingContainer} onScroll={() => setContextMenuProps({ visible: false, top: 0, left: 0 })}>
                 {props.isLoading &&
                     <div style={{ height: `${loadingContainerHeight}px`, marginTop: `-${loadingContainerHeight}px` }} className={`w-full sticky justify-center items-center flex top-0 bg-background-900 z-10 opacity-80`}>
                         <div className='w-full h-full flex justify-center items-center'>
@@ -100,7 +115,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
                 <table className='w-full leading-10  rounded-lg'>
-                    <thead className='w-full text-lightFont-500 text-left sticky top-0 bg-background-900'>
+                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky top-0 bg-background-900'>
                         <tr>
                             {props.headers.map((header) =>
                                 <th key={`key_${header}_header`} className={`px-4 py-3`}>
@@ -128,13 +143,13 @@ export function VilaTable(props: Props) {
 
                     </tbody>
                 </table>
+                {props.contextOptions ?
+                    <VilaContextMenu top={contextMenuProps.top} left={contextMenuProps.left} visible={contextMenuProps.visible}
+                        invertedX={contextMenuProps.invertedX} invertedY={contextMenuProps.invertedY} options={props.contextOptions} selectedElements={Array.from(selectedElements.values())}
+                        tableBodyRef={tableBodyRef}></VilaContextMenu>
+                    : undefined
+                }
             </div>
-            {props.contextOptions ?
-                <VilaContextMenu top={contextMenuProps.top} left={contextMenuProps.left} visible={contextMenuProps.visible}
-                    invertedX={contextMenuProps.invertedX} invertedY={contextMenuProps.invertedY} options={props.contextOptions} selectedElements={Array.from(selectedElements.values())}
-                    tableBodyRef={tableBodyRef}></VilaContextMenu>
-                : undefined
-            }
         </div>
     )
 }

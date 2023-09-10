@@ -52,8 +52,11 @@ export function VilaContextMenu(props: Props) {
     useClickOutsideContext(props.tableBodyRef, contextRef, () => triggerClearContext())
 
     return (
-        <div ref={contextRef} id='table_menu_context' style={{ top: `${props.top - (props.invertedY && props.options.length ? 46 * props.options.length : 0)}px`, left: `${props.left - (props.invertedX && contextRef.current?.clientWidth ? contextRef.current?.clientWidth : 0)}px` }}
-            className={`flex flex-col rounded-lg absolute  z-10 bg-background-600 text-lightFont-500 ${props.visible ? '' : ' invisible'}`}>
+        <div ref={contextRef} id='table_menu_context' style={{
+            top: `${props.top - (props.invertedY && props.options.length ? 46 * props.options.length : 0)}px`,
+            left: `${props.left - (props.invertedX && contextRef.current?.clientWidth ? contextRef.current?.clientWidth : 0)}px`
+        }}
+            className={`flex flex-col rounded-lg absolute z-10 bg-background-600 text-lightFont-500 ${props.visible ? '' : ' invisible'}`}>
             {props.options.map((option, index) => {
                 const condition = option.disableCondition
                 const isDisabled = condition && props.selectedElements.find((element) => condition(element)) !== undefined
