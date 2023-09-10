@@ -73,15 +73,15 @@ export function VilaSidebar({ options = [] }: { options?: MenuOption[] }) {
 
     return (
         visibleSidebar ?
-            <nav className={`flex overflow-y-auto flex-col box-border px-2 py-4 w-[200px] rounded-tr-lg rounded-br-lg z-[5] 
+            <div className={`flex overflow-y-auto flex-col box-border px-2 py-4 w-[200px] rounded-tr-lg rounded-br-lg z-[5] 
                 top-0 left-0 bg-background-400 h-screen absolute gap-4 text-lightFont-400  ${openSidebar ? 'animate-showSidebar' : 'animate-hideSidebar left-[-300px]'} `} ref={wrapperRef} >
                 <VilaButton icon='close' font='lightFont' buttonStyle={'outlined'} onClick={onCloseSidebar}>
                     {'Close'}
                 </VilaButton>
-                <div className='flex gap-4 flex-col px-4 text-lg'>
-                    {options.map((option) => <div className='' onClick={() => onGoTo(option.route)}>{option.label}</div>)}
-                </div>
-            </nav>
+                <nav className='flex gap-4 flex-col px-4 text-lg'>
+                    {options.map((option) => <a className='cursor-pointer' onClick={() => onGoTo(option.route)}>{option.label}</a>)}
+                </nav>
+            </div>
             :
             <></>
     )

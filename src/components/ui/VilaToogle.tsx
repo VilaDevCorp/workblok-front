@@ -17,10 +17,10 @@ function ToogleElement({ optionElement, setOption, selected }: { optionElement: 
     )
 }
 
-export function VilaToogle({ optionList, option, setOption }: { optionList: ToogleOption[], option: number | undefined, setOption: React.Dispatch<SetStateAction<number | undefined>> }) {
+export function VilaToogle({ optionList, option, setOption, vertical = false }: { optionList: ToogleOption[], option: number | undefined, setOption: React.Dispatch<SetStateAction<number | undefined>>, vertical?: boolean }) {
 
     return (
-        <div className='w-full flex bg-background-400 rounded-md'>
+        <div className={`w-full flex ${vertical && 'flex-col'} bg-background-400 rounded-md`}>
             {optionList.map((optionElement) => <ToogleElement optionElement={optionElement} setOption={setOption} selected={optionElement.value === option} />)}
         </div>
     )

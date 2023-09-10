@@ -19,6 +19,8 @@ import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipCont
 import { ActivityIcon, activities } from '../components/atom/ActivityIcon';
 import { conf } from '../conf';
 import { PuffLoader } from 'react-spinners';
+import { useScreen } from '../hooks/useScreen';
+import { screenSize } from '../StyledTheme';
 
 
 const monthOptions: SelectOption[] = [
@@ -43,7 +45,7 @@ export function StatsScreen() {
     const snackbar = useSnackbar()
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
-
+    const { screenWidth } = useScreen()
     const [stats, setStats] = useState<StatsResult | undefined>(undefined)
     const [customInterval, setCustomInterval] = useState<number | undefined>(1)
     const [year, setYear] = useState<number | undefined>(moment().get('year'))
@@ -265,7 +267,7 @@ export function StatsScreen() {
                         </div>
                     }
                 </div>
-                {month !== undefined && <VilaToogle option={week} setOption={setWeek} optionList={weekOptions} />}
+                {month !== undefined && <VilaToogle option={week} setOption={setWeek} optionList={weekOptions} vertical={screenWidth < screenSize.mobileM && true} />}
                 <div className='flex mt-4 h-full flex-col'>
                     {!isLoadingStats ?
                         <>

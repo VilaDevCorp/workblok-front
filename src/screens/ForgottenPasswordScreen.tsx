@@ -101,7 +101,7 @@ export function ForgottenPasswordScreen() {
     return (
         <VilaLayout isPublic>
             <PublicFormLayout>
-                {false ?
+                {step === 1 ?
                     <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your email and we will send you a code for resetting your password in the next screen."}</p>
