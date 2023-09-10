@@ -21,7 +21,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                 {!isPublic ?
                     <>
                         <Header />
-                        <main className={`flex max-w-[1500px] h-full ${fillScreen && 'h-[calc(100vh-182px)]'} max-h-[600px] bg-transparent m-auto py-5 md:px-4 relative`}>
+                        <main className={`flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '} max-h-[600px] bg-transparent m-auto py-5 md:px-4 relative`}>
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
