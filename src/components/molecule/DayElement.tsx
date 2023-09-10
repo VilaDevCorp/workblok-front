@@ -39,12 +39,13 @@ export function DayElement({ date, tasks, selectedTasks, setSelectedTasks, onCre
 }) {
 
     const hasSelected = tasks.some((task) => selectedTasks.includes(task.id))
+    const isCurrentWeekday = moment().isSame(moment(date), 'day')
 
     return (
-        <div className={`flex flex-col w-full min-w-[150px] grow basis-0 [&:last-child]:border-r-0 
+        <div className={`flex flex-col w-full min-w-[150px] p-1 border-2 border-transparent grow basis-0  ${isCurrentWeekday && 'border-highlightPlus '}
             [&:last-child]:rounded-r-lg [&:last-child]:rounded-br-lg [&:first-child]:rounded-tl-lg [&:first-child]:rounded-bl-lg hover:opacity-100 
             ${hasSelected ? 'opacity-100' : 'opacity-70'} } `}>
-            <div className={`flex w-full flex-col items-center justify-center h-[80px] z-[3] py-2`}>
+            <div className={`flex w-full flex-col items-center justify-center min-h-[80px] h-[80px] z-[3] py-2`}>
                 {getWeekdayLabel(date)}
                 <div className={`flex w-full justify-center`}>{date.getDate()}</div>
             </div>
