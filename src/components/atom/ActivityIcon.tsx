@@ -1,10 +1,11 @@
-import { BiRun } from 'react-icons/bi';
+import { BiRun, BiTennisBall } from 'react-icons/bi';
 import { GiBoxingGlove, GiWeightLiftingUp } from 'react-icons/gi';
 import { IoMdFootball } from 'react-icons/io';
-import { FaFootballBall, FaRunning } from 'react-icons/fa';
-import { MdDirectionsWalk, MdOutlineDirectionsBike } from 'react-icons/md';
+import { FaFootballBall, FaRunning, FaSwimmer, FaHiking } from 'react-icons/fa';
+import { MdDirectionsWalk, MdOutlineDirectionsBike, MdSportsHandball, MdSportsVolleyball } from 'react-icons/md';
+import { TbBallBasketball, TbBarbell, TbYoga } from 'react-icons/tb';
 
-export const activities = ['running', 'lifting', 'bike', 'football', 'boxing', 'rugby', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk', 'walk'];
+export const activities = ['running', 'lifting', 'bike', 'football', 'boxing', 'rugby', 'walk', 'tennis-ball', 'basketball', 'barbell', 'swimmer', 'yoga', 'handball', 'volleyball', 'hiking'];
 
 
 export type ActivityType = typeof activities[number]
@@ -27,6 +28,22 @@ export function ActivityIcon({ type }: { type?: ActivityType }) {
                 return <GiWeightLiftingUp />;
             case 'walk':
                 return <MdDirectionsWalk />;
+            case 'tennis-ball':
+                return <BiTennisBall />;
+            case 'basketball':
+                return <TbBallBasketball />;
+            case 'barbell':
+                return <TbBarbell />;
+            case 'swimmer':
+                return <FaSwimmer />;
+            case 'yoga':
+                return <TbYoga />;
+            case 'handball':
+                return <MdSportsHandball />;
+            case 'volleyball':
+                return <MdSportsVolleyball />;
+            case 'hiking':
+                return <FaHiking />;
             default:
                 return <></>;
         }
