@@ -20,12 +20,14 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
     const [name, setName] = useState<string>('')
     const { createTemplate, getTemplate, updateTemplate } = useApi()
     const { user } = useAuth()
-    const { setIsLoading, triggerReloadTemplates } = useMisc()
+    const { setIsLoading, isLoading, triggerReloadTemplates } = useMisc()
     const { t } = useTranslation()
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
     const snackbar = useSnackbar()
+
+    const disabledButton = isLoading || nameError
 
     useEffect(() => {
         onGetTemplate()
@@ -76,11 +78,12 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
     }
 
     return (
-        <VilaModal onClose={onClose} hasHeader title={`${templateId ? 'Edit template' : 'Create template'}`} size='m-squared'
-            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+        <VilaModal onClose={onClose} hasHeader title={`${templateId ? 'Edit template' : 'Create template'}`} size='m-fluid-h'
+            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>,
+            <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()} disabled={disabledButton}>{'Save'}</VilaButton>]}>
             <VilaForm nColumns={1} fields={[
                 {
-                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} />
+                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} errorMsg={nameDirty ? nameMessage : ''} />
                 }]} />
         </VilaModal >
     )

@@ -9,7 +9,11 @@ export function ActivityArea({ activities, selectedActivities, setSelectedActivi
 }) {
     return (
         <>
-            {activities.map((activity) => <ActivityElement id={activity.id} activity={activity} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />)}
+            {activities.length > 0 ?
+                activities.map((activity) => <ActivityElement id={activity.id} activity={activity} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />)
+                :
+                <div className='w-full absolute flex justify-center mt-10 items-center text-lightFont-300 text-xl'>{'No elements yet'}</div>
+            }
         </>
     )
 }

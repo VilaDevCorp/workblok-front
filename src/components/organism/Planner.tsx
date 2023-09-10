@@ -89,19 +89,20 @@ export function Planner() {
     }
 
     return (
-        <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>            <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[300px] bg-background-400 rounded-lg gap-2 '>
-            {isLoadingPlanner ?
-                <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
-                    <PuffLoader color='#124969' loading size={100} />
-                </article>
-                :
-                datesArray.map((date, index) =>
-                    <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
-                        selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)
+        <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
+            <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
+                {isLoadingPlanner ?
+                    <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
+                        <PuffLoader color='#124969' loading size={100} />
+                    </article>
+                    :
+                    datesArray.map((date, index) =>
+                        <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
+                            selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)
 
-            }
+                }
 
-        </div>
+            </div>
             <div className='flex justify-between flex-col gap-6 items-center md:flex-row'>
                 <ActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
                 <TemplateSelector startDate={startDate} />

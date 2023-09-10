@@ -64,7 +64,7 @@ export function ActivitiesScreen() {
         setIsLoadingTable(() => true)
         try {
             if (user === undefined) {
-                throw new ApiError({ message: "Not user detected", cause: StatusCode.ClientErrorForbidden })
+                throw new ApiError({ message: "Not user detected", cause: StatusCode.ServerErrorInternal })
             }
             const data = await getActivities(page, searchKey, user?.id)
             setTotalPages(data.totalPages)

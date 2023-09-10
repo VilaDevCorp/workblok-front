@@ -23,7 +23,7 @@ export function VilaTextInput({ type = 'text', disabled = false, ...props }: Pro
                 <input className="bg-transparent focus:outline-none w-full" onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} onChange={(e) => props.setValue(e.target.value)} value={props.value} type={type} disabled={disabled} />
                 {props.icon && props.iconAlignment === 'right' && <VilaIcon type={props.icon} />}
             </div>
-            <p className="text-error h-[14px]">{props.errorMsg}</p>
+            <p className="text-error h-[14px] text-sm">{props.errorMsg}</p>
         </div>
     )
 }

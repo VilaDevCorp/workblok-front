@@ -6,8 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { VilaButton } from '../ui/VilaButton';
 import { VilaModal } from '../ui/VilaModal';
 import { TemplatePlanner } from './TemplatePlanner';
-import { VilaTextInput } from '../ui/VilaTextInput';
-import { VilaField } from '../ui/VilaField';
 import { TemplateTask } from '../../types/entities';
 import { useNavigate } from 'react-router-dom';
 import { useApiError } from '../../hooks/useApiError';
@@ -28,6 +26,7 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
+    const [isLoadingPlanner, setIsLoadingPlanner] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -36,7 +35,7 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
 
 
     const onGetTemplate = async () => {
-        setIsLoading(() => true)
+        setIsLoadingPlanner(true)
         try {
             if (templateId) {
                 const template = await getTemplate(templateId)
@@ -52,7 +51,7 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
         } catch (e) {
             setError(e as Error)
         } finally {
-            setIsLoading(false)
+            setIsLoadingPlanner(false)
         }
 
     }
@@ -60,7 +59,7 @@ export function TemplatePlannerModal({ templateId, onClose }: { templateId?: str
     return (
         <VilaModal onClose={onClose} hasHeader title={`Template planner`} size='l'
             buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Close'}</VilaButton>]}>
-            <TemplatePlanner templateId={templateId!} tasks={tasks} setTasks={setTasks} />
+            <TemplatePlanner templateId={templateId!} isLoadingPlanner={isLoadingPlanner} tasks={tasks} setTasks={setTasks} />
         </VilaModal >
     )
 }

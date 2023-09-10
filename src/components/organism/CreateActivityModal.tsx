@@ -28,7 +28,7 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
     const [size, setSize] = useState<number | undefined>(undefined)
     const { createActivity, getActivity, updateActivity } = useApi()
     const { user } = useAuth()
-    const { setIsLoading, triggerReloadActivities } = useMisc()
+    const { setIsLoading, triggerReloadActivities, isLoading } = useMisc()
     const { t } = useTranslation()
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
@@ -37,6 +37,8 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
 
     const [nameDirty, nameError, nameMessage, nameValidate] = useValidator(name, [notEmptyValidator])
     const [sizeDirty, sizeError, sizeMessage, sizeValidate] = useValidator(size ? size.toString() : '', [notEmptyValidator])
+
+    const disabledButton = isLoading || nameError || sizeError
 
     useEffect(() => {
         onGetActivity()
@@ -90,16 +92,17 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
 
     return (
         <VilaModal onClose={onClose} hasHeader title={`${activityId ? 'Edit activity' : 'Create activity'}`} size='m-squared'
-            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>, <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
+            buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>,
+            <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()} disabled={disabledButton}>{'Save'}</VilaButton>]}>
             <VilaForm nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1} fields={[
                 {
-                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} />
+                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} errorMsg={nameDirty ? nameMessage : ''} />
                 },
                 {
-                    label: 'Size', input: <SizeSelector setSize={setSize} size={size} />
+                    label: 'Size', input: <SizeSelector setSize={setSize} size={size} errorMsg={sizeDirty ? sizeMessage : ''} />
                 },
                 {
-                    label: 'Description', input: <VilaTextArea value={description} setValue={setDescription} />
+                    label: 'Description', input: <VilaTextArea value={description} setValue={setDescription}  />
                 },
                 {
                     label: 'Icon', input: <IconSelector setIcon={setIcon} icon={icon} />

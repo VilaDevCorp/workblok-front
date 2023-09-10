@@ -14,6 +14,8 @@ const getSize = (size?: ModalSize): string => {
             return 'w-3/4 md:max-h-[450px] max-w-[600px]'
         case 's':
             return 'w-1/2 max-h-600 max-w-1200'
+        case 'm-fluid-h':
+            return 'w-2/5 max-w-[600px]'
         case 'xs-fluid-h':
             return 'w-2/5 max-w-[600px]'
         default:
@@ -54,7 +56,7 @@ export function VilaModal(props: Props) {
                         <span className='ml-auto'><VilaButtonIcon size={'s'} buttonStyle={'transparent'} font='lightFont' icon='close' onClick={() => props.onClose()} />
                         </span>
                     </div>}
-                <div className='overflow-y-auto px-2 mt-4 mb-4'>
+                <div className='overflow-y-auto px-2 mt-4 mb-4 py-2'>
                     {props.children}
                 </div>
                 <div className='self-end mt-auto flex gap-3 '>

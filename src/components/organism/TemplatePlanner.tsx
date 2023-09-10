@@ -5,9 +5,10 @@ import { SelectActivityModal } from './SelectActivityModal';
 import { TemplateDayElement } from '../molecule/TemplateDayElement';
 import { TemplateActivityOptions } from '../molecule/TemplateActivityOptions';
 import { TemplateSelectActivityModal } from './TemplateSelectActivityModal';
+import { PuffLoader } from 'react-spinners';
 
 
-export function TemplatePlanner({ templateId, tasks, setTasks }: { templateId: string, tasks: TemplateTask[][], setTasks: React.Dispatch<SetStateAction<TemplateTask[][]>> }) {
+export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner }: { templateId: string, tasks: TemplateTask[][], setTasks: React.Dispatch<SetStateAction<TemplateTask[][]>>, isLoadingPlanner: boolean }) {
 
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
@@ -26,14 +27,22 @@ export function TemplatePlanner({ templateId, tasks, setTasks }: { templateId: s
     }
 
     return (
-        <div className='flex w-full min-h-[400px] h-[50vh] max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
-            <div className='flex flex-grow overflow-auto'>
-                {[1, 2, 3, 4, 5, 6, 7].map((weekDay) =>
-                    <TemplateDayElement weekDay={weekDay} tasks={tasks[weekDay-1]}
-                        selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(weekDay)} />)}
+        <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
+            <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
+                {isLoadingPlanner ?
+                    <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
+                        <PuffLoader color='#124969' loading size={100} />
+                    </article>
+                    :
+
+                    [1, 2, 3, 4, 5, 6, 7].map((weekDay) =>
+                        <TemplateDayElement weekDay={weekDay} tasks={tasks[weekDay - 1]}
+                            selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(weekDay)} />)
+
+                }
             </div>
             <TemplateActivityOptions selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} />
             {visibleSelectActivityModal && <TemplateSelectActivityModal templateId={templateId} weekDay={selectActivityWeekDay} onClose={onCloseSelectActivityModal} />}
-        </div>
+        </section>
     )
 }
