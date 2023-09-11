@@ -55,7 +55,6 @@ export function VilaTable(props: Props) {
             })
         } else {
             setSelectedElements((oldValue) => {
-                console.log(oldValue)
                 oldValue.set(index, props.data[index].realEntity)
                 return oldValue
             })
@@ -73,14 +72,13 @@ export function VilaTable(props: Props) {
             let invertedX = false
             let invertedY = false
             if (tableBodyRef.current && tableHeadRef.current) {
-                topPosition = e.clientY - tableBodyRef.current.getBoundingClientRect().top + tableHeadRef.current.clientHeight
+                const tableContainerWithoutHeader = loadingContainer.current ? loadingContainer.current.clientHeight - tableHeadRef.current.clientHeight : 0
+                const topPositionRelativeToContainer = e.clientY - tableBodyRef.current.getBoundingClientRect().top
+                topPosition = topPositionRelativeToContainer + tableHeadRef.current.clientHeight
                 leftPosition = e.clientX - tableBodyRef.current.getBoundingClientRect().left
                 invertedX = leftPosition > tableBodyRef.current.getBoundingClientRect().width / 2
-                invertedY = topPosition > tableBodyRef.current.getBoundingClientRect().height / 2
+                invertedY = topPositionRelativeToContainer > tableContainerWithoutHeader / 2
             }
-            console.log({
-                topPosition, leftPosition, invertedX, invertedY
-            })
             setContextMenuProps({
                 top: topPosition, left: leftPosition, visible: true, nOptions: props.contextOptions.length,
                 invertedX, invertedY
