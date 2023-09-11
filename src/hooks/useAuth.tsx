@@ -3,9 +3,12 @@ import { conf } from '../conf';
 import { User } from '../types/entities';
 import { useMisc } from './useMisc';
 import { ApiError, ApiResponse } from '../types/types';
+import moment from 'moment';
+import StatusCode from 'status-code-enum';
 
 export interface AuthContext {
   user?: User,
+  weekCompletedPercentage: number,
   csrfToken?: string,
   login: (user: string, password: string) => Promise<string>,
   authenticate: (username: string, password: string) => void,
@@ -28,9 +31,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<User | undefined>(undefined)
   const [isCompletedLoad, setIsCompletedLoad] = useState<boolean>(false)
-  const { reloadUserInfoFlag } = useMisc()
+  const [weekCompletedPercentage, setWeekCompletedPercentage] = useState<number>(0)
+  const { reloadUserInfoFlag, reloadWeekPercentageFlag } = useMisc()
   const [csrfToken, setCsrfToken] = useState<string>('')
-  const apiUrl =  import.meta.env.VITE_REACT_APP_API_URL
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     loadCsrf()
@@ -43,6 +47,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsCompletedLoad(true)
     }
   }, [csrfToken, reloadUserInfoFlag])
+
+  useEffect(() => {
+    reloadWeekPercentage()
+  }, [reloadWeekPercentageFlag, user])
 
   interface LoginResponse {
     csrf: string
@@ -120,6 +128,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const getWeekCompletedPercentage = async (userId: string): Promise<number> => {
+    const startWeekMoment = moment().get('weekday') > 0 ? moment().set('weekday', 1) : moment().subtract(1, 'week').set('weekday', 1)
+    const startDate = moment([startWeekMoment.year(), startWeekMoment.month(), startWeekMoment.date()]).toDate()
+    const url = `${apiUrl}private/task/completedWeekPercentage`
+    const options: RequestInit = {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({ userId: userId, startDate: moment(startDate).format(conf.dateInputFormat) }),
+      headers: new Headers({
+        'X-API-CSRF': csrfToken ? csrfToken : '',
+        'content-type': 'application/json',
+      })
+    }
+    let result: number
+    try {
+      const res = await fetch(url, options)
+      const resObject: ApiResponse<number> = await res.json()
+      if (!res.ok) {
+        throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
+      }
+      result = resObject.obj
+    } catch (e) {
+      throw e
+    }
+    return result
+  }
+
+
   const reloadUserInfo = async () => {
     setIsCompletedLoad(() => false)
     let ownUser: User | undefined = undefined
@@ -130,10 +166,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         cleanUserParams()
       }
+      const weekCompletedPercentageResult = await getWeekCompletedPercentage(ownUser.id)
+      setWeekCompletedPercentage(weekCompletedPercentageResult)
     } catch (e) {
       logout()
     }
     setIsCompletedLoad(() => true)
+  }
+
+  const reloadWeekPercentage = async () => {
+    if (user) {
+      const weekCompletedPercentageResult = await getWeekCompletedPercentage(user.id)
+      setWeekCompletedPercentage(weekCompletedPercentageResult)
+    }
   }
 
 
@@ -147,6 +192,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value: AuthContext = {
     user,
     csrfToken,
+    weekCompletedPercentage,
     login,
     authenticate,
     logout,

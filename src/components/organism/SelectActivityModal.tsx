@@ -23,7 +23,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(0)
     const { t } = useTranslation()
-    const { setIsLoading, triggerReloadTasks } = useMisc()
+    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag } = useMisc()
     const firstRender = useRef<boolean>(true)
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
@@ -82,6 +82,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
                     snackbar.onOpen('Tasks added!', 'check', 'success')
                 }
             }))
+            triggerReloadWeekPercentageFlag()
             onClose()
         } catch (e) {
             setError(e as Error)

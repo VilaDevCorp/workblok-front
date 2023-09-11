@@ -31,4 +31,13 @@ const taskSize: ValueGradient = {
   5: "#D93030",
 };
 
-export const stylesVars = { colors, fonts, taskSize };
+const percentageValue: ValueGradient = {
+  1: "#55d745",
+  2: "#9b3838",
+  3: "#d1a423",
+  4: "#7eb535",
+  5: "#256E58",
+};
+
+
+export const stylesVars = { colors, fonts, taskSize, percentageValue };

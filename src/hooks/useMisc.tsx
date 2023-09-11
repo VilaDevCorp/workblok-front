@@ -12,14 +12,16 @@ export interface MiscContext {
   reloadActivitiesFlag: boolean,
   triggerReloadActivities: () => void,
   reloadTemplatesFlag: boolean,
+  reloadWeekPercentageFlag: boolean,
+  triggerReloadWeekPercentageFlag: () => void,
   triggerReloadTemplates: () => void,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   openSidebar: boolean,
   setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>,
   blockedSidebar: boolean,
   setBlockedSidebar: React.Dispatch<React.SetStateAction<boolean>>,
-  savedDate: Date|undefined,
-  setSavedDate: React.Dispatch<React.SetStateAction<Date|undefined>>,
+  savedDate: Date | undefined,
+  setSavedDate: React.Dispatch<React.SetStateAction<Date | undefined>>,
 }
 
 const MiscContext = createContext<MiscContext>({} as any)
@@ -41,11 +43,12 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
   const [reloadTasksFlag, setReloadTasksFlag] = useState<boolean>(false)
   const [reloadActivitiesFlag, setReloadActivitiesFlag] = useState<boolean>(false)
   const [reloadTemplatesFlag, setReloadTemplatesFlag] = useState<boolean>(false)
+  const [reloadWeekPercentageFlag, setReloadWeekPercentageFlag] = useState<boolean>(false)
   //This state manages when the sidebar starts the animation for open/close
   const [openSidebar, setOpenSidebar] = useState<boolean>(false)
   //This state blocks the sidebar when its doing the open/close animation
   const [blockedSidebar, setBlockedSidebar] = useState<boolean>(false)
-  const [savedDate, setSavedDate] = useState<Date|undefined>(undefined)
+  const [savedDate, setSavedDate] = useState<Date | undefined>(undefined)
 
   const triggerReloadUserInfo = () => {
     setReloadUserInfoFlag((old) => !old)
@@ -59,6 +62,10 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
   const triggerReloadTemplates = () => {
     setReloadTemplatesFlag((old) => !old)
   }
+  const triggerReloadWeekPercentageFlag = () => {
+    setReloadWeekPercentageFlag((old) => !old)
+  }
+
 
   const triggerClearContext = () => {
     setClearContext((old) => !old)
@@ -66,7 +73,7 @@ export const MiscProvider = ({ children }: { children: ReactNode }) => {
 
 
   const value: MiscContext = {
-    isLoading, setIsLoading, clearContext, triggerClearContext, reloadUserInfoFlag, triggerReloadUserInfo, reloadTasksFlag, triggerReloadTasks,
+    isLoading, setIsLoading, clearContext, triggerClearContext, reloadUserInfoFlag, triggerReloadUserInfo, reloadTasksFlag, triggerReloadTasks, reloadWeekPercentageFlag, triggerReloadWeekPercentageFlag,
     reloadActivitiesFlag, triggerReloadActivities, reloadTemplatesFlag, triggerReloadTemplates, openSidebar, setOpenSidebar, blockedSidebar, setBlockedSidebar,
     savedDate, setSavedDate
   }

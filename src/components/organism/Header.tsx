@@ -32,7 +32,7 @@ export function Header() {
                 <VilaButtonIcon icon='menu' buttonStyle='transparent' onClick={() => onOpenSidebar()} />
             }
 
-            <img src={headerImg} alt='Logo header' className='cursor-pointer ml-2 h-[60px] w-[100px] ' />
+            <img src={headerImg} alt='Logo header' className='cursor-pointer ml-2 h-[60px] w-[70px] ' />
             {screenWidth > 800 ?
                 <TopMenu options={navigationItems} />
                 :
