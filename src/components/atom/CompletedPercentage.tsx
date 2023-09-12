@@ -18,8 +18,9 @@ export function CompletedPercentage({ percentage }: { percentage: number }) {
 
     return (
         <div style={{ background: `conic-gradient(${getColor()} ${360 / 100 * percentage}deg, transparent 5deg)` }}
-            className='w-[60px] h-[60px] shrink-0 rounded-full flex justify-center items-center'>
-            <span className='w-[48px] h-[48px] shrink-0 rounded-full text-md font-bold text-lightFont-200 bg-background-900  flex justify-center items-center '>{`${percentage.toFixed(0)}%`}</span>
+            className='w-[50px] h-[50px] min-[350px]:w-[60px] min-[350px]:h-[60px] shrink-0 rounded-full flex justify-center items-center'>
+            <span className='w-[40px] h-[40px] min-[350px]:w-[48px] min-[350px]:h-[48px] shrink-0 rounded-full text-sm min-[350px]:text-base
+                font-bold text-lightFont-200 bg-background-900  flex justify-center items-center '>{`${percentage.toFixed(0)}%`}</span>
         </div>
     )
 }
