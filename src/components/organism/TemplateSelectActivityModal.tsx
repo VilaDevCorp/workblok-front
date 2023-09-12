@@ -32,6 +32,19 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
 
+    const handleEnterPress = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            onConfirm()
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleEnterPress);
+        return () => {
+            window.removeEventListener("keydown", handleEnterPress);
+        };
+    }, [selectedActivities]);
+
 
     const onGetActivities = async () => {
         setIsLoading(true)

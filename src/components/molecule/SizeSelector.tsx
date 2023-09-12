@@ -18,7 +18,7 @@ export function SizeSelector({ size, setSize, errorMsg }: {
         <div className='flex gap-2 w-full flex-col'>
             <div className='flex gap-4 w-full'>
                 {sizeOptions.map((sizeOption) =>
-                    <div className={`w-[35px] h-[35px] flex justify-center text-darkFont-900 font-semibold items-center cursor-default text-2xl ${size === sizeOption ? ' opacity-100 ' : ' opacity-30 '} rounded-full`}
+                    <div key={sizeOption} className={`w-[35px] h-[35px] flex justify-center text-darkFont-900 font-semibold items-center cursor-default text-2xl ${size === sizeOption ? ' opacity-100 ' : ' opacity-30 '} rounded-full`}
                         style={{ border: `1px solid ${stylesVars.taskSize[sizeOption as keyof ValueGradient]}`, color: stylesVars.taskSize[sizeOption as keyof ValueGradient] }}
                         onClick={() => setSize(sizeOption)}>{sizeOption}</div>
                 )}

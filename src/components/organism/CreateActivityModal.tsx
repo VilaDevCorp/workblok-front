@@ -94,7 +94,7 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
         <VilaModal onClose={onClose} hasHeader title={`${activityId ? 'Edit activity' : 'Create activity'}`} size='m-squared'
             buttons={[<VilaButton buttonStyle={'outlined'} onClick={() => onClose()} font='lightFont'>{'Cancel'}</VilaButton>,
             <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()} disabled={disabledButton}>{'Save'}</VilaButton>]}>
-            <VilaForm nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1} fields={[
+            <VilaForm onSubmit={onConfirm} nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1} fields={[
                 {
                     label: 'Name', input: <VilaTextInput value={name} setValue={setName} errorMsg={nameDirty ? nameMessage : ''} />
                 },

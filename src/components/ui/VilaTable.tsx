@@ -4,10 +4,14 @@ import { useMisc } from '../../hooks//useMisc';
 import { VilaTextInput } from './VilaTextInput';
 import { ContextMenuPosition, ContextOption, VilaContextMenu } from './VilaContextMenu';
 
+export interface RealEntity {
+    id: string;
+    [key: string]: any;
+}
 
 export interface TableCell {
     displayFields: (string | JSX.Element)[]
-    realEntity: unknown
+    realEntity: RealEntity
 }
 
 type Props = {
@@ -125,18 +129,19 @@ export function VilaTable(props: Props) {
                     <tbody ref={tableBodyRef} className='text-lightFont-500'>
                         {props.data && props.data.length > 0 ?
                             props.data && props.data.map((element, index) => {
-                                return <tr key={`table_element_${index}`} className={`leading-[40px] cursor-default border-b border-background-400  
+                                return <tr key={`table_element_${element.realEntity.id}`} className={`leading-[40px] cursor-default border-b border-background-400  
                             ${selectedElements.has(index) ? ' bg-background-300 text-lightFont-500' : ' hover:bg-background-400 hover:text-lightFont-500 '}`}
                                     onContextMenu={(e) => { onOpenContextMenu(e, index) }}
                                     onClick={() => onSelect(index)}>
                                     {element.displayFields.map((field, index) =>
-                                        <td key={`table_element_${index}_${index}`} className={`px-4 py-3`} >{field ? field : ''}</td>
+                                        <td key={`table_element_${element.realEntity.id}_${index}`} className={`px-4 py-3`} >{field ? field : ''}</td>
                                     )}
                                 </tr>
                             })
                             :
-                            // <></>
-                            <td className='w-full absolute flex justify-center mt-10 items-center text-lightFont-300 text-xl'>{'No elements yet'}</td>
+                            <tr>
+                                <td className='w-full absolute flex justify-center mt-10 items-center text-lightFont-300 text-xl'>{'No elements yet'}</td>
+                            </tr>
                         }
 
                     </tbody>

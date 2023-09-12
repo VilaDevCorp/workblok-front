@@ -79,7 +79,7 @@ export function VilaSidebar({ options = [] }: { options?: MenuOption[] }) {
                     {'Close'}
                 </VilaButton>
                 <nav className='flex gap-4 flex-col px-4 text-lg'>
-                    {options.map((option) => <a className='cursor-pointer' onClick={() => onGoTo(option.route)}>{option.label}</a>)}
+                    {options.map((option) => <a key={option.label} className='cursor-pointer' onClick={() => onGoTo(option.route)}>{option.label}</a>)}
                 </nav>
             </div>
             :

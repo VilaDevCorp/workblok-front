@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApiError } from '../../hooks/useApiError';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { PuffLoader } from 'react-spinners';
+import { conf } from '../../conf';
 
 
 export function Planner() {
@@ -92,12 +93,12 @@ export function Planner() {
         <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
             <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
                 {isLoadingPlanner ?
-                    <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
+                    <div className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
                         <PuffLoader color='#124969' loading size={100} />
-                    </article>
+                    </div>
                     :
                     datesArray.map((date, index) =>
-                        <DayElement date={date} tasks={tasks[index] ? tasks[index] : []}
+                        <DayElement key={moment(date).format(conf.dateFormat)} date={date} tasks={tasks[index] ? tasks[index] : []}
                             selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(date)} />)
 
                 }

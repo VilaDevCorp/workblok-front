@@ -105,14 +105,14 @@ export function ForgottenPasswordScreen() {
                     <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your email and we will send you a code for resetting your password in the next screen."}</p>
-                        <VilaForm fields={[{ input: < VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' }]} nColumns={1} />
+                        <VilaForm onSubmit={() => onSendCode} fields={[{ input: < VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' }]} nColumns={1} />
                         <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onSendCode()} font='lightFont' >{'Send code'}</VilaButton>
                     </>
                     :
                     <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your code and the new password for your account."}</p>
-                        <VilaForm fields={[{ input: <VilaTextInput value={mail} setValue={() => false} disabled />, label: 'Email' },
+                        <VilaForm onSubmit={() => onValidate()} fields={[{ input: <VilaTextInput value={mail} setValue={() => false} disabled />, label: 'Email' },
                         { input: <VilaTextInput value={code} setValue={setCode} errorMsg={codeDirty ? codeMessage : ''} />, label: 'Code' },
                         { input: <VilaTextInput value={password} setValue={setPassword} type={'password'} errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
                         { input: <VilaTextInput value={repeatPassword} setValue={setRepeatPassword} type={'password'} errorMsg={passwordMatchError} />, label: 'Repeat password' },

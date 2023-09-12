@@ -24,7 +24,7 @@ export function VilaSelect({ noEmpty = false, disabled = false, ...props }: Prop
             onChange={(e) => props.setValue(e.target.value)} value={props.value} disabled={disabled}
             onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} >
             {!noEmpty && <option value={""}>{props.emptyLabel}</option>}
-            {props.options.map((option) => <option value={option.value}>{option.label}</option>)}
+            {props.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
     )
 }

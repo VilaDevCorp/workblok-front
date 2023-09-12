@@ -21,7 +21,7 @@ export function VilaToogle({ optionList, option, setOption, vertical = false }: 
 
     return (
         <div className={`w-full flex ${vertical && 'flex-col'} bg-background-400 rounded-md`}>
-            {optionList.map((optionElement) => <ToogleElement optionElement={optionElement} setOption={setOption} selected={optionElement.value === option} />)}
+            {optionList.map((optionElement) => <ToogleElement key={`key_${optionElement.value}`} optionElement={optionElement} setOption={setOption} selected={optionElement.value === option} />)}
         </div>
     )
 }

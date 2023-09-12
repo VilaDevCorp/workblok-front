@@ -75,7 +75,7 @@ export function ValidateAccountScreen() {
                 <div className={`flex w-[500px] h-full px-4 justify-center items-center flex-col gap-6 `}>
                     <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                     <p className='text-lightFont-600 w-fit mb-2' >{"Your email hasn't been validated yet. Write your email and the code we sent you for activating your account."}</p>
-                    <VilaForm fields={[{ input: <VilaTextInput value={userMail!} setValue={() => false} disabled />, label: 'Email' },
+                    <VilaForm onSubmit={()=>onValidate()} fields={[{ input: <VilaTextInput value={userMail!} setValue={() => false} disabled />, label: 'Email' },
                     { input: <VilaTextInput value={code} setValue={setCode} errorMsg={codeDirty ? codeMessage : ''} />, label: 'Code' }]} nColumns={1}></VilaForm>
                     <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onValidate()} font='lightFont' >{'Validate'}</VilaButton>
                     <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't see the code in your email? "}<a className={linkClasses} onClick={() => onResendCode()}>{'Send a new code'}</a></span>

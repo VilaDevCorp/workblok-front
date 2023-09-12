@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { VilaButtonIcon } from './VilaButtonIcon';
+import React from 'react';
 
 
 export type ModalSize = 'xs' | 's' | 'm-longer' | 'm-squared' | 'm-fluid-h' | 'l' | 'xl' | 'xs-fluid-h'
@@ -7,7 +8,7 @@ export type ModalSize = 'xs' | 's' | 'm-longer' | 'm-squared' | 'm-fluid-h' | 'l
 const getSize = (size?: ModalSize): string => {
     switch (size) {
         case 'l':
-            return 'w-11/12 max-h-[1000px] max-w-2000'
+            return 'md:!w-11/12 max-h-[1000px] max-w-[1500px]'
         case 'm-longer':
             return 'lg:w-2/5 sm:max-h-[600px] sm:max-w-[450px]'
         case 'm-squared':
@@ -60,8 +61,10 @@ export function VilaModal(props: Props) {
                     {props.children}
                 </div>
                 <div className='self-end mt-auto flex gap-3 '>
-                    {props.buttons?.map((button) =>
-                        button
+                    {props.buttons?.map((button, index) =>
+                        <React.Fragment key={index}>
+                            {button}
+                        </React.Fragment>
                     )}
                 </div>
             </div>

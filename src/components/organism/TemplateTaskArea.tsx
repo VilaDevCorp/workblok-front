@@ -9,7 +9,7 @@ export function TemplateTaskArea({ tasks, selectedTasks, setSelectedTasks }: {
     return (
         <div className={`relative no-scrollbar w-full overflow-y-auto overflow-x-hidden`}>
             <div className='w-full fade-out-list flex flex-col gap-[2px]'>
-                {tasks.map((task) => <TemplateTaskElement task={task} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
+                {tasks.map((task) => <TemplateTaskElement key={task.id} task={task} selectedActivities={selectedTasks} setSelectedActivities={setSelectedTasks} />)}
             </div>
         </div>
     )

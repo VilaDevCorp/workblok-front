@@ -6,6 +6,7 @@ import { TemplateDayElement } from '../molecule/TemplateDayElement';
 import { TemplateActivityOptions } from '../molecule/TemplateActivityOptions';
 import { TemplateSelectActivityModal } from './TemplateSelectActivityModal';
 import { PuffLoader } from 'react-spinners';
+import { weekdays } from 'moment';
 
 
 export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner }: { templateId: string, tasks: TemplateTask[][], setTasks: React.Dispatch<SetStateAction<TemplateTask[][]>>, isLoadingPlanner: boolean }) {
@@ -36,7 +37,7 @@ export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner 
                     :
 
                     [1, 2, 3, 4, 5, 6, 7].map((weekDay) =>
-                        <TemplateDayElement weekDay={weekDay} tasks={tasks[weekDay - 1]}
+                        <TemplateDayElement key={weekDay} weekDay={weekDay} tasks={tasks[weekDay - 1]}
                             selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} onCreateTask={() => onOpenSelectActivityModal(weekDay)} />)
 
                 }

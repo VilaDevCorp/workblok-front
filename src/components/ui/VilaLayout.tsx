@@ -25,7 +25,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
-                        <footer className="max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-end items-center gap-2 py-2">
+                        <footer className="m-auto max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-end items-center gap-2 py-2">
                             <VilaIcon className="text-2xl" type="developer" /><span>{'Created by David Vila'}</span>
                         </footer>
                     </>

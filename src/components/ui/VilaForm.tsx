@@ -6,15 +6,16 @@ export interface FormField {
     input: JSX.Element
 }
 
-export function VilaForm({ nColumns = 1, fields }: { nColumns: number, fields: FormField[] }) {
+export function VilaForm({ nColumns = 1, fields, onSubmit }: { nColumns: number, fields: FormField[], onSubmit: () => void }) {
 
     return (
-        <div className={`flex flex-wrap gap-[20px] w-full `}>
+        <form onSubmit={(e) => { e.preventDefault(); onSubmit() }} className={`flex flex-wrap gap-[20px] w-full `}>
             {fields.map((field) =>
-                <VilaField label={field.label} nColumns={nColumns}>
+                <VilaField key={field.label} label={field.label} nColumns={nColumns}>
                     {field.input}
                 </VilaField>
             )}
-        </div>
+            <button type="submit" className="hidden" />
+        </form>
     )
 }
