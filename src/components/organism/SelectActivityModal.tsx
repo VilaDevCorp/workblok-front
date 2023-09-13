@@ -54,7 +54,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
         setIsLoadingActivities(() => true)
         try {
             if (user === undefined) {
-                throw new ApiError({ message: "Not user detected", cause: StatusCode.ServerErrorInternal })
+                return
             }
             const activityPage = await getActivities(page, searchText, user.id)
             setActivityPage(activityPage)

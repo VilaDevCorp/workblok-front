@@ -50,7 +50,7 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
         setIsLoading(true)
         try {
             if (user === undefined) {
-                throw new ApiError({ message: "Not user detected", cause: StatusCode.ServerErrorInternal })
+                return
             }
             const activityPage = await getActivities(page, searchText, user.id)
             setActivityPage(activityPage)
