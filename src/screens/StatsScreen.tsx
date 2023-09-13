@@ -21,6 +21,7 @@ import { conf } from '../conf';
 import { PuffLoader } from 'react-spinners';
 import { useScreen } from '../hooks/useScreen';
 import { screenSize } from '../StyledTheme';
+import { CompletedPercentage } from '../components/atom/CompletedPercentage';
 
 
 const monthOptions: SelectOption[] = [
@@ -274,29 +275,30 @@ export function StatsScreen() {
                             <div className='bg-background-300 rounded-lg px-3 py-2 flex flex-col gap-4 w-full'>
                                 {stats?.scheduledDans !== undefined && stats?.scheduledDans !== null &&
                                     <StatElement label='Scheduled dans'
-                                        value={<span className='flex gap-1 items-center'>{stats.scheduledDans.toString()}<VilaIcon className='text-coinIcon' type='coin' /></span>} />
+                                        value={<span className='flex gap-1 items-center text-coinIcon'><VilaIcon type='coin' />{stats.scheduledDans.toString()}</span>} />
                                 }
                                 {stats?.completedDans !== undefined && stats?.completedDans !== null &&
                                     <StatElement label='Completed dans'
-                                        value={<span className='flex gap-1 items-center'>{stats.completedDans.toString()}<VilaIcon className='text-coinIcon' type='coin' /></span>} />
-                                }
-                                {stats?.completedPercentage !== undefined && stats?.completedPercentage !== null &&
-                                    <StatElement
-                                        label='Completed percentage'
-                                        value={`${stats.completedPercentage.toFixed(2)}% `}
-                                    />
+                                        value={<span className='flex gap-1 items-center text-coinIcon'><VilaIcon type='coin' />{stats.completedDans.toString()}</span>} />
                                 }
                                 {stats?.dailyAvgScheduled !== undefined && stats?.dailyAvgScheduled !== null &&
                                     <StatElement
                                         label='Daily average scheduled dans'
-                                        value={<span className='flex gap-1 items-center'>{stats.dailyAvgScheduled.toFixed(2).toString()}<VilaIcon className='text-coinIcon' type='coin' /></span>} />
+                                        value={<span className='flex gap-1 items-center text-coinIcon'><VilaIcon type='coin' />{stats.dailyAvgScheduled.toFixed(2).toString()}</span>} />
 
                                 }
                                 {stats?.dailyAvgCompleted !== undefined && stats?.dailyAvgCompleted !== null &&
                                     <StatElement
                                         label='Daily average completed dans'
-                                        value={<span className='flex gap-1 items-center'>{stats.dailyAvgCompleted.toFixed(2).toString()}<VilaIcon className='text-coinIcon' type='coin' /></span>} />
+                                        value={<span className='flex gap-1 items-center text-coinIcon'><VilaIcon type='coin' />{stats.dailyAvgCompleted.toFixed(2).toString()}</span>} />
                                 }
+                                {stats?.completedPercentage !== undefined && stats?.completedPercentage !== null &&
+                                    <StatElement
+                                        label='Completed percentage'
+                                        value={<CompletedPercentage percentage={stats.completedPercentage} />}
+                                    />
+                                }
+
                             </div>
                             {stats?.activityInfo && stats.activityInfo.length > 0 ?
                                 <ResponsiveContainer width={'100%'} height={'100%'} minHeight={'250px'}>
