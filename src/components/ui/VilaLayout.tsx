@@ -17,15 +17,15 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
     return (
 
         (isPublic || user) ?
-            <div className={`min-h-full md:min-h-full w-full px-4 py-4 ${isPublic && 'flex items-center justify-center'} `}>
+            <div className={`min-h-full flex flex-col items-center md:min-h-full w-full px-4 py-4 ${isPublic && 'flex items-center justify-center'} `}>
                 {!isPublic ?
                     <>
                         <Header />
-                        <main className={`flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '} max-h-[600px] bg-transparent m-auto py-5 md:px-4 relative`}>
+                        <main className={`w-full flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '}  bg-transparent py-5 md:px-4 relative`}>
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
-                        <footer className="m-auto max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-end items-center gap-2 py-2">
+                        <footer className=" mt-10 lg:mt-20 max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-end items-center gap-2 py-2">
                             <VilaIcon className="text-2xl" type="developer" /><span>{'Created by David Vila'}</span>
                         </footer>
                     </>

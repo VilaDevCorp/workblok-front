@@ -158,7 +158,7 @@ export function TemplatesScreen() {
     return (
         <VilaLayout>
             <div className='flex w-full flex-col gap-4'>
-                <div className='h-[calc(100%-50px)] min-h-[500px]'>
+                <div className='h-[45vh] min-h-[400px]'>
                     <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
                         searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 </div>

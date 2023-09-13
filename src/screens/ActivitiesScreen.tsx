@@ -15,10 +15,13 @@ import { useSnackbar } from '../hooks/useSnackbar';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApiError } from '../hooks/useApiError';
+import { SizeIndicator } from '../components/atom/SizeIndicator';
+import { ActivityIcon } from '../components/atom/ActivityIcon';
+import { IconIndicator } from '../components/atom/IconIndicator';
 
 export function ActivitiesScreen() {
 
-    const headers = ['name', 'size']
+    const headers = ['name', 'size', 'icon']
 
 
     const { getActivities, deleteActivities } = useApi();
@@ -69,7 +72,7 @@ export function ActivitiesScreen() {
             const data = await getActivities(page, searchKey, user?.id)
             setTotalPages(data.totalPages)
             const tableData: TableCell[] = []
-            data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, dataElement.size.toString()], realEntity: dataElement }))
+            data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, <SizeIndicator size={dataElement.size} />, <IconIndicator icon={dataElement.icon} />], realEntity: dataElement }))
             if (data.content.length < 1 && page > 1) {
                 setPage((old) => old - 1)
             }
@@ -142,7 +145,7 @@ export function ActivitiesScreen() {
     return (
         <VilaLayout>
             <div className='flex w-full flex-col gap-4'>
-                <div className='h-[calc(100%-50px)] min-h-[500px]'>
+                <div className='h-[45vh] min-h-[500px]'>
                     <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
                         searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 </div>
