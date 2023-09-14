@@ -2,7 +2,7 @@ import { AiOutlineDelete, AiOutlineDown, AiOutlineEdit, AiOutlineFile, AiOutline
 import { BsCheck, BsMap } from 'react-icons/bs';
 import { CgCloseR } from 'react-icons/cg';
 import { FiMail } from 'react-icons/fi';
-import { FaRedo, FaRegListAlt, FaSignInAlt, FaUserCircle } from 'react-icons/fa';
+import { FaRedo, FaRegListAlt, FaSignInAlt, FaUserCircle, FaRegStickyNote} from 'react-icons/fa';
 import { MdOutlineCancel } from 'react-icons/md';
 import { RiCoinLine, RiLogoutCircleRLine } from 'react-icons/ri';
 import { IoMdAddCircleOutline, IoMdArrowRoundBack, IoMdArrowRoundForward, IoMdPeople, IoMdPhonePortrait, IoIosMenu, IoMdClose, IoIosAdd, IoIosCalendar, IoIosPlay } from 'react-icons/io';
@@ -16,7 +16,7 @@ import { GiTwoCoins } from 'react-icons/gi';
 export type IconType = "previous" | "next" | "logout" | "cancel" | "confirm" | "close" | "user" | "login" |
     "delete" | "edit" | "add" | "check" | "search" | "mail" | "phone" | "download" | "upload" | "alert" |
     "map" | "pdf" | "meeting" | "log" | "file" | "incidence" | "progress" | "important" | "redo" | "menu" |
-    "unfold" | "fold" | "coin" | "calendar" | "play" | "developer"
+    "unfold" | "fold" | "coin" | "calendar" | "play" | "developer" | "notes"
 
 const getIcon = (type: IconType): JSX.Element => {
     switch (type) {
@@ -97,6 +97,8 @@ const getIcon = (type: IconType): JSX.Element => {
                 0-36.04218 9.284699-9.138484 26.903696-7.091463 34.068267 0z m-135.54199-26.318833c3.582286-9.504023 
                 21.347498-15.498868 32.679217-11.258612 10.819965 4.020933 17.180349 19.008046 14.256035 28.512069l-119.896906 329.716493c-3.509178 
                 9.504023-20.616419 13.305632-30.193551 9.723347-10.161994-3.509178-21.201282-17.545889-17.545888-26.976804l120.627985-329.716493z" /></svg>
+        case "notes":
+            return <FaRegStickyNote />
         default:
             return <></>
     }
