@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
 }
 
 input:-webkit-autofill,

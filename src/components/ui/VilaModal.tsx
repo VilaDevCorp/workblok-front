@@ -12,7 +12,7 @@ const getSize = (size?: ModalSize): string => {
         case 'm-longer':
             return 'lg:w-2/5 sm:max-h-[600px] sm:max-w-[450px]'
         case 'm-squared':
-            return 'w-3/4 md:max-h-[450px] max-w-[600px]'
+            return 'w-3/4 md:max-h-[550px] max-w-[750px]'
         case 's':
             return 'w-1/2 max-h-600 max-w-1200'
         case 'm-fluid-h':

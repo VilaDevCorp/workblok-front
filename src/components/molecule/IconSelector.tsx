@@ -9,7 +9,8 @@ export function IconSelector({ icon, setIcon }: {
     return (
         <div className='flex gap-4 w-full items-center flex-wrap max-h-[150px] overflow-y-auto'>
             {activities.map((iconOption) =>
-                <div key={`${iconOption}_icon`} className={`w-[35px] h-[35px] flex justify-center items-center text-lightFont-500 cursor-default text-2xl ${icon === iconOption ? ' opacity-100 ' : ' opacity-30 '} rounded-full`}
+                <div key={`${iconOption}_icon`} className={`w-[40px] h-[40px] flex justify-center items-center text-lightFont-500 cursor-pointer text-3xl transition-all
+                ${icon === iconOption ? ' opacity-100 ' : ' opacity-30 hover:opacity-50 '} rounded-full`}
                     onClick={() => setIcon(iconOption as ActivityType)}>
                     <ActivityIcon type={iconOption as ActivityType} />
                 </div>

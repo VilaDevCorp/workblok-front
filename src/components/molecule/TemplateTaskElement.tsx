@@ -32,10 +32,10 @@ export function TemplateTaskElement({ task, selectedActivities, setSelectedActiv
              hover:!opacity-100 shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] `} onClick={() => onSelect()} >
             <div className='flex flex-col gap-2'>
                 {task.edges.activity.icon !== undefined &&
-                    <span className='text-lg'>
+                    <span className='text-2xl'>
                         <ActivityIcon type={task.edges.activity.icon} />
                     </span>}
-                <span className={`border flex w-[20px] h-[20px] items-center justify-center rounded-full`} style={{
+                <span className={`border font-bold flex w-[25px] h-[25px] items-center text-lg justify-center rounded-full`} style={{
                     borderColor: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient],
                     color: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient]
                 }}>{task.edges.activity.size}</span>
@@ -44,7 +44,7 @@ export function TemplateTaskElement({ task, selectedActivities, setSelectedActiv
                         <VilaButtonIcon icon={'notes'} size='xs' onClick={(e) => { setShowDescription(task.edges.activity.description); e.stopPropagation() }} />
                     </span>}
             </div>
-            <div>
+            <div style={{ overflowWrap: 'anywhere' }}>
                 {task.edges.activity.name}
             </div>
         </div>

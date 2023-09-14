@@ -92,7 +92,7 @@ export function RegisterScreen() {
                     { input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Mail' },
                     { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
                     { input: <VilaTextInput value={repeatPassword} setValue={setRepeatPassword} type='password' errorMsg={passwordMatchError} />, label: 'Repeat password' }
-                    ]} nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1}></VilaForm>
+                    ]} nColumns={1}></VilaForm>
                 <VilaButton disabled={disabledButton} onClick={onRegister} font='lightFont' >{'Sign up'}</VilaButton>
             </PublicFormLayout>
         </VilaLayout>

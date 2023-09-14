@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApiError } from '../../hooks/useApiError';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import StatusCode from 'status-code-enum';
+import { PuffLoader } from 'react-spinners';
 
 export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { templateId: string, weekDay?: number, onClose: () => void }) {
 
@@ -31,6 +32,8 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
+    const [isLoadingActivities, setIsLoadingActivities] = useState<boolean>(false)
+
 
     const handleEnterPress = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -47,7 +50,7 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
 
 
     const onGetActivities = async () => {
-        setIsLoading(true)
+        setIsLoadingActivities(true)
         try {
             if (user === undefined) {
                 return
@@ -57,7 +60,7 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
         } catch (e) {
             setError(e as Error)
         } finally {
-            setIsLoading(false)
+            setIsLoadingActivities(false)
         }
 
     }
@@ -102,8 +105,14 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
             <VilaButton font='lightFont' buttonStyle={'filled'} disabled={selectedActivities.length < 1} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <div className='flex flex-col w-full h-full overflow-hidden gap-4'>
                 <VilaTextInput icon='search' setValue={setSearchText} value={searchText} />
-                <div className='flex flex-col w-full h-[500px] overflow-y-auto overflow-x-hidden items-center gap-2'>
-                    <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
+                <div className='flex flex-col w-full h-[full] md:h-[200px]  overflow-y-auto overflow-x-hidden items-center gap-2'>
+                    {isLoadingActivities ?
+                        <span className='w-full h-full grow flex justify-center items-center'>
+                            <PuffLoader color='#124969' loading size={100} />
+                        </span>
+                        :
+                        <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
+                    }
                 </div>
                 <VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
                     totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} />
