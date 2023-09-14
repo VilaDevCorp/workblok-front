@@ -83,7 +83,7 @@ export function CreateTemplateModal({ templateId, onClose }: { templateId?: stri
             <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()} disabled={disabledButton}>{'Save'}</VilaButton>]}>
             <VilaForm onSubmit={onConfirm} nColumns={1} fields={[
                 {
-                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} errorMsg={nameDirty ? nameMessage : ''} />
+                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} maxChars={120} errorMsg={nameDirty ? nameMessage : ''} />
                 }]} />
         </VilaModal >
     )

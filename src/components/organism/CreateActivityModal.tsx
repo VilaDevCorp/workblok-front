@@ -96,13 +96,13 @@ export function CreateActivityModal({ activityId, onClose }: { activityId?: stri
             <VilaButton font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()} disabled={disabledButton}>{'Save'}</VilaButton>]}>
             <VilaForm onSubmit={onConfirm} nColumns={screenWidth > ScreenWidthEnum.s ? 2 : 1} fields={[
                 {
-                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} errorMsg={nameDirty ? nameMessage : ''} />
+                    label: 'Name', input: <VilaTextInput value={name} setValue={setName} maxChars={120} errorMsg={nameDirty ? nameMessage : ''} />
                 },
                 {
                     label: 'Size', input: <SizeSelector setSize={setSize} size={size} errorMsg={sizeDirty ? sizeMessage : ''} />
                 },
                 {
-                    label: 'Description', input: <VilaTextArea value={description} setValue={setDescription}  />
+                    label: 'Description', input: <VilaTextArea value={description} setValue={setDescription}  maxChars={255} />
                 },
                 {
                     label: 'Icon', input: <IconSelector setIcon={setIcon} icon={icon} />
