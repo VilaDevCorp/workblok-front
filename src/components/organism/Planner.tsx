@@ -14,6 +14,7 @@ import { useApiError } from '../../hooks/useApiError';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { PuffLoader } from 'react-spinners';
 import { conf } from '../../conf';
+import { DescriptionDialog } from '../atom/DescriptionDialog';
 
 
 export function Planner() {
@@ -25,7 +26,7 @@ export function Planner() {
     const [tasks, setTasks] = useState<Task[][]>([])
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-    const { setIsLoading, reloadTasksFlag, savedDate, setSavedDate } = useMisc()
+    const { setIsLoading, reloadTasksFlag, savedDate, setSavedDate, setShowDescription } = useMisc()
     const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
@@ -33,6 +34,7 @@ export function Planner() {
     const [isLoadingPlanner, setIsLoadingPlanner] = useState<boolean>(false)
 
     useEffect(() => {
+        setShowDescription('')
         if (savedDate) {
             setStartDate(savedDate)
         } else {
@@ -91,7 +93,8 @@ export function Planner() {
 
     return (
         <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
-            <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
+            <div style={{ scrollbarGutter: 'stable' }} className='flex relative flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
+                <DescriptionDialog />
                 {isLoadingPlanner ?
                     <div className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
                         <PuffLoader color='#124969' loading size={100} />

@@ -23,7 +23,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(0)
     const { t } = useTranslation()
-    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag } = useMisc()
+    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag, setModalShowDescription } = useMisc()
     const firstRender = useRef<boolean>(true)
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
@@ -40,6 +40,11 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
             onConfirm()
         }
     }
+
+    useEffect(() => {
+        setModalShowDescription('')
+    }, [])
+    
 
     useEffect(() => {
         window.addEventListener("keydown", handleEnterPress);
@@ -112,7 +117,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
             <VilaButton disabled={selectedActivities.length < 1} font='lightFont' buttonStyle={'filled'} onClick={() => onConfirm()}>{'Save'}</VilaButton>]}>
             <div className='flex flex-col w-full h-full overflow-hidden gap-4'>
                 <VilaTextInput icon='search' setValue={setSearchText} value={searchText} />
-                <div className='flex flex-col w-full h-[300px] overflow-y-auto overflow-x-hidden items-center gap-2'>
+                <div className='flex flex-col w-full h-full md:h-[300px] relative overflow-y-auto overflow-x-hidden items-center gap-2'>
                     {isLoadingActivities ?
                         <span className='w-full h-full grow flex justify-center items-center'>
                             <PuffLoader color='#124969' loading size={100} />

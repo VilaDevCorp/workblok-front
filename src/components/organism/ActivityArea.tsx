@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Activity } from '../../types/entities';
 import { ActivityElement } from '../molecule/ActivityElement';
+import { DescriptionDialog } from '../atom/DescriptionDialog';
 
 export function ActivityArea({ activities, selectedActivities, setSelectedActivities }: {
     activities: Activity[], selectedActivities: string[],
@@ -9,6 +10,7 @@ export function ActivityArea({ activities, selectedActivities, setSelectedActivi
 }) {
     return (
         <>
+            <DescriptionDialog isModal />
             {activities.length > 0 ?
                 activities.map((activity) => <ActivityElement key={activity.id} id={activity.id} activity={activity} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />)
                 :

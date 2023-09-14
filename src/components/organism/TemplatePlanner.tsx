@@ -7,6 +7,7 @@ import { TemplateActivityOptions } from '../molecule/TemplateActivityOptions';
 import { TemplateSelectActivityModal } from './TemplateSelectActivityModal';
 import { PuffLoader } from 'react-spinners';
 import { weekdays } from 'moment';
+import { DescriptionDialog } from '../atom/DescriptionDialog';
 
 
 export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner }: { templateId: string, tasks: TemplateTask[][], setTasks: React.Dispatch<SetStateAction<TemplateTask[][]>>, isLoadingPlanner: boolean }) {
@@ -15,7 +16,11 @@ export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner 
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
     const { reloadTasksFlag } = useMisc()
     const [selectActivityWeekDay, setSelectActivityWeekDay] = useState<number | undefined>(undefined)
+    const { setShowDescription } = useMisc()
 
+    useEffect(() => {
+        setShowDescription('')
+    }, [])
 
     const onOpenSelectActivityModal = (weekDay: number) => {
         setSelectActivityWeekDay(weekDay)
@@ -30,6 +35,7 @@ export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner 
     return (
         <section className='flex w-full h-full max-h-[900px] gap-5 relative text-lightFont-500 flex-col rounded-lg'>
             <div style={{ scrollbarGutter: 'stable' }} className='flex flex-grow overflow-hidden overflow-x-auto h-[45vh] min-h-[350px] bg-background-400 rounded-lg gap-2 '>
+                <DescriptionDialog />
                 {isLoadingPlanner ?
                     <article className='rounded-lg w-full h-full flex m-auto justify-center items-center'>
                         <PuffLoader color='#124969' loading size={100} />

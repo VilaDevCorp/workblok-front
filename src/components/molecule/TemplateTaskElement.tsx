@@ -2,11 +2,16 @@ import React from 'react';
 import { TemplateTask } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 import { ValueGradient, stylesVars } from '../../utils/stylesVars'
+import { VilaButtonIcon } from '../ui/VilaButtonIcon';
+import { useMisc } from '../../hooks/useMisc';
 
 export function TemplateTaskElement({ task, selectedActivities, setSelectedActivities }: {
     task: TemplateTask, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {
+
+    const { setShowDescription } = useMisc()
+
 
     const onSelect = () => {
         if (isSelected) {
@@ -34,6 +39,10 @@ export function TemplateTaskElement({ task, selectedActivities, setSelectedActiv
                     borderColor: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient],
                     color: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient]
                 }}>{task.edges.activity.size}</span>
+                {task.edges.activity.description !== undefined &&
+                    <span className='text-2xl'>
+                        <VilaButtonIcon icon={'notes'} size='xs' onClick={(e) => { setShowDescription(task.edges.activity.description); e.stopPropagation() }} />
+                    </span>}
             </div>
             <div>
                 {task.edges.activity.name}
