@@ -3,11 +3,16 @@ import styled from 'styled-components';
 import { Task } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 import { ValueGradient, stylesVars } from './../../utils/stylesVars'
+import { VilaIcon } from '../ui/VilaIcon';
+import { VilaButtonIcon } from '../ui/VilaButtonIcon';
+import { useMisc } from '../../hooks/useMisc';
 
 export function TaskElement({ task, selectedActivities, setSelectedActivities }: {
     task: Task, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {
+
+    const {setShowDescription} = useMisc()
 
     const onSelect = () => {
         if (isSelected) {
@@ -34,6 +39,11 @@ export function TaskElement({ task, selectedActivities, setSelectedActivities }:
                     borderColor: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient],
                     color: stylesVars.taskSize[task.edges.activity.size as keyof ValueGradient]
                 }}>{task.edges.activity.size}</span>
+                {task.edges.activity.description !== undefined &&
+                    <span className='text-2xl'>
+                        <VilaButtonIcon icon={'notes'} size='xs' onClick={(e)=>{setShowDescription(task.edges.activity.description);e.stopPropagation()}} />
+                    </span>}
+
             </div>
             <div>
                 {task.edges.activity.name}
