@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300&family=Montserrat&family=Noto+Sans+JP&family=Noto+Sans+Linear+B&family=Open+Sans&family=Raleway&family=Sarabun&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,6 +23,7 @@ select:-webkit-autofill {
 
 html {
   background: #060f14;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 #root {

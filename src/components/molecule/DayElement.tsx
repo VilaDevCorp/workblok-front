@@ -1,12 +1,7 @@
 import moment from 'moment';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { SizeEnum } from '../../types/types';
+import React from 'react';
 import { Task } from '../../types/entities';
-import { conf } from './../../conf'
 import { TaskArea } from '../organism/TaskArea';
-import { VilaButtonIcon } from '../ui/VilaButtonIcon';
-import { SelectActivityModal } from '../organism/SelectActivityModal';
 import { VilaIcon } from '../ui/VilaIcon';
 
 

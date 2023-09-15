@@ -9,7 +9,7 @@ import { useMisc } from '../../hooks/useMisc';
 
 
 const navigationItems: MenuOption[] = [
-    { label: 'Planning', route: '/' },
+    { label: 'Planner', route: '/' },
     { label: 'Activities', route: '/activities' },
     { label: 'Templates', route: '/templates' },
     { label: 'Stats', route: '/stats' }

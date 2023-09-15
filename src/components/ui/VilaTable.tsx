@@ -108,19 +108,19 @@ export function VilaTable(props: Props) {
             </div>
             <div className='w-full h-full overflow-auto mt-4 relative' ref={loadingContainer} onScroll={() => setContextMenuProps({ visible: false, top: 0, left: 0 })}>
                 {props.isLoading &&
-                    <div style={{ height: `${loadingContainerHeight}px`, marginTop: `-${loadingContainerHeight}px` }} className={`w-full sticky justify-center items-center flex top-0 bg-background-900 z-10 opacity-80`}>
+                    <div style={{ height: `${loadingContainerHeight}px`, marginTop: `-${loadingContainerHeight}px` }} className={`w-full sticky justify-center items-center flex top-0 z-10 backdrop-blur-sm`}>
                         <div className='w-full h-full flex justify-center items-center'>
-                            <div className='w-full flex sticky justify-center align-middle backdrop-opacity-50 '>
+                            <div className='w-full flex sticky justify-center align-middle'>
                                 <PuffLoader size={100} color={'#77B78E'} />
                             </div>
                         </div>
                     </div>
                 }
                 <table className='w-full leading-10  rounded-lg'>
-                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky top-0 bg-background-900'>
+                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky top-0'>
                         <tr>
                             {props.headers.map((header) =>
-                                <th key={`key_${header}_header`} className={`px-4 py-3`}>
+                                <th key={`key_${header}_header`} className={`px-4 py-3 font-["Montserrat"]`}>
                                     {header.toUpperCase()}
                                 </th>
                             )}
@@ -140,7 +140,7 @@ export function VilaTable(props: Props) {
                             })
                             :
                             <tr>
-                                <td className='w-full absolute flex justify-center mt-10 items-center text-lightFont-300 text-xl'>{'No elements yet'}</td>
+                                <td className='w-full absolute flex justify-center mt-10 items-center text-lightFont-300 text-xl'>{'No elements found'}</td>
                             </tr>
                         }
 

@@ -17,7 +17,8 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
     return (
 
         (isPublic || user) ?
-            <div className={`min-h-full flex flex-col items-center md:min-h-full w-full px-4 py-4 ${isPublic && 'flex items-center justify-center'} `}>
+            <div className={`min-h-full flex  flex-col items-center h-screen md:min-h-full w-full px-4 py-4 
+                ${isPublic && 'flex backdrop-blur-sm items-center justify-center bg-[url("./../../../public/front-vertical-min.jpg")] md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
                 {!isPublic ?
                     <>
                         <Header />
@@ -30,16 +31,19 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                         </footer>
                     </>
                     :
-                    <main className='flex max-w-[1500px] h-full overflow-auto w-full max-h-[900px] bg-transparent ml-auto mr-auto'>
+                    <main className="flex max-w-[1500px] h-full overflow-auto w-full max-h-[900px] ml-auto mr-auto">
                         {children}
                     </main>
                 }
             </div>
             :
-            <main className={`flex w-screen h-full justify-center items-center py-5 flex-col gap-6 m-auto`}>
-                <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                <p className="text-lightFont-500">{'You need an account to access this page'}</p>
-                <VilaButton onClick={() => navigate("/login")} font="lightFont">{'Login'}</VilaButton>
-            </main>
+            <div className={`min-h-full flex  flex-col items-center bg-center md:min-h-full h-screen backdrop-blur-sm w-full px-4 py-4 bg-[url("./../../../public/front-vertical-min.jpg")] 
+            md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
+                <main className={`flex backdrop-brightness-[20%] backdrop-blur-sm p-8 rounded-lg h-full justify-center items-center py flex-col gap-6 m-auto`}>
+                    <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
+                    <p className="text-lightFont-500">{'You need an account to view this page'}</p>
+                    <VilaButton onClick={() => navigate("/login")} font="lightFont">{'Login'}</VilaButton>
+                </main>
+            </div>
     )
 }

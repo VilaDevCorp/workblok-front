@@ -91,6 +91,7 @@ export default {
       highlight: "#8db6e3",
       highlightPlus: "#dcd42c",
       modalTransparent:"#315264bf",
+      plannerLowOp:"#132b37bf",
     },
     extend: {
       keyframes: {

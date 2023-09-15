@@ -50,9 +50,9 @@ export function VilaModal(props: Props) {
 
     return (
         <div className="w-full top-0 left-0 h-full md:h-screen  backdrop-blur-sm flex z-40 max-h-screen justify-center items-center fixed backdrop-contrast-75 " onClick={() => props.onClose()}>
-            <div className={`relative flex rounded-lg h-full sm:h-auto flex-col px-3 py-3 bg-background-900 ${getSize(props.size)} w-full `} onClick={(e) => e.stopPropagation()}>
+            <div style={{ background: 'linear-gradient(120deg, rgba(6,15,20,1) 0%, rgba(19,43,55,1) 100%)' }} className={`relative flex rounded-lg h-full sm:h-auto flex-col px-3 py-3 bg-background-900 ${getSize(props.size)} w-full `} onClick={(e) => e.stopPropagation()}>
                 {props.hasHeader &&
-                    <div className='flex w-full justify-between flex-row ml-auto items-center text-lightFont-500'>
+                    <div className='flex w-full font-["Montserrat"] justify-between flex-row ml-auto items-center text-lightFont-500'>
                         {props.title}
                         <span className='ml-auto'><VilaButtonIcon size={'s'} buttonStyle={'transparent'} font='lightFont' icon='close' onClick={() => props.onClose()} />
                         </span>

@@ -139,7 +139,7 @@ export function TemplatesScreen() {
             onUpdateTemplate(templates[0].id)
         }
     }, {
-        label: 'Planning',
+        label: 'Planner',
         icon: 'calendar',
         onClick: (elements: unknown[]) => {
             const templates = elements as Template[]
