@@ -3,6 +3,7 @@ import { PuffLoader, PulseLoader } from 'react-spinners';
 import { useMisc } from '../../hooks//useMisc';
 import { VilaTextInput } from './VilaTextInput';
 import { ContextMenuPosition, ContextOption, VilaContextMenu } from './VilaContextMenu';
+import { VilaTooltip } from './VilaTooltip';
 
 export interface RealEntity {
     id: string;
@@ -94,8 +95,9 @@ export function VilaTable(props: Props) {
         <div className='w-full flex flex-col h-full'>
             <div className='flex gap-4 flex-col md:flex-row'>
                 {props.searchKey !== undefined && props.setSearchKey ?
-                    <div className='min-w-[50%]'>
+                    <div className='min-w-[50%] flex'>
                         <VilaTextInput icon={'search'} value={props.searchKey} setValue={props.setSearchKey} />
+                        <VilaTooltip message='Right click in an element to unfold more options' />
                     </div>
                     :
                     undefined
@@ -117,7 +119,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
                 <table className='w-full leading-10  rounded-lg'>
-                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky top-0'>
+                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky   top-0'>
                         <tr>
                             {props.headers.map((header) =>
                                 <th key={`key_${header}_header`} className={`px-4 py-3 font-["Montserrat"]`}>
