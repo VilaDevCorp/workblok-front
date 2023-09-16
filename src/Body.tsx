@@ -31,7 +31,7 @@ function Body() {
 
   return (
     <div
-      className='w-full h-full md:h-screen relative' >
+      className='w-full h-full md:h-screen relative h-' >
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
           <>

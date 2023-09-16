@@ -17,7 +17,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
     return (
 
         (isPublic || user) ?
-            <div className={`min-h-full flex  flex-col items-center h-screen md:min-h-full w-full px-4 py-4 
+            <div className={`min-h-full flex  flex-col items-center h-full md:h-auto md:min-h-full w-full px-4 py-4 
                 ${isPublic && 'flex backdrop-blur-sm items-center justify-center bg-[url("./../../../public/front-vertical-min.jpg")] md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
                 {!isPublic ?
                     <>
