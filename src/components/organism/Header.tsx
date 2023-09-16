@@ -17,7 +17,7 @@ const navigationItems: MenuOption[] = [
 
 export function Header() {
     const { screenWidth } = useScreen()
-    const { setOpenSidebar, setBlockedSidebar, blockedSidebar} = useMisc()
+    const { setOpenSidebar, setBlockedSidebar, blockedSidebar } = useMisc()
 
     const onOpenSidebar = () => {
         if (!blockedSidebar) {
@@ -31,8 +31,10 @@ export function Header() {
             {screenWidth <= 800 &&
                 <VilaButtonIcon icon='menu' buttonStyle='transparent' onClick={() => onOpenSidebar()} />
             }
+            {screenWidth >= 800 &&
+                <img src={headerImg} alt='Logo header' className='cursor-pointer ml-2 h-[60px] w-[70px] ' />
+            }
 
-            <img src={headerImg} alt='Logo header' className='cursor-pointer ml-2 h-[60px] w-[70px] ' />
             {screenWidth > 800 ?
                 <TopMenu options={navigationItems} />
                 :

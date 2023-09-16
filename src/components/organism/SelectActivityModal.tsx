@@ -44,7 +44,7 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     useEffect(() => {
         setModalShowDescription('')
     }, [])
-    
+
 
     useEffect(() => {
         window.addEventListener("keydown", handleEnterPress);
@@ -126,8 +126,9 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
                         <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
                     }
                 </div>
-                <VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
-                    totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} />
+                {activityPage && activityPage?.totalPages > 1 &&
+                    <span className='mt-auto'><VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
+                        totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} /></span>}
             </div>
         </VilaModal >
     )

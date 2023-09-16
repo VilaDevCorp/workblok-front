@@ -22,11 +22,11 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
 
         (isPublic || user) ?
             <div className={`min-h-full flex  flex-col items-center h-full md:h-auto md:min-h-full w-full px-4 py-4 
-                ${isPublic && 'flex backdrop-blur-sm items-center justify-center bg-[url("./../../../public/front-vertical-min.jpg")] md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
+                ${isPublic && 'flex h-screen backdrop-blur-sm items-center justify-center bg-[url("./../../../public/front-vertical-min.jpg")] md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
                 {!isPublic ?
                     <>
                         <Header />
-                        <main className={`w-full flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '}  bg-transparent py-5 md:px-4 relative`}>
+                        <main className={`w-full flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '}  bg-transparent py-5 lg:py-16 md:px-4 relative`}>
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
