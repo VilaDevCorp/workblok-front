@@ -45,6 +45,14 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
         setModalShowDescription('')
     }, [])
 
+    useEffect(() => {
+        if (!firstRender.current) {
+            const timer = setTimeout(() => onReloadActivities(), 500)
+            return (() => clearTimeout(timer))
+        }
+        firstRender.current = false
+    }, [searchText])
+
 
     useEffect(() => {
         window.addEventListener("keydown", handleEnterPress);
@@ -126,9 +134,8 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
                         <ActivityArea activities={activityPage?.content ? activityPage.content : []} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
                     }
                 </div>
-                {activityPage && activityPage?.totalPages > 1 &&
-                    <span className='mt-auto'><VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
-                        totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} /></span>}
+                <VilaPagination page={page} setPage={setPage} maxVisiblePages={5}
+                    totalPages={activityPage?.totalPages ? activityPage.totalPages : 0} />
             </div>
         </VilaModal >
     )

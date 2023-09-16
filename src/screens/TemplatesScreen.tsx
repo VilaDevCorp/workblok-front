@@ -162,10 +162,9 @@ export function TemplatesScreen() {
                     <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton key={'add_template_but'} icon='add' font='lightFont' onClick={() => onCreateTemplate()} >{'Add template'}</VilaButton>]}
                         searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 </div>
-                {totalPages > 1 &&
                     <div className='h-[50px]'>
                         <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
-                    </div>}
+                </div>
             </div>
             <>{createTemplateModalVisible && <CreateTemplateModal templateId={templateForEdit} onClose={() => onCloseCreateTemplateModal()} />}</>
             <>{plannerTemplateModalVisible && <TemplatePlannerModal templateId={templateForEdit} onClose={() => onClosePlannerTemplateModal()} />}</>

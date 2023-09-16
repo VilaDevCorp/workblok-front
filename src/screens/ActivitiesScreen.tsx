@@ -149,9 +149,9 @@ export function ActivitiesScreen() {
                     <VilaTable headers={headers} data={tableData} isLoading={isLoadingTable} buttons={[<VilaButton icon='add' font='lightFont' onClick={() => onCreateActivity()} >{'Add activity'}</VilaButton>]}
                         searchKey={searchKey} setSearchKey={setSearchKey} contextOptions={contextOptions} />
                 </div>
-                {totalPages > 1 && <div className='h-[50px]'>
+                <div className='h-[50px]'>
                     <VilaPagination page={page} setPage={setPage} totalPages={totalPages} maxVisiblePages={10} />
-                </div>}
+                </div>
 
             </div>
             <>{createActivityModalVisible && <CreateActivityModal activityId={activityForEdit} onClose={() => onCloseCreateActivityModal()} />}</>
