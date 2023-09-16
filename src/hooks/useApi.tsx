@@ -19,7 +19,6 @@ export interface ApiContext {
     deleteTasks: (ids: string[]) => Promise<void>
     getUserTasks: (userId: string, startDate: Date) => Promise<Task[]>,
     completeTasks: (form: CompleteTaskForm) => Promise<void>
-    updateUserDans: (userId: string, isAdd: boolean, value: number) => Promise<void>,
     getUser: (id: string) => Promise<User>
     createTemplate: (form: CreateTemplateForm) => Promise<void>
     getTemplates: (page: number, name: string, userId: string) => Promise<Page<Template>>
@@ -31,6 +30,7 @@ export interface ApiContext {
     deleteTemplateTasks: (ids: string[]) => Promise<void>
     applyTemplate: (templateId: string, form: ApplyTemplateForm) => Promise<void>
     getStats: (form: StatsForm) => Promise<StatsResult>
+    completeTutorial: (userId: string) => Promise<void>
 }
 
 
@@ -47,7 +47,7 @@ export const useApi = () => {
 
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
-    const { csrfToken } = useAuth()
+    const { user, csrfToken } = useAuth()
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL
 
     const register = async (user: RegisterUserForm) => {
@@ -304,27 +304,6 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
             throw e
         }
         return result
-    }
-
-    const updateUserDans = async (userId: string, isAdd: boolean, value: number): Promise<void> => {
-        const url = `${apiUrl}private/user/${userId}/dans?add=${isAdd}&value=${value}`
-        const options: RequestInit = {
-            credentials: 'include',
-            method: 'PATCH',
-            headers: new Headers({
-                'X-API-CSRF': csrfToken ? csrfToken : '',
-                'content-type': 'application/json',
-            })
-        }
-        try {
-            const res = await fetch(url, options)
-            const resObject: ApiResponse<unknown> = await res.json()
-            if (!res.ok) {
-                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
-            }
-        } catch (e) {
-            throw e
-        }
     }
 
     const sendVerificationCode = async (form: CreateVerificationCodeForm): Promise<void> => {
@@ -600,8 +579,26 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-
-
+    const completeTutorial = async (userId: string): Promise<void> => {
+        const url = `${apiUrl}private/user/${userId}/completeTutorial`
+        const options: RequestInit = {
+            credentials: 'include',
+            method: 'POST',
+            headers: new Headers({
+                'X-API-CSRF': csrfToken ? csrfToken : '',
+                'content-type': 'application/json',
+            })
+        }
+        try {
+            const res = await fetch(url, options)
+            const resObject: ApiResponse<StatsResult> = await res.json()
+            if (!res.ok) {
+                throw new ApiError({ cause: res.status, message: resObject.message, errCode: resObject.errCode })
+            }
+        } catch (e) {
+            throw e
+        }
+    }
 
 
     const value: ApiContext = {
@@ -618,7 +615,6 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         completeTasks,
         getUserTasks,
         getUser,
-        updateUserDans,
         createTemplate,
         getTemplate,
         getTemplates,
@@ -628,7 +624,8 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         deleteTemplateTasks,
         createTemplateTask,
         applyTemplate,
-        getStats
+        getStats,
+        completeTutorial
     }
 
     return (

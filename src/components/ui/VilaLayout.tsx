@@ -6,6 +6,9 @@ import { VilaButton } from "./VilaButton";
 import { useSnackbar } from "../../hooks/useSnackbar";
 import { GrUserWorker } from "react-icons/gr";
 import { VilaIcon } from "./VilaIcon";
+import { Tutorial } from "../organism/Tutorial";
+import { useMisc } from "../../hooks/useMisc";
+import { VilaButtonIcon } from "./VilaButtonIcon";
 
 export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: string, children: JSX.Element | JSX.Element[], isPublic?: boolean, fillScreen?: boolean }) {
 
@@ -13,6 +16,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
     const { user, logout } = useAuth()
     const navigate = useNavigate()
     const snackbar = useSnackbar()
+    const { visibleTutorial, setVisibleTutorial } = useMisc()
 
     return (
 
@@ -26,9 +30,11 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
-                        <footer className=" mt-10 lg:mt-20 max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-end items-center gap-2 py-2">
-                            <VilaIcon className="text-2xl" type="developer" /><span>{'Created by David Vila'}</span>
+                        <footer className=" mt-10 lg:mt-20 max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-between items-center py-2">
+                            <VilaButton font="lightFont" onClick={()=>setVisibleTutorial(true)} buttonStyle="outlined" icon="help" >{'Tutorial'}</VilaButton>
+                            <div className="flex gap-2"><VilaIcon className="text-2xl" type="developer" /><span>{'Created by David Vila'}</span></div>
                         </footer>
+                        {(!user?.tutorialCompleted || visibleTutorial) && <Tutorial />}
                     </>
                     :
                     <main className="flex max-w-[1500px] h-full overflow-auto w-full max-h-[900px] ml-auto mr-auto">

@@ -3,8 +3,8 @@ import { IconType, VilaIcon } from './VilaIcon';
 
 const buildClasses = (props: Props) => {
     let resultClasses = ''
-    const baseClasses = ' flex gap-2 items-center px-1 py-1 rounded-full border-2 border-transparent text-lightFont-500 ' +
-        'enabled:hover:brightness-125 enabled:active:scale-105 transition-transform justify-center aspect-square '
+    const baseClasses = ' flex grow-0 gap-2 items-center px-1 py-1 rounded-full border-2 border-transparent text-lightFont-500 ' +
+        'enabled:hover:brightness-125 enabled:active:scale-105 transition-transform justify-center aspect-square h-fit '
 
     switch (props.buttonStyle) {
         case 'filled':
