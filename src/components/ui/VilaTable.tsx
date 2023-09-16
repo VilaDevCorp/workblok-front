@@ -4,6 +4,7 @@ import { useMisc } from '../../hooks//useMisc';
 import { VilaTextInput } from './VilaTextInput';
 import { ContextMenuPosition, ContextOption, VilaContextMenu } from './VilaContextMenu';
 import { VilaTooltip } from './VilaTooltip';
+import { ScreenWidthEnum, useScreen } from '../../hooks/useScreen';
 
 export interface RealEntity {
     id: string;
@@ -38,6 +39,8 @@ export function VilaTable(props: Props) {
 
     const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
     const tableHeadRef = useRef<HTMLTableSectionElement | null>(null);
+
+    const { screenWidth } = useScreen()
 
 
     useEffect(() => {
@@ -93,20 +96,20 @@ export function VilaTable(props: Props) {
 
     return (
         <div className='w-full flex flex-col h-full'>
-            <div className='flex gap-4 flex-col md:flex-row'>
+            <div className='flex gap-4 flex-col md:flex-row items-center'>
                 {props.searchKey !== undefined && props.setSearchKey ?
-                    <div className='min-w-[50%] flex'>
-                        <VilaTextInput icon={'search'} value={props.searchKey} setValue={props.setSearchKey} />
-                        <VilaTooltip message='Right click in an element to unfold more options' />
+                    <div className='min-w-[50%] flex items-center w-full md:w-auto'>
+                        <VilaTextInput icon={'search'} value={props.searchKey} setValue={props.setSearchKey} noError />
                     </div>
                     :
                     undefined
                 }
-                {props.buttons &&
-                    <div className='ml-auto flex gap-3'>
-                        {props.buttons}
-                    </div>
-                }
+                <div className='ml-auto flex gap-3 items-center'>
+                    <VilaTooltip message={screenWidth > ScreenWidthEnum.m ? 'You can select items by clicking on them and open the menu by right clicking'
+                        : 'You can select items by clicking on them and open the menu by holding down'} />
+
+                    {props.buttons}
+                </div>
             </div>
             <div className='w-full h-full overflow-auto mt-4 relative' ref={loadingContainer} onScroll={() => setContextMenuProps({ visible: false, top: 0, left: 0 })}>
                 {props.isLoading &&
@@ -119,7 +122,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
                 <table className='w-full leading-10  rounded-lg'>
-                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky backdrop-brightness-50 backdrop-blur-sm rounded-t-lg    top-0'>
+                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky backdrop-brightness-50 backdrop-blur-sm rounded-t-lg top-0'>
                         <tr>
                             {props.headers.map((header) =>
                                 <th key={`key_${header}_header`} className={`px-4 py-3 font-["Montserrat"]`}>

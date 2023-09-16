@@ -30,8 +30,8 @@ function Body() {
 
 
   return (
-    <div style={{ background: 'linear-gradient(120deg, rgba(6,15,20,1) 0%, rgba(19,43,55,1) 100%)' }}
-      className='w-full h-full md:h-screen bg-background-900 relative' >
+    <div
+      className='w-full h-full md:h-screen relative' >
       <BrowserRouter>
         {authInfo.isCompletedLoad === true ?
           <>

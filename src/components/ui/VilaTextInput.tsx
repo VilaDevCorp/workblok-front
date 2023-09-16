@@ -10,8 +10,9 @@ export type Props = {
     iconAlignment?: 'left' | 'right'
     type?: TextInputType
     disabled?: boolean
-    errorMsg?:string,
-    maxChars?:number
+    errorMsg?: string,
+    noError?: boolean,
+    maxChars?: number
 }
 
 export function VilaTextInput({ type = 'text', disabled = false, ...props }: Props) {
@@ -24,7 +25,7 @@ export function VilaTextInput({ type = 'text', disabled = false, ...props }: Pro
                 <input className="bg-transparent focus:outline-none w-full" onFocus={() => setIsFocused(true)} maxLength={props.maxChars} onBlur={() => setIsFocused(false)} onChange={(e) => props.setValue(e.target.value)} value={props.value} type={type} disabled={disabled} />
                 {props.icon && props.iconAlignment === 'right' && <VilaIcon type={props.icon} />}
             </div>
-            <p className="text-error h-[14px] text-sm">{props.errorMsg}</p>
+            {!props.noError && <p className="text-error h-[14px] text-sm">{props.errorMsg}</p>}
         </div>
     )
 }

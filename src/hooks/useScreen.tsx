@@ -3,13 +3,14 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 
 export interface ScreenContext {
   screenWidth: number,
+  screenHeight: number,
 }
 
 export const ScreenWidthEnum = {
   s: 425,
   m: 768,
   l: 1024,
-  xl: 1440, 
+  xl: 1440,
 }
 
 const ScreenContext = createContext<ScreenContext>({} as any)
@@ -26,9 +27,11 @@ export const useScreen = () => {
 export const ScreenProvider = ({ children }: { children: ReactNode }) => {
 
   const [screenWidth, setScreenWidth] = useState<number>(window.screen.width)
+  const [screenHeight, setScreenHeight] = useState<number>(window.screen.height)
 
   const onResize = () => {
     setScreenWidth(window.screen.width)
+    setScreenHeight(window.screen.height)
   }
 
   useEffect(() => {
@@ -40,7 +43,8 @@ export const ScreenProvider = ({ children }: { children: ReactNode }) => {
 
 
   const value: ScreenContext = {
-    screenWidth
+    screenWidth,
+    screenHeight,
   }
 
   return (
