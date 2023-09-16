@@ -69,7 +69,7 @@ export function LoginScreen() {
             <PublicFormLayout>
                 <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                 <VilaForm onSubmit={()=>onLogin()} fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
-                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Contraseña' }]} nColumns={1}></VilaForm>
+                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' }]} nColumns={1}></VilaForm>
                 <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
                 <VilaButton className='!w-full !justify-center' disabled={disabledButton} onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
                 <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>

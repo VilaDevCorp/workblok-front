@@ -89,7 +89,7 @@ export function RegisterScreen() {
                 <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                 <VilaForm onSubmit={()=>onRegister()} fields={
                     [{ input: <VilaTextInput value={username} setValue={setUsername} errorMsg={usernameDirty ? usernameMessage : ''} />, label: 'Username' },
-                    { input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Mail' },
+                    { input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
                     { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
                     { input: <VilaTextInput value={repeatPassword} setValue={setRepeatPassword} type='password' errorMsg={passwordMatchError} />, label: 'Repeat password' }
                     ]} nColumns={1}></VilaForm>

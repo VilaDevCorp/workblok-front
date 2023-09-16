@@ -39,7 +39,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
             :
             <div className={`min-h-full flex  flex-col items-center bg-center md:min-h-full h-screen backdrop-blur-sm w-full px-4 py-4 bg-[url("./../../../public/front-vertical-min.jpg")] 
             md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
-                <main className={`flex backdrop-brightness-[20%] backdrop-blur-sm p-8 rounded-lg h-full justify-center items-center py flex-col gap-6 m-auto`}>
+                <main className={`flex backdrop-brightness-[20%] backdrop-blur-sm p-8 rounded-lg h-full md:h-auto justify-center items-center py flex-col gap-6 m-auto`}>
                     <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                     <p className="text-lightFont-500">{'You need an account to view this page'}</p>
                     <VilaButton onClick={() => navigate("/login")} font="lightFont">{'Login'}</VilaButton>
