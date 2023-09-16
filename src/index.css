@@ -22,8 +22,10 @@ select:-webkit-autofill {
 }
 
 html {
-  background: #060f14;
-  font-family: 'Noto Sans JP', sans-serif;
+  /* background: 'red'; */
+  font-family: "Noto Sans JP", sans-serif;
+  background: linear-gradient(120deg, rgba(6,15,20,1) 0%, rgba(19,43,55,1) 100%);
+
 }
 
 #root {

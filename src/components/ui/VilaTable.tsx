@@ -119,7 +119,7 @@ export function VilaTable(props: Props) {
                     </div>
                 }
                 <table className='w-full leading-10  rounded-lg'>
-                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky   top-0'>
+                    <thead ref={tableHeadRef} className='w-full text-lightFont-500 text-left sticky backdrop-brightness-50 backdrop-blur-sm rounded-t-lg    top-0'>
                         <tr>
                             {props.headers.map((header) =>
                                 <th key={`key_${header}_header`} className={`px-4 py-3 font-["Montserrat"]`}>
