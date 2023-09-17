@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth"
 import { Header } from "../organism/Header"
-import logo from './../../../public/logo.svg';
+import logo from './../../../public/logo.svg'
 import { VilaButton } from "./VilaButton";
 import { useSnackbar } from "../../hooks/useSnackbar";
-import { GrUserWorker } from "react-icons/gr";
 import { VilaIcon } from "./VilaIcon";
 import { Tutorial } from "../organism/Tutorial";
 import { useMisc } from "../../hooks/useMisc";
-import { VilaButtonIcon } from "./VilaButtonIcon";
 
 export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: string, children: JSX.Element | JSX.Element[], isPublic?: boolean, fillScreen?: boolean }) {
 
@@ -22,7 +20,7 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
 
         (isPublic || user) ?
             <div className={`min-h-full flex  flex-col items-center h-full md:h-auto md:min-h-full w-full px-4 py-4 
-                ${isPublic && 'flex h-screen backdrop-blur-sm items-center justify-center bg-[url("./../../../public/front-vertical-min.jpg")] md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
+                ${isPublic && 'flex h-screen backdrop-blur-sm items-center justify-center bg-[url("/front-vertical-min.jpg")] md:bg-[url("/front-image-min.jpg")] bg-cover '} `}>
                 {!isPublic ?
                     <>
                         <Header />
@@ -43,8 +41,8 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                 }
             </div>
             :
-            <div className={`min-h-full flex  flex-col items-center bg-center md:min-h-full h-screen backdrop-blur-sm w-full px-4 py-4 bg-[url("./../../../public/front-vertical-min.jpg")] 
-            md:bg-[url("./../../../public/front-image-min.jpg")] bg-cover '} `}>
+            <div className={`min-h-full flex  flex-col items-center bg-center md:min-h-full h-screen backdrop-blur-sm w-full px-4 py-4 bg-[url("/front-vertical-min.jpg")] 
+            md:bg-[url("/front-image-min.jpg")] bg-cover '} `}>
                 <main className={`flex backdrop-brightness-[20%] backdrop-blur-sm p-8 rounded-lg h-full md:h-auto justify-center items-center py flex-col gap-6 m-auto`}>
                     <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                     <p className="text-lightFont-500">{'You need an account to view this page'}</p>

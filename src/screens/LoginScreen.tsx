@@ -1,15 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { useTheme } from 'styled-components';
-import { useApi } from '../hooks/useApi';
+import { useTheme } from 'styled-components';
 import { useAuth } from '../hooks/useAuth';
-import loginImg from './../../public/loginImg.png';
 import { useMisc } from '../hooks/useMisc';
 import { VilaForm } from '../components/ui/VilaForm'
 import { VilaTextInput } from '../components/ui/VilaTextInput';
 import { VilaButton } from '../components/ui/VilaButton';
 import logo from './../../public/logo.svg';
-import { useValidator, notEmptyValidator, emailValidator, minLength8Validator, upperLowerCaseValidator } from '../hooks/useValidator';
+import { useValidator, notEmptyValidator } from '../hooks/useValidator';
 import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { VilaLayout } from '../components/ui/VilaLayout';

@@ -1,5 +1,4 @@
 import { PuffLoader } from 'react-spinners';
-import logo from './../../../public/logo.svg'
 import { VilaLayout } from '../ui/VilaLayout';
 
 export function PageLoadingScreen({ isPublic = false }: { isPublic?: boolean }) {

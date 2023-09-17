@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import headerImg from './../../../public/logo.svg';
 import { HeaderUser } from '../molecule/HeaderUser';
 import { TopMenu } from '../molecule/TopMenu';
