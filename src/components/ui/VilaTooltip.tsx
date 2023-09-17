@@ -13,7 +13,6 @@ export function VilaTooltip({ message }: { message: string }) {
     const showTooltip = () => {
         if (tooltilRef.current !== null) {
             const rect = tooltilRef.current.getBoundingClientRect()
-            console.log(screenWidth)
             if (rect.left > screenWidth / 2) {
                 setInvertedX(true)
             }

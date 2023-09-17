@@ -15,6 +15,7 @@ import StatusCode from 'status-code-enum';
 import { VilaLayout } from '../components/ui/VilaLayout';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { PublicFormLayout } from '../components/organism/PublicFormLayout';
+import { VilaCheckbox } from '../components/ui/VilaCheckbox';
 
 
 export function LoginScreen() {
@@ -26,6 +27,7 @@ export function LoginScreen() {
 
     const [mail, setMail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [rememberMe, setRememberMe] = useState<boolean>(false)
 
     const { isLoading, setIsLoading, triggerReloadUserInfo } = useMisc()
 
@@ -42,7 +44,7 @@ export function LoginScreen() {
         if (mailValid && passwordValid) {
             setIsLoading(true)
             try {
-                await auth.authenticate(mail, password)
+                await auth.authenticate(mail, password, rememberMe)
                 triggerReloadUserInfo()
                 navigate('/')
             } catch (e) {
@@ -68,12 +70,13 @@ export function LoginScreen() {
         <VilaLayout isPublic>
             <PublicFormLayout>
                 <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                <VilaForm onSubmit={()=>onLogin()} fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
-                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' }]} nColumns={1}></VilaForm>
+                <VilaForm onSubmit={() => onLogin()} fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
+                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
+                { input: <VilaCheckbox label='Remember me' value={rememberMe} setValue={setRememberMe} />, label:''}]} nColumns={1}></VilaForm>
                 <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
                 <VilaButton className='!w-full !justify-center' disabled={disabledButton} onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
                 <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>
             </PublicFormLayout>
-        </VilaLayout>
+        </VilaLayout >
     )
 }

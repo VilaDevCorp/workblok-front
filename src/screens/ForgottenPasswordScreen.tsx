@@ -105,7 +105,7 @@ export function ForgottenPasswordScreen() {
                     <>
                         <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
                         <p className='text-lightFont-600 w-fit mb-2' >{"Write your email and we will send you a code for resetting your password in the next screen."}</p>
-                        <VilaForm onSubmit={() => onSendCode} fields={[{ input: < VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' }]} nColumns={1} />
+                        <VilaForm onSubmit={() => onSendCode()} fields={[{ input: < VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' }]} nColumns={1} />
                         <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onSendCode()} font='lightFont' >{'Send code'}</VilaButton>
                     </>
                     :

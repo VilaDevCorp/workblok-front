@@ -8,14 +8,22 @@ export interface FormField {
 
 export function VilaForm({ nColumns = 1, fields, onSubmit }: { nColumns: number, fields: FormField[], onSubmit: () => void }) {
 
+    const onCustomSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit()
+    }
+
     return (
-        <form onSubmit={(e) => { e.preventDefault(); onSubmit() }} className={`flex flex-wrap gap-[20px] w-full `}>
-            {fields.map((field) =>
-                <VilaField key={field.label} label={field.label} nColumns={nColumns}>
-                    {field.input}
-                </VilaField>
-            )}
-            <button type="submit" className="hidden" />
-        </form>
+        <form onSubmit={onCustomSubmit} className={`flex flex-wrap gap-[15px] w-full `
+        }>
+            {
+                fields.map((field) =>
+                    <VilaField key={field.label} label={field.label} nColumns={nColumns}>
+                        {field.input}
+                    </VilaField>
+                )
+            }
+            < button type="submit" className="hidden" />
+        </form >
     )
 }

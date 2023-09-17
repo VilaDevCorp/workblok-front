@@ -11,7 +11,7 @@ export interface AuthContext {
   weekCompletedPercentage: number,
   csrfToken?: string,
   login: (user: string, password: string) => Promise<string>,
-  authenticate: (username: string, password: string) => void,
+  authenticate: (username: string, password: string, rememberMe: boolean) => void,
   logout: () => void,
   isCompletedLoad: boolean
 }
@@ -78,11 +78,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const authenticate = async (username: string, password: string) => {
+  const authenticate = async (username: string, password: string, rememberMe: boolean) => {
     try {
       const csrf = await login(username.toLowerCase().trim(), password)
       setCsrfToken(csrf)
-      localStorage.setItem('csrfToken', csrf)
+
+      if (rememberMe) {
+        localStorage.setItem('csrfToken', csrf)
+      } else {
+        sessionStorage.setItem('csrfToken', csrf)
+      }
     } catch (e) {
       throw e
     }
@@ -121,7 +126,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const loadCsrf = () => {
     if (!csrfToken) {
-      const csrf = localStorage.getItem('csrfToken')
+      let csrf = localStorage.getItem('csrfToken')
+      if (!csrf) {
+        csrf = sessionStorage.getItem('csrfToken')
+      }
       if (csrf) {
         setCsrfToken(csrf)
       }
@@ -183,6 +191,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   const cleanUserParams = async () => {
+    sessionStorage.setItem("csrfToken", "")
     localStorage.setItem("csrfToken", "")
     setCsrfToken('')
     setUser(undefined)
