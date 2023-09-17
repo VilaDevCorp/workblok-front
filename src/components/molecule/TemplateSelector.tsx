@@ -15,7 +15,7 @@ export function TemplateSelector({ startDate }: { startDate: Date | undefined })
 
     const { user } = useAuth()
     const { getAllUserTemplates, applyTemplate } = useApi()
-    const { setIsLoading, triggerReloadTasks } = useMisc()
+    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag } = useMisc()
 
     const [templates, setTemplates] = useState<SelectOption[]>([])
     const [selectedTemplate, setSelectedTemplate] = useState<string>('')
@@ -44,6 +44,7 @@ export function TemplateSelector({ startDate }: { startDate: Date | undefined })
             if (startDate && user) {
                 await applyTemplate(selectedTemplate, { startDate: moment(startDate).format(conf.dateInputFormat), userId: user?.id })
                 triggerReloadTasks()
+                triggerReloadWeekPercentageFlag()
                 snackbar.onOpen('Template applied!', 'check', 'success')
             }
         } catch (e) {
