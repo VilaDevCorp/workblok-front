@@ -147,7 +147,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
-            body: JSON.stringify({ page, name, pageSize: 10, userId }),
+            body: JSON.stringify({ page, name: name.trim(), pageSize: 10, userId }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
@@ -375,7 +375,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         const options: RequestInit = {
             credentials: 'include',
             method: 'POST',
-            body: JSON.stringify({ page, name, pageSize: 10, userId }),
+            body: JSON.stringify({ page, name: name.trim(), pageSize: 10, userId }),
             headers: new Headers({
                 'X-API-CSRF': csrfToken ? csrfToken : '',
                 'content-type': 'application/json',
