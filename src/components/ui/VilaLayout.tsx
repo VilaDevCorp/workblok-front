@@ -26,11 +26,11 @@ export function VilaLayout({ title, children, isPublic, fillScreen }: { title?: 
                 {!isPublic ?
                     <>
                         <Header />
-                        <main className={`w-full flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '}  bg-transparent py-5 lg:py-16 md:px-4 relative`}>
+                        <main className={`w-full flex max-w-[1500px] h-full ${fillScreen && '!h-[calc(100vh-182px)] '}  bg-transparent py-5 2xl:py-16 md:px-4 relative`}>
                             {title ? <h1 className='text-2xl text-primary-500'>{title}</h1> : undefined}
                             {children}
                         </main>
-                        <footer className=" mt-10 lg:mt-20 max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-between items-center py-2">
+                        <footer className=" mt-10 2xl:mt-16 max-w-[1500px] text-highlight text-sm w-full bottom-0 h-[50px] flex justify-between items-center py-2">
                             <VilaButton font="lightFont" onClick={()=>setVisibleTutorial(true)} buttonStyle="outlined" icon="help" >{'Tutorial'}</VilaButton>
                             <div className="flex gap-2"><VilaIcon className="text-2xl" type="developer" /><span>{'Created by David Vila'}</span></div>
                         </footer>
