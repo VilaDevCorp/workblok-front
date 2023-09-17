@@ -85,7 +85,6 @@ export function VilaTable(props: Props) {
                 topPosition = topPositionRelativeToContainer + tableHeadRef.current.clientHeight
                 leftPosition = e.clientX - tableBodyRef.current.getBoundingClientRect().left
                 invertedX = leftPosition > tableBodyRef.current.getBoundingClientRect().width / 2
-                console.log(topPositionRelativeToContainer, tableContainerWithoutHeader)
                 invertedY = topPositionRelativeToContainer - (loadingContainer.current ? loadingContainer.current.scrollTop : 0) > tableContainerWithoutHeader / 2
             }
             setContextMenuProps({

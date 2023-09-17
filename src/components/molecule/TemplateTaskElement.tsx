@@ -2,15 +2,15 @@ import React from 'react';
 import { TemplateTask } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 import { ValueGradient, stylesVars } from '../../utils/stylesVars'
-import { VilaButtonIcon } from '../ui/VilaButtonIcon';
-import { useMisc } from '../../hooks/useMisc';
+import { VilaIcon } from '../ui/VilaIcon';
+import { useDescriptionDialog } from '../../hooks/useDescriptionDialog';
 
 export function TemplateTaskElement({ task, selectedActivities, setSelectedActivities }: {
     task: TemplateTask, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {
 
-    const { setShowDescription } = useMisc()
+    const { onShowDescriptionDialog, onHideDescriptionDialog } = useDescriptionDialog()
 
 
     const onSelect = () => {
@@ -41,7 +41,9 @@ export function TemplateTaskElement({ task, selectedActivities, setSelectedActiv
                 }}>{task.edges.activity.size}</span>
                 {task.edges.activity.description !== undefined &&
                     <span className='text-2xl'>
-                        <VilaButtonIcon icon={'notes'} size='xs' onClick={(e) => { setShowDescription(task.edges.activity.description); e.stopPropagation() }} />
+                        <VilaIcon type={'notes'} onClick={(e) => { onShowDescriptionDialog(task.edges.activity.description, false, e); e.stopPropagation() }}
+                            onMouseEnter={(e) => { onShowDescriptionDialog(task.edges.activity.description, false, e); e.stopPropagation() }}
+                            onMouseLeave={(e) => { onHideDescriptionDialog(); e.stopPropagation() }} />
                     </span>}
             </div>
             <div style={{ overflowWrap: 'anywhere' }}>

@@ -1,31 +1,46 @@
-import React, { useEffect, useRef } from 'react';
-import { useMisc } from '../../hooks/useMisc';
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { VilaButtonIcon } from '../ui/VilaButtonIcon';
+import { useEffect, useRef, useState } from 'react';
+import { useDescriptionDialog } from '../../hooks/useDescriptionDialog';
 
-export function DescriptionDialog({ isModal }: { isModal?: boolean }) {
-    const { showDescription, setShowDescription, setModalShowDescription, modalShowDescription } = useMisc()
+export function DescriptionDialog({ inModal }: { inModal?: boolean }) {
+
     const dialogBox = useRef(null)
+    const { modalText, text, event } = useDescriptionDialog()
 
+    const [top, setTop] = useState<number>(0)
+    const [left, setLeft] = useState<number>(0)
+    const [invertedX, setInvertedX] = useState<boolean>(false)
+    const [invertedY, setInvertedY] = useState<boolean>(false)
 
-    const onClose = () => {
-        if (isModal) {
-            setModalShowDescription('')
+    useEffect(() => {
+        if (event) {
+            const { clientX, clientY } = event
+            setTop(clientY)
+            setLeft(clientX)
+            if (clientX > window.innerWidth / 2) {
+                setInvertedX(true)
+            } else {
+                setInvertedX(false)
+            }
+            if (clientY > window.innerHeight / 2) {
+                setInvertedY(true)
+            } else {
+                setInvertedY(false)
+            }
         } else {
-            setShowDescription('')
-
+            setTop(0)
+            setLeft(0)
+            setInvertedX(false)
+            setInvertedY(false)
         }
-    }
-    useClickOutside(dialogBox, () => onClose())
+    }, [event])
+
 
     return (
         <>
-            {(isModal && modalShowDescription || !isModal && showDescription) &&
-                <article ref={dialogBox} className={`fixed bg-modalTransparent p-4
-                left-1/2  -translate-x-1/2  flex flex-col z-10 mt-4
-                w-[300px] h-[200px] rounded-lg backdrop-blur-sm`}>
-                    <VilaButtonIcon buttonStyle='transparent'  className='w-[20px] ml-auto' icon='close' size='xs' onClick={onClose} />
-                    <p className='w-full h-full overflow-auto'>{isModal ? modalShowDescription : showDescription}</p>
+            {(inModal && modalText || !inModal && text) &&
+                <article ref={dialogBox} style={{ maxWidth: window.screen.width / 2 - 20, top: top, left: left + (invertedX ? -20 : 20) }} className={`fixed bg-modalTransparent p-4
+                flex flex-col z-10 mt-4 w-[300px] rounded-lg backdrop-blur-sm ${invertedX && '-translate-x-full'} ${invertedY && '-translate-y-full'}`}>
+                    <p className='w-full text-lightFont-200 h-full overflow-auto'>{inModal ? modalText : text}</p>
                 </article>}
         </>
     )

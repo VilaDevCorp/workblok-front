@@ -1,18 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Task } from '../../types/entities';
 import { ActivityIcon } from '../atom/ActivityIcon';
 import { ValueGradient, stylesVars } from './../../utils/stylesVars'
 import { VilaIcon } from '../ui/VilaIcon';
-import { VilaButtonIcon } from '../ui/VilaButtonIcon';
-import { useMisc } from '../../hooks/useMisc';
+import { useDescriptionDialog } from '../../hooks/useDescriptionDialog';
 
 export function TaskElement({ task, selectedActivities, setSelectedActivities }: {
     task: Task, selectedActivities: string[],
     setSelectedActivities: React.Dispatch<React.SetStateAction<string[]>>
 }) {
 
-    const {setShowDescription} = useMisc()
+    const {onShowDescriptionDialog, onHideDescriptionDialog} = useDescriptionDialog()
 
     const onSelect = () => {
         if (isSelected) {
@@ -41,7 +39,8 @@ export function TaskElement({ task, selectedActivities, setSelectedActivities }:
                 }}>{task.edges.activity.size}</span>
                 {task.edges.activity.description !== undefined &&
                     <span className='text-2xl'>
-                        <VilaButtonIcon icon={'notes'} size='xs' onClick={(e)=>{setShowDescription(task.edges.activity.description);e.stopPropagation()}} />
+                        <VilaIcon type={'notes'} onClick={(e) => { onShowDescriptionDialog(task.edges.activity.description, false, e); e.stopPropagation() }} onMouseEnter={(e) => { onShowDescriptionDialog(task.edges.activity.description, false, e); e.stopPropagation() }}
+                            onMouseLeave={(e) => { onHideDescriptionDialog(); e.stopPropagation() }} />
                     </span>}
 
             </div>

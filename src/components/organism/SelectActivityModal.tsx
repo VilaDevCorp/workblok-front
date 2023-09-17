@@ -17,13 +17,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import StatusCode from 'status-code-enum';
 import { PuffLoader } from 'react-spinners';
+import { useDescriptionDialog } from '../../hooks/useDescriptionDialog';
 
 export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: () => void }) {
 
     const [searchText, setSearchText] = useState<string>('')
     const [page, setPage] = useState<number>(0)
     const { t } = useTranslation()
-    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag, setModalShowDescription } = useMisc()
+    const { setIsLoading, triggerReloadTasks, triggerReloadWeekPercentageFlag } = useMisc()
     const firstRender = useRef<boolean>(true)
 
     const [activityPage, setActivityPage] = useState<Page<Activity> | undefined>(undefined)
@@ -34,7 +35,8 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
     const [isLoadingActivities, setIsLoadingActivities] = useState<boolean>(false)
-
+    const {onHideDescriptionDialog} = useDescriptionDialog()
+    
     const handleEnterPress = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
             onConfirm()
@@ -42,7 +44,6 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     }
 
     useEffect(() => {
-        setModalShowDescription('')
     }, [])
 
     useEffect(() => {

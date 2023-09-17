@@ -10,7 +10,7 @@ export function ActivityArea({ activities, selectedActivities, setSelectedActivi
 }) {
     return (
         <>
-            <DescriptionDialog isModal />
+            <DescriptionDialog inModal />
             {activities.length > 0 ?
                 activities.map((activity) => <ActivityElement key={activity.id} id={activity.id} activity={activity} selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />)
                 :

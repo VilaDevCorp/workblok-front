@@ -18,10 +18,13 @@ import { useApiError } from '../hooks/useApiError';
 import { SizeIndicator } from '../components/atom/SizeIndicator';
 import { ActivityIcon } from '../components/atom/ActivityIcon';
 import { IconIndicator } from '../components/atom/IconIndicator';
+import { VilaIcon } from '../components/ui/VilaIcon';
+import { useDescriptionDialog } from '../hooks/useDescriptionDialog';
+import { DescriptionDialog } from '../components/atom/DescriptionDialog';
 
 export function ActivitiesScreen() {
 
-    const headers = ['name', 'size', 'icon']
+    const headers = ['name', 'description', 'size', 'icon']
 
 
     const { getActivities, deleteActivities } = useApi();
@@ -41,6 +44,7 @@ export function ActivitiesScreen() {
     const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState<boolean>(false)
     const [activityForEdit, setActivityForEdit] = useState<string | undefined>(undefined)
     const [activitiesForDelete, setActivitiesForDelete] = useState<string[]>([])
+    const { onShowDescriptionDialog, onHideDescriptionDialog } = useDescriptionDialog()
 
 
     useEffect(() => {
@@ -72,7 +76,14 @@ export function ActivitiesScreen() {
             const data = await getActivities(page, searchKey, user?.id)
             setTotalPages(data.totalPages)
             const tableData: TableCell[] = []
-            data.content.map((dataElement) => tableData.push({ displayFields: [dataElement.name, <SizeIndicator size={dataElement.size} />, <IconIndicator icon={dataElement.icon} />], realEntity: dataElement }))
+            data.content.map((dataElement) => tableData.push({
+                displayFields: [dataElement.name, dataElement.description ? <span className='text-2xl'>
+                    <VilaIcon type={'notes'} onClick={(e) => { onShowDescriptionDialog(dataElement.description, false, e); e.stopPropagation() }}
+                        onMouseEnter={(e) => { onShowDescriptionDialog(dataElement.description, false, e); e.stopPropagation() }}
+                        onMouseLeave={(e) => { onHideDescriptionDialog(); e.stopPropagation() }} />
+                </span> : <></>,
+                < SizeIndicator size={dataElement.size} />, <IconIndicator icon={dataElement.icon} />], realEntity: dataElement
+            }))
             if (data.content.length < 1 && page > 1) {
                 setPage((old) => old - 1)
             }
@@ -154,6 +165,7 @@ export function ActivitiesScreen() {
                 </div>
 
             </div>
+            <DescriptionDialog />
             <>{createActivityModalVisible && <CreateActivityModal activityId={activityForEdit} onClose={() => onCloseCreateActivityModal()} />}</>
             <>{confirmDeleteModalVisible && <ConfirmationModal onClick={() => onDelete()} onClose={() => onCloseDeleteConfirmationModal()} label='These activities will be deleted. Are you sure?' />}</>
 

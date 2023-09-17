@@ -1,12 +1,10 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { useMisc } from '../../hooks/useMisc';
 import { TemplateTask } from '../../types/entities';
-import { SelectActivityModal } from './SelectActivityModal';
 import { TemplateDayElement } from '../molecule/TemplateDayElement';
 import { TemplateActivityOptions } from '../molecule/TemplateActivityOptions';
 import { TemplateSelectActivityModal } from './TemplateSelectActivityModal';
 import { PuffLoader } from 'react-spinners';
-import { weekdays } from 'moment';
 import { DescriptionDialog } from '../atom/DescriptionDialog';
 
 
@@ -16,11 +14,6 @@ export function TemplatePlanner({ templateId, tasks, setTasks, isLoadingPlanner 
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
     const { reloadTasksFlag } = useMisc()
     const [selectActivityWeekDay, setSelectActivityWeekDay] = useState<number | undefined>(undefined)
-    const { setShowDescription } = useMisc()
-
-    useEffect(() => {
-        setShowDescription('')
-    }, [])
 
     const onOpenSelectActivityModal = (weekDay: number) => {
         setSelectActivityWeekDay(weekDay)

@@ -34,7 +34,7 @@ export function VilaTooltip({ message }: { message: string }) {
         <span ref={tooltilRef} className='relative'>
             <VilaIcon type='help' className='text-primary-100 text-3xl' onMouseEnter={() => showTooltip()} onMouseLeave={() => hideTooltip()} />
             {visible &&
-                <div style={{ width: (screenWidth / 2 - 20) + 'px' }} className={`bg-modalTransparent absolute ${invertedX ? '-translate-x-full' : 'left-4'} ${invertedY ? '-translate-y-full' : ''} bg-background-300 max-w-[250px] rounded-lg p-2 text-lightFont-300 text-sm z-50`}>{message}</div>}
+                <div style={{ width: (screenWidth / 2 - 20) + 'px' }} className={`bg-modalTransparent backdrop-blur-sm absolute ${invertedX ? '-translate-x-full' : 'left-4'} ${invertedY ? '-translate-y-full' : ''} bg-background-300 max-w-[250px] rounded-lg p-2 text-lightFont-300 text-sm z-50`}>{message}</div>}
         </span>
     )
 }

@@ -15,6 +15,7 @@ import { useSnackbar } from '../../hooks/useSnackbar';
 import { PuffLoader } from 'react-spinners';
 import { conf } from '../../conf';
 import { DescriptionDialog } from '../atom/DescriptionDialog';
+import { useDescriptionDialog } from '../../hooks/useDescriptionDialog';
 
 
 export function Planner() {
@@ -26,15 +27,14 @@ export function Planner() {
     const [tasks, setTasks] = useState<Task[][]>([])
     const [visibleSelectActivityModal, setVisibleSelectActivityModal] = useState<boolean>(false)
     const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-    const { setIsLoading, reloadTasksFlag, savedDate, setSavedDate, setShowDescription } = useMisc()
+    const { reloadTasksFlag, savedDate } = useMisc()
     const [selectActivityDate, setSelectActivityDate] = useState<Date | undefined>(undefined)
     const navigate = useNavigate()
     const { setError } = useApiError({ navigate })
-    const snackbar = useSnackbar()
     const [isLoadingPlanner, setIsLoadingPlanner] = useState<boolean>(false)
+    const {onHideDescriptionDialog} = useDescriptionDialog()
 
     useEffect(() => {
-        setShowDescription('')
         if (savedDate) {
             setStartDate(savedDate)
         } else {
