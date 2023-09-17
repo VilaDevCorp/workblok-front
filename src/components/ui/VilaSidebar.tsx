@@ -74,7 +74,7 @@ export function VilaSidebar({ options = [] }: { options?: MenuOption[] }) {
     return (
         visibleSidebar ?
             <div className={`flex font-["Montserrat"] overflow-y-auto flex-col box-border px-2 py-4 w-[200px] rounded-tr-lg rounded-br-lg z-[5] 
-                top-0 left-0 bg-background-400 h-screen absolute gap-4 text-lightFont-400  ${openSidebar ? 'animate-showSidebar' : 'animate-hideSidebar left-[-300px]'} `} ref={wrapperRef} >
+                top-0 left-0 bg-background-400 h-full absolute gap-4 text-lightFont-400  ${openSidebar ? 'animate-showSidebar' : 'animate-hideSidebar left-[-300px]'} `} ref={wrapperRef} >
                 <VilaButton icon='close' font='lightFont' buttonStyle={'outlined'} onClick={onCloseSidebar}>
                     {'Close'}
                 </VilaButton>

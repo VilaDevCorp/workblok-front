@@ -87,10 +87,10 @@ export function TemplateSelectActivityModal({ templateId, weekDay, onClose }: { 
             await Promise.all(selectedActivities.map(async (activity) => {
                 if (weekDay && user?.id) {
                     await createTemplateTask(templateId, { activityId: activity, weekDay })
-                    triggerReloadTasks()
-                    snackbar.onOpen('Tasks added!', 'check', 'success')
                 }
             }))
+            triggerReloadTasks()
+            snackbar.onOpen('Tasks added!', 'check', 'success')
         } catch (e) {
             setError(e as Error)
         } finally {

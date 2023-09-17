@@ -35,8 +35,8 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
     const { setError } = useApiError({ navigate })
     const snackbar = useSnackbar()
     const [isLoadingActivities, setIsLoadingActivities] = useState<boolean>(false)
-    const {onHideDescriptionDialog} = useDescriptionDialog()
-    
+    const { onHideDescriptionDialog } = useDescriptionDialog()
+
     const handleEnterPress = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
             onConfirm()
@@ -107,10 +107,10 @@ export function SelectActivityModal({ date, onClose }: { date?: Date, onClose: (
             await Promise.all(selectedActivities.map(async (activity) => {
                 if (date && user?.id) {
                     await createTask({ activityId: activity, dueDate: moment(date).format(conf.dateInputFormat), userId: user.id })
-                    triggerReloadTasks()
-                    snackbar.onOpen('Tasks added!', 'check', 'success')
                 }
             }))
+            triggerReloadTasks()
+            snackbar.onOpen('Tasks added!', 'check', 'success')
             triggerReloadWeekPercentageFlag()
             onClose()
         } catch (e) {
