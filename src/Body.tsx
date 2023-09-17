@@ -51,7 +51,7 @@ function Body() {
           :
           <VilaLoadingScreen />
         }
-        {isLoading && <PuffLoader size={55} color='#5387A5' className='!absolute z-100 right-[50px] bottom-10 ' />}
+        {isLoading && <PuffLoader size={55} color='#5387A5' className='!fixed z-100 right-[50px] bottom-10 ' />}
         <VilaSnackbar />
       </BrowserRouter>
     </div >
