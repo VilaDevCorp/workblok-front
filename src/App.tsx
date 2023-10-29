@@ -3,28 +3,37 @@ import { ApiProvider } from './hooks/useApi';
 import { AuthProvider } from './hooks/useAuth';
 import { MiscProvider } from './hooks/useMisc';
 import { ScreenProvider } from './hooks/useScreen';
-import { SnackbarProvider } from './hooks/useSnackbar';
 import '../src/index.css'; // replace with the name of your tailwind css file
 import { ApiErrorProvider } from './hooks/useApiError';
-import { DescriptionDialog } from './components/atom/DescriptionDialog';
-import { DescriptionDialogProvider } from './hooks/useDescriptionDialog';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { QueryClient, QueryClientProvider } from 'react-query';
 
+const colors = {
+  brand: {
+    900: '#1a365d',
+    800: '#153e75',
+    700: '#2a69ac',
+  },
+}
+
+const theme = extendTheme({ colors })
+const queryClient = new QueryClient()
 
 function App() {
   return (<>
     <ScreenProvider>
       <MiscProvider>
-        <SnackbarProvider>
-          <DescriptionDialogProvider>
-            <AuthProvider>
-              <ApiErrorProvider>
-                <ApiProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <ApiErrorProvider>
+              <ApiProvider>
+                <ChakraProvider theme={theme}>
                   <Body />
-                </ApiProvider>
-              </ApiErrorProvider>
-            </AuthProvider>
-          </DescriptionDialogProvider>
-        </SnackbarProvider>
+                </ChakraProvider>
+              </ApiProvider>
+            </ApiErrorProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </MiscProvider>
     </ScreenProvider>
   </>

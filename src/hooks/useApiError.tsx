@@ -2,8 +2,8 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { useSnackbar } from './useSnackbar';
 import { useAuth } from './useAuth';
+import { useToast } from '@chakra-ui/react';
 
 
 export interface ApiErrorContext {
@@ -16,8 +16,8 @@ const ApiErrorContext = createContext<ApiErrorContext>({} as any)
 export const useApiError = ({ navigate }: { navigate: NavigateFunction }) => {
   const ctx = useContext(ApiErrorContext)
   const { error, setError } = ctx
-  const snackbar = useSnackbar()
   const { logout } = useAuth()
+  const toast = useToast()
 
   useEffect(() => {
     if (error) {
@@ -25,13 +25,25 @@ export const useApiError = ({ navigate }: { navigate: NavigateFunction }) => {
         if (error.cause === StatusCode.ClientErrorForbidden) {
           logout()
           navigate("/login")
-          snackbar.onOpen('Your session has expired', 'cancel', 'error')
+          toast({
+            title: 'Your session has expired',
+            status: 'error',
+            duration: 5000,
+          })
           return
         }
-        snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+        toast({
+          title: 'An internal error has occurred',
+          status: 'error',
+          duration: 5000,
+        })
       } else {
-        snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
-      }
+        toast({
+          title: 'An internal error has occurred',
+          status: 'error',
+          duration: 5000,
+        })
+        }
       setError(undefined)
     }
   }, [ctx.error])

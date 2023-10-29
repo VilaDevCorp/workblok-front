@@ -95,35 +95,15 @@ export default {
     },
     extend: {
       keyframes: {
-        showAnimation: {
-          "0%": { transform: "scale(0)" },
-          "100%": { transform: "scale(1)" },
-        },
-        hideAnimation: {
+        loadingPulseAnimation: {
           "0%": { transform: "scale(1)" },
-          "100%": { transform: "scale(0)" },
-        },
-        showSnackbar: {
-          "0%": { opacity: 0 },
-          "20%": { opacity: 1 },
-          "80%": { opacity: 1 },
-          "100%": { opacity: 0 },
-        },
-        showSidebarAnimation: {
-          "0%": { left: "-300px" },
-          "100%": { left: 0 },
-        },
-        hideSidebarAnimation: {
-          "0%": { left: 0 },
-          "100%": { left: "-300px" },
+          "100%": { transform: "scale(1.3)" },
         },
       },
       animation: {
-        showModal: "showAnimation .1s linear",
-        hideModal: "hideAnimation .1s linear",
-        showSnackbar: "showSnackbar 4s linear 1",
-        hideSidebar: "hideSidebarAnimation .3s",
-        showSidebar: "showSidebarAnimation .3s ",
+        //give me the possibilities to use in my animation
+
+        loadingPulse: "loadingPulseAnimation .8s ease-in infinite alternate ",
       },
     },
   },

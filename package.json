@@ -1,5 +1,5 @@
 {
-  "name": "pontevedra-front",
+  "name": "appname",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/recharts": "^1.8.24",
-    "@types/styled-components": "^5.1.26",
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "autoprefixer": "^10.4.14",
+    "framer-motion": "^10.16.4",
     "i18next": "^22.4.10",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.1.1",
@@ -20,12 +22,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.1.5",
-    "react-icons": "^4.7.1",
+    "react-icons": "^4.11.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.4.5",
-    "react-spinners": "^0.13.7",
-    "recharts": "^2.7.2",
     "status-code-enum": "^1.0.0",
-    "styled-components": "^5.3.6",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {

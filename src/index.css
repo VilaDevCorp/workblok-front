@@ -24,8 +24,6 @@ select:-webkit-autofill {
 html {
   /* background: 'red'; */
   font-family: "Noto Sans JP", sans-serif;
-  background: linear-gradient(120deg, rgba(6,15,20,1) 0%, rgba(19,43,55,1) 100%);
-
 }
 
 #root {
@@ -51,38 +49,18 @@ html {
   height: 0;
 }
 
-.fade-out-list::before {
-  content: "";
-  display: block;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  height: 10px; /* Adjust the height of the fade-out effect as needed */
-  background: rgb(0, 0, 0);
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(19, 43, 55, 1) 91%
-  );
-  pointer-events: none; /* Allow interactions with underlying elements */
+
+@keyframes liquidMoving {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-200%);
+  }
 }
 
-.fade-out-list::after {
-  content: "";
-  display: block;
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 10px; /* Adjust the height of the fade-out effect as needed */
-  background: rgb(19, 43, 55);
-  background: linear-gradient(
-    0deg,
-    rgba(19, 43, 55, 1) 0%,
-    rgba(0, 0, 0, 0) 91%
-  );
-  pointer-events: none; /* Allow interactions with underlying elements */
+
+[id*="liquid"] {
+  animation: liquidMoving 2s linear infinite;
 }

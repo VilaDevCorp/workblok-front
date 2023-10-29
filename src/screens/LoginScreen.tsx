@@ -1,80 +1,162 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from 'styled-components';
 import { useAuth } from '../hooks/useAuth';
 import { useMisc } from '../hooks/useMisc';
-import { VilaForm } from '../components/ui/VilaForm'
-import { VilaTextInput } from '../components/ui/VilaTextInput';
-import { VilaButton } from '../components/ui/VilaButton';
-import logo from './../../public/logo.svg';
 import { useValidator, notEmptyValidator } from '../hooks/useValidator';
 import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
-import { VilaLayout } from '../components/ui/VilaLayout';
-import { useSnackbar } from '../hooks/useSnackbar';
 import { PublicFormLayout } from '../components/organism/PublicFormLayout';
-import { VilaCheckbox } from '../components/ui/VilaCheckbox';
+import { Layout } from '../components/organism/Layout';
+import { FormControl, InputGroup, Input, InputLeftElement, FormErrorMessage, FormHelperText, Checkbox, Button, useToast } from '@chakra-ui/react';
+import { HiOutlineMail } from 'react-icons/hi';
+import { TbLock } from 'react-icons/tb';
+import { Typography } from '../components/atom/Typography';
+import { Link } from '../components/atom/Link';
+import { IoMdClose } from 'react-icons/io';
+import { useApi } from '../hooks/useApi';
 
 
 export function LoginScreen() {
 
     const auth = useAuth()
     const navigate = useNavigate()
-    const theme = useTheme()
-    const snackbar = useSnackbar()
+    const { sendVerificationCode } = useApi()
 
-    const [mail, setMail] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [rememberMe, setRememberMe] = useState<boolean>(false)
+    const [notValidatedAccount, setNotValidatedAccount] = useState<boolean>(false)
 
     const { isLoading, setIsLoading, triggerReloadUserInfo } = useMisc()
 
-    const [mailDirty, mailError, mailMessage, mailValidate] = useValidator(mail, [notEmptyValidator]);
+    const [emailDirty, emailError, emailMessage, emailValidate] = useValidator(email, [notEmptyValidator]);
     const [passwordDirty, passwordError, passwordMessage, passwordValidate] = useValidator(password, [notEmptyValidator]);
 
+    const toast = useToast()
 
-    const disabledButton = isLoading || mailError || passwordError
+    const onResendCode = async () => {
+        setIsLoading(true)
+        try {
+            await sendVerificationCode({ email, type: 'validate_account' })
+            toast({
+                title: 'The code was succesfully sent!',
+                status: 'success',
+                duration: 5000,
+            })
+        } catch (e) {
+            toast({
+                title: 'There was an error sending the new code. Try again',
+                status: 'error',
+                duration: 5000,
+            })
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const disabledButton = isLoading || emailError || passwordError
 
     const onLogin = async () => {
-        const mailValid = mailValidate()
+        const emailValid = emailValidate()
         const passwordValid = passwordValidate()
 
-        if (mailValid && passwordValid) {
+        if (emailValid && passwordValid) {
             setIsLoading(true)
             try {
-                await auth.authenticate(mail, password, rememberMe)
+                await auth.authenticate(email, password, rememberMe)
                 triggerReloadUserInfo()
                 navigate('/')
             } catch (e) {
                 setIsLoading(false)
                 if (e instanceof ApiError) {
                     if (e.cause === StatusCode.ClientErrorUnauthorized && e.errCode === '002') {
-                        navigate(`/validate/${mail}`)
+                        setNotValidatedAccount(true)
                     }
                     if (e.cause === StatusCode.ClientErrorUnauthorized && e.errCode === '001' || e.cause === StatusCode.ClientErrorNotFound) {
-                        snackbar.onOpen('Wrong credentials', 'cancel', 'error')
+                        toast({
+                            title: 'Wrong credentials',
+                            status: 'error',
+                            duration: 5000,
+                        })
                     }
                 } else {
-                    snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+                    toast({
+                        title: 'An internal error has occurred',
+                        status: 'error',
+                        duration: 5000,
+                    })
                 }
             }
             setIsLoading(false)
         }
     }
 
-    const linkClasses = 'text-secondary-100  self-start cursor-pointer hover:text-secondary-400'
-
     return (
-        <VilaLayout isPublic>
-            <PublicFormLayout>
-                <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                <VilaForm onSubmit={() => onLogin()} fields={[{ input: <VilaTextInput value={mail} setValue={setMail} errorMsg={mailDirty ? mailMessage : ''} />, label: 'Email' },
-                { input: <VilaTextInput value={password} setValue={setPassword} type='password' errorMsg={passwordDirty ? passwordMessage : ''} />, label: 'Password' },
-                { input: <VilaCheckbox label='Remember me' value={rememberMe} setValue={setRememberMe} />, label:''}]} nColumns={1}></VilaForm>
-                <a className={linkClasses} onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</a>
-                <VilaButton className='!w-full !justify-center' disabled={disabledButton} onClick={() => onLogin()} icon={'login'} font='lightFont' >{'Login'}</VilaButton>
-                <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't have an account? "}<a className={linkClasses} onClick={() => navigate("/register")}>{'Sign up'}</a></span>
+        <Layout isPublic>
+            <PublicFormLayout title={'Sign in'}>
+                {!notValidatedAccount ?
+                    <>
+                        <FormControl isInvalid={emailDirty && emailError}>
+                            <InputGroup>
+                                <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <InputLeftElement
+                                    pointerEvents='none'
+                                    color='gray.300'
+                                    fontSize='1.2em'
+                                >
+                                    <HiOutlineMail color='gray.300' />
+                                </InputLeftElement>
+                            </InputGroup>
+                            {emailError && emailDirty ?
+                                <FormErrorMessage>{emailMessage}</FormErrorMessage>
+                                : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
+                            }
+                        </FormControl>
+
+                        <FormControl isInvalid={passwordDirty && passwordError}>
+                            <InputGroup>
+                                <Input placeholder="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <InputLeftElement
+                                    pointerEvents='none'
+                                    color='gray.300'
+                                    fontSize='1.2em'
+                                >
+                                    <TbLock color='gray.300' />
+                                </InputLeftElement>
+                            </InputGroup>
+                            {passwordDirty && passwordError ?
+                                <FormErrorMessage>{passwordMessage}</FormErrorMessage>
+                                : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
+                            }
+                        </FormControl>
+                        <FormControl>
+                            <Checkbox onChange={(e) => setRememberMe(e.target.checked)}>
+                                {'Remember me'}
+                            </Checkbox>
+                            <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
+                        </FormControl>
+                        <Button isLoading={isLoading} isDisabled={disabledButton} onClick={onLogin}>{'Sign in'}</Button>
+                        <Link className='mt-2' onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</Link>
+                        <span className='flex mt-5'>
+                            <Typography>{`New here? ${'\u00A0'}`}</Typography><Link onClick={() => navigate("/register")}>{'Sign up'}</Link>
+                        </span>
+                    </>
+                    :
+                    <>
+
+                        <div className='flex gap-2'>
+                            <IoMdClose className='text-3xl text-error' />
+                            <Typography mode='body' className='mb-4'>{'Your account has not been validated'}</Typography>
+                        </div>
+                        <Typography mode='body' className='mb-4'>{`In order to validate the account you should follow the instructions we sent you via email`}</Typography>
+
+                        <span >
+                            <Typography mode='body'>{`You can't see the email? Try to ${'\u00A0'}`}</Typography>
+                            <Link onClick={() => onResendCode()}>{' send another code'}</Link>
+                        </span>
+                    </>}
             </PublicFormLayout>
-        </VilaLayout >
+
+        </Layout >
     )
 }

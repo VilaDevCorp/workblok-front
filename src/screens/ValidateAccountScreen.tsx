@@ -1,96 +1,112 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useTheme } from 'styled-components';
 import { useApi } from '../hooks/useApi';
 import { useMisc } from '../hooks/useMisc';
-import { VilaForm } from '../components/ui/VilaForm'
-import { VilaTextInput } from '../components/ui/VilaTextInput';
-import { VilaButton } from '../components/ui/VilaButton';
 import logo from './../../public/logo.svg';
-import { useValidator, notEmptyValidator } from '../hooks/useValidator';
-import { useSnackbar } from '../hooks/useSnackbar';
 import { ApiError } from '../types/types';
 import StatusCode from 'status-code-enum';
-import { VilaLayout } from '../components/ui/VilaLayout';
 import { PublicFormLayout } from '../components/organism/PublicFormLayout';
-import { VilaIcon } from '../components/ui/VilaIcon';
+import { Layout } from '../components/organism/Layout';
+import { Spinner, useToast } from '@chakra-ui/react';
+import { Logo } from '../components/atom/Logo';
+import { Typography } from '../components/atom/Typography';
+import { BiCheck } from 'react-icons/bi';
+import { IoMdClose } from 'react-icons/io';
+import { Link } from '../components/atom/Link';
 
 
 export function ValidateAccountScreen() {
 
     const navigate = useNavigate()
-    const theme = useTheme()
     const { useVerificationCode, sendVerificationCode } = useApi()
-    const [code, setCode] = useState<string>('')
     const [step, setStep] = useState<number>(1)
-    const { userMail } = useParams();
+    const { code, userMail } = useParams();
+    const [codeError, setCodeError] = useState<string>('')
 
     const { isLoading, setIsLoading } = useMisc()
-    const snackbar = useSnackbar()
-    const [codeDirty, codeError, codeMessage, codeValidate] = useValidator(code, [notEmptyValidator]);
+    const toast = useToast()
 
-    const disabledButton = isLoading || codeError
+    useEffect(() => {
+        onValidate()
+    }, [])
+
 
     const onValidate = async () => {
-        const codeValid = codeValidate()
-        if (codeValid) {
-            setIsLoading(true)
-            try {
-                await useVerificationCode({ code, mail: userMail!, type: 'validate_account' })
-                setStep(2)
-                setTimeout(() => {
-                    navigate('/login')
-                }, 3500);
-            } catch (e) {
-                if (e instanceof ApiError) {
-                    if (e.cause === StatusCode.ClientErrorNotFound || e.cause === StatusCode.ClientErrorUnauthorized) {
-                        snackbar.onOpen('The code is not correct', 'cancel', 'error')
-                    }
-                    if (e.cause === StatusCode.ClientErrorGone) {
-                        snackbar.onOpen('The code has expired', 'cancel', 'error')
-                    }
-                } else {
-                    snackbar.onOpen('An internal error has occurred', 'cancel', 'error')
+        setIsLoading(true)
+        try {
+            await useVerificationCode({ code: code!, email: userMail!, type: 'validate_account' })
+        } catch (e) {
+            if (e instanceof ApiError) {
+                if (e.cause === StatusCode.ClientErrorNotFound || e.cause === StatusCode.ClientErrorUnauthorized) {
+                    setCodeError('The code is not correct')
                 }
-
-                setIsLoading(false)
+                if (e.cause === StatusCode.ClientErrorGone) {
+                    setCodeError('The code has expired')
+                }
+            } else {
+                setCodeError('An internal error has occurred')
             }
+        } finally {
+            setStep(2)
             setIsLoading(false)
         }
+
     }
     const onResendCode = async () => {
         setIsLoading(true)
         try {
-            await sendVerificationCode({ mail: userMail!, type: 'validate_account' })
-            snackbar.onOpen('The code was succesfully sent!', 'check', 'success')
+            await sendVerificationCode({ email: userMail!, type: 'validate_account' })
+            toast({
+                title: 'The code was succesfully sent!',
+                status: 'success',
+                duration: 5000,
+            })
         } catch (e) {
-            snackbar.onOpen('There was an error sending the new code. Try again', 'cancel', 'error')
+            toast({
+                title: 'There was an error sending the new code. Try again',
+                status: 'error',
+                duration: 5000,
+            })
+        } finally {
             setIsLoading(false)
         }
-        setIsLoading(false)
     }
 
-    const linkClasses = 'text-secondary-100  self-start cursor-pointer hover:text-secondary-400'
-
     return (
-        <VilaLayout isPublic>
-            <PublicFormLayout>
+        <Layout isPublic>
+            <PublicFormLayout title={'Email validation'}>
                 {step === 1 ?
-                    <>
-                        <img src={logo} className='w-[120px] h-[120px]' alt='Logo login' />
-                        <p className='text-lightFont-600 w-fit mb-2' >{"Your email hasn't been validated yet. Write your email and the code we sent you for activating your account."}</p>
-                        <VilaForm onSubmit={() => onValidate()} fields={[{ input: <VilaTextInput value={userMail!} setValue={() => false} disabled />, label: 'Email' },
-                        { input: <VilaTextInput value={code} setValue={setCode} errorMsg={codeDirty ? codeMessage : ''} />, label: 'Code' }]} nColumns={1}></VilaForm>
-                        <VilaButton disabled={disabledButton} className='!w-full !justify-center mt-6 mb-4' onClick={() => onValidate()} font='lightFont' >{'Validate'}</VilaButton>
-                        <span className='text-lightFont-700 w-full justify-center gap-4 flex' >{"You don't see the code in your email? "}<a className={linkClasses} onClick={() => onResendCode()}>{'Send a new code'}</a></span>
-                    </>
+                    <div className='ml-auto mr-auto mt-2 flex flex-col items-center gap-4'>
+                        <Spinner speed='.8s' size={'xl'} color='blue.500' />
+                        <Typography mode='body' className='mb-4'>{'Validating...'}</Typography>
+                    </div>
                     :
                     <>
-                        <VilaIcon type='check' className='text-6xl text-success' />
-                        <p className='text-lightFont-600 w-fit mb-2' >{"Email validated! Now you can login."}</p>
+                        {codeError ?
+                            <>
+                                <div className='flex gap-2'>
+                                    <IoMdClose className='text-3xl text-error' />
+                                    <Typography mode='body' className='mb-4'>{codeError}</Typography>
+                                </div>
+                                <span className='flex'>
+                                    <Typography mode='body'>{`Try to ${'\u00A0'}`}</Typography>
+                                    <Link onClick={() => onResendCode()}>{' send another code'}</Link>
+                                </span>
+                            </>
+                            :
+                            <>
+                                <div className='flex gap-2'>
+                                    <BiCheck className='text-3xl text-success' />
+                                    <Typography mode='body' className='mb-4'>{'Your email has been validated'}</Typography>
+                                </div>
+                                <span className='flex'>
+                                    <Typography mode='body'>{`Now you can${'\u00A0'}`}</Typography>
+                                    <Link onClick={() => navigate('/login')}>{' sign in'}</Link>
+                                </span>
+                            </>}
                     </>
                 }
-            </PublicFormLayout>
-        </VilaLayout>
+            </PublicFormLayout >
+        </Layout >
     )
 }
