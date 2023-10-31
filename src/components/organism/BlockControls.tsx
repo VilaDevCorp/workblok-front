@@ -20,6 +20,8 @@ import { useApi } from "../../hooks/useApi";
 import moment from "moment";
 import { Block } from "../../types/entities";
 import { Typography } from "../atom/Typography";
+import { useApiError } from "../../hooks/useApiError";
+import { useNavigate } from "react-router-dom";
 
 export function BlockControls({}: {}) {
   const [time, setTime] = useState(25);
@@ -31,6 +33,8 @@ export function BlockControls({}: {}) {
   const queryClient = useQueryClient();
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [resultBlock, setResultBlock] = useState<Block | undefined>(undefined);
+  const navigation = useNavigate();
+  const { setError } = useApiError(navigation);
 
   useEffect(() => {
     const interval = setInterval(() => onAddSecond(), 1000);
@@ -66,6 +70,7 @@ export function BlockControls({}: {}) {
           status: "error",
           duration: 5000,
         });
+        setError(err as Error);
       },
     });
 

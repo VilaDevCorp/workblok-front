@@ -10,16 +10,18 @@ import { useQuery } from "react-query";
 import { Section } from "../components/organism/Section";
 import { BlocksGrid } from "../components/organism/BlocksGrid";
 import { BlockControls } from "../components/organism/BlockControls";
+import { useApiError } from "../hooks/useApiError";
 
 export function HomeScreen() {
-  const auth = useAuth();
+  const { csrfToken } = useAuth();
   const { searchBlocks } = useApi();
   const today = moment().startOf("day").toDate();
   const [finishedBlocks, setFinishedBlocks] = useState<Block[]>([]);
   const toast = useToast();
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-
+  const navigation = useNavigate();
+  const { setError } = useApiError(navigation);
   const { isLoading: isLoadingFinishedBlocks } = useQuery({
     queryKey: ["getFinishedBlocks", page],
     queryFn: () =>
@@ -39,6 +41,7 @@ export function HomeScreen() {
         status: "error",
         duration: 5000,
       });
+      setError(err as Error);
     },
   });
 
