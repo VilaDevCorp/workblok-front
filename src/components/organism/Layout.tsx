@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Header } from "../organism/Header";
-import logo from "./../../../public/logo.svg";
+import logo from "/logo.svg";
 import { Footer } from "./Footer";
-import { Logo } from "../atom/Logo";
 import { Typography } from "../atom/Typography";
 import { Button } from "@chakra-ui/react";
 
@@ -45,7 +44,7 @@ export function Layout({
       <main
         className={`flex p-8 rounded-lg h-full md:h-auto justify-center items-center py flex-col gap-6 m-auto`}
       >
-        <Logo className="mb-10" />
+        <img src={logo} alt="Logo" className="mb-10 self-center  w-[200px]" />
         <Typography>{"You need an account to view this page"}</Typography>
         <Button onClick={() => navigate("/login")}>{"Sign in"}</Button>
       </main>
