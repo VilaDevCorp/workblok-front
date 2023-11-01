@@ -16,34 +16,36 @@ export function HomeScreen() {
   const { csrfToken } = useAuth();
   const { searchBlocks } = useApi();
   const today = moment().startOf("day").toDate();
-  const [finishedBlocks, setFinishedBlocks] = useState<Block[]>([]);
   const toast = useToast();
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
   const navigation = useNavigate();
   const { setError } = useApiError(navigation);
-  const { isLoading: isLoadingFinishedBlocks } = useQuery({
-    queryKey: ["getFinishedBlocks", page],
-    queryFn: () =>
-      searchBlocks({
-        page,
-        pageSize: 9,
-        isActive: false,
-        startDate: today,
-      }),
-    onSuccess: (data) => {
-      setFinishedBlocks(data.content);
-      setTotalPages(data.totalPages);
-    },
-    onError: (err) => {
-      toast({
-        title: "Error obtaining your blocks",
-        status: "error",
-        duration: 5000,
-      });
-      setError(err as Error);
-    },
-  });
+  const { data: finishedBlocks, isLoading: isLoadingFinishedBlocks } = useQuery(
+    {
+      queryKey: ["getFinishedBlocks", page],
+      queryFn: () =>
+        searchBlocks({
+          page,
+          pageSize: 9,
+          isActive: false,
+          startDate: today,
+        }),
+
+      onSuccess: (data) => {
+        if (data.content.length < 1 && page > 0) {
+          setPage(page - 1);
+        }
+      },
+      onError: (err) => {
+        toast({
+          title: "Error obtaining your blocks",
+          status: "error",
+          duration: 5000,
+        });
+        setError(err as Error);
+      },
+    }
+  );
 
   return (
     <Layout>
@@ -52,10 +54,10 @@ export function HomeScreen() {
       </Section>
       <Section title="Finished blocks">
         <BlocksGrid
-          blocks={finishedBlocks}
+          blocks={finishedBlocks?.content || []}
           page={page}
           setPage={setPage}
-          totalPages={totalPages}
+          totalPages={finishedBlocks?.totalPages || 0}
         />
       </Section>
     </Layout>

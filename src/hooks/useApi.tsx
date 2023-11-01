@@ -22,6 +22,7 @@ export interface ApiContext {
   finishBlock: (blockId: string) => Promise<void>;
   getBlock: (id: string) => Promise<Block>;
   searchBlocks: (form: SearchBlockForm) => Promise<Page<Block>>;
+  deleteBlocks: (ids: string[]) => Promise<void>;
 }
 
 const ApiContext = createContext<ApiContext>({} as any);
@@ -249,7 +250,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     return result;
   };
 
-  const deleteActivities = async (ids: string[]): Promise<void> => {
+  const deleteBlocks = async (ids: string[]): Promise<void> => {
     const url = `${apiUrl}private/block`;
     const options: RequestInit = {
       credentials: "include",
@@ -284,6 +285,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     applyPenalty,
     getBlock,
     searchBlocks,
+    deleteBlocks
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

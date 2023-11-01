@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Block } from "../../types/entities";
-import { IconButton } from "@chakra-ui/react";
-import moment from "moment";
+import { Button, IconButton } from "@chakra-ui/react";
+import moment, { invalid } from "moment";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { Jar } from "../atom/Jar";
+import { IoMdRemove } from "react-icons/io";
+import { useApi } from "../../hooks/useApi";
+import { useMutation, useQueryClient } from "react-query";
 
 export function BlocksGrid({
   blocks,
@@ -16,12 +19,42 @@ export function BlocksGrid({
   setPage: (page: number) => void;
   totalPages: number;
 }) {
+  const [selectedBlocks, setSelectedBlocks] = useState<Block[]>([]);
+  const { deleteBlocks } = useApi();
+  const queryclient = useQueryClient();
+
+  const { mutate: onDeleteBlocks } = useMutation({
+    mutationKey: "deleteBlocks",
+    mutationFn: () => deleteBlocks(selectedBlocks.map((b) => b.id)),
+    onSuccess: () => {
+      queryclient.invalidateQueries(["getFinishedBlocks"]);
+      setSelectedBlocks([]);
+    },
+  });
+
+  const onClickBlock = (block: Block) => {
+    if (selectedBlocks.includes(block)) {
+      setSelectedBlocks(selectedBlocks.filter((b) => b.id !== block.id));
+    } else {
+      setSelectedBlocks([...selectedBlocks, block]);
+    }
+  };
+
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-4">
+      <Button
+        leftIcon={<IoMdRemove />}
+        isDisabled={selectedBlocks.length < 1}
+        onClick={() => onDeleteBlocks()}
+      >
+        Delete
+      </Button>
+      <div className="grid grid-cols-[repeat(auto-fill,88px)] gap-4 justify-between">
         {blocks.map((block) => (
           <Jar
             key={block.id}
+            onClick={() => onClickBlock(block)}
+            isSelected={selectedBlocks.includes(block)}
             size={80}
             time={block.targetMinutes}
             passedTime={moment(block.finishDate).diff(
