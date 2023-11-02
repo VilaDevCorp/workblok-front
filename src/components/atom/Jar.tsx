@@ -1,4 +1,8 @@
-import React, { useMemo, useId } from "react";
+import { IconButton } from "@chakra-ui/react";
+import React, { useMemo, useId, useState } from "react";
+import { BiInfoCircle, BiPlus } from "react-icons/bi";
+import { IoIosInformation } from "react-icons/io";
+import { DetailsModal } from "../../modals/DetailsModal";
 
 export function Jar({
   size = 100,
@@ -7,6 +11,7 @@ export function Jar({
   distractionMinutes = 0,
   onClick,
   isSelected,
+  blockId,
 }: {
   size: number;
   time: number;
@@ -14,6 +19,7 @@ export function Jar({
   distractionMinutes?: number;
   onClick?: () => void;
   isSelected?: boolean;
+  blockId?: string;
 }) {
   const getPercentageOffset = (percentage: number) => {
     if (percentage === 0) return 0;
@@ -32,9 +38,23 @@ export function Jar({
   );
 
   const id = useId();
+  const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className={ onClick && `w-full hover:backdrop-brightness-75 transition-[backdrop-filter] border-4 border-transparent rounded-[25px] ${isSelected && " !border-primary-500 backdrop-"}`}>
+    <div
+      className={`${onClick && "hover:backdrop-brightness-75"}
+      } transition-[backdrop-filter] relative border-4 border-transparent rounded-[25px] ${
+        isSelected && " !border-primary-500 backdrop-brightness-75"
+      }`}
+    >
+      {blockId && (
+        <IconButton
+          onClick={() => setShowDetails(true)}
+          className={`!absolute !bg-transparent opacity-25 hover:opacity-100  rounded-full !w-[30px] !h-[30px] !min-w-[30px] !min-h-[30px] !top-[10%] !z-10 !right-[50%] translate-x-[50%]`}
+          aria-label="dsf"
+          icon={<BiInfoCircle size={24} />}
+        ></IconButton>
+      )}
       <svg
         width={size}
         height={size * 2}
@@ -98,35 +118,6 @@ export function Jar({
           </g>
         </g>
 
-        {passedTime - distractionMinutes > time && (
-          <g>
-            <rect
-              y={0.2 * 2 * size - 15}
-              x={size / 2 - 15}
-              rx={100}
-              width={30}
-              height={30}
-              fill="white"
-              opacity={0.7}
-            ></rect>
-            <text
-              textAnchor="middle"
-              y={0.2 * 2 * size}
-              height={20}
-              alignmentBaseline="middle"
-              x={"50%"}
-              stroke={"green"}
-              fill={"green"}
-              style={{
-                wordWrap: "break-word",
-                width: "100%",
-                fontWeight: "lighter",
-                padding: "0 10%",
-                fontSize: ".8rem",
-              }}
-            >{`+${passedTime - distractionMinutes - time}`}</text>
-          </g>
-        )}
         <text
           y={"50%"}
           x={"50%"}
@@ -142,7 +133,11 @@ export function Jar({
             padding: "0 10%",
             fontSize: "1.3rem",
           }}
-        >{`${time}`}</text>
+        >{`${
+          passedTime - distractionMinutes > time
+            ? passedTime - distractionMinutes
+            : time
+        }`}</text>
         {distractionMinutes && distractionMinutes > 0 && (
           <g>
             <rect
@@ -188,6 +183,9 @@ export function Jar({
           strokeDashoffset="0"
         />
       </svg>
+      {showDetails && blockId && (
+        <DetailsModal blockId={blockId} onClose={() => setShowDetails(false)} />
+      )}
     </div>
   );
 }

@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Block } from "../../types/entities";
 import { Button, IconButton } from "@chakra-ui/react";
 import moment, { invalid } from "moment";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { BiChevronLeft, BiChevronRight, BiPlus } from "react-icons/bi";
 import { Jar } from "../atom/Jar";
 import { IoMdRemove } from "react-icons/io";
 import { useApi } from "../../hooks/useApi";
 import { useMutation, useQueryClient } from "react-query";
+import { ConfirmationModal } from "../../modals/ConfirmationModal";
 
 export function BlocksGrid({
   blocks,
@@ -22,6 +23,7 @@ export function BlocksGrid({
   const [selectedBlocks, setSelectedBlocks] = useState<Block[]>([]);
   const { deleteBlocks } = useApi();
   const queryclient = useQueryClient();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { mutate: onDeleteBlocks } = useMutation({
     mutationKey: "deleteBlocks",
@@ -29,6 +31,7 @@ export function BlocksGrid({
     onSuccess: () => {
       queryclient.invalidateQueries(["getFinishedBlocks"]);
       setSelectedBlocks([]);
+      setDeleteModalOpen(false);
     },
   });
 
@@ -40,12 +43,16 @@ export function BlocksGrid({
     }
   };
 
+  const onPrepareDelete = () => {
+    setDeleteModalOpen(true);
+  };
+
   return (
     <>
       <Button
         leftIcon={<IoMdRemove />}
         isDisabled={selectedBlocks.length < 1}
-        onClick={() => onDeleteBlocks()}
+        onClick={() => onPrepareDelete()}
       >
         Delete
       </Button>
@@ -53,6 +60,7 @@ export function BlocksGrid({
         {blocks.map((block) => (
           <Jar
             key={block.id}
+            blockId={block.id}
             onClick={() => onClickBlock(block)}
             isSelected={selectedBlocks.includes(block)}
             size={80}
@@ -78,6 +86,13 @@ export function BlocksGrid({
           onClick={() => setPage(page + 1)}
           isDisabled={page + 1 >= totalPages}
         />
+        <ConfirmationModal
+          open={deleteModalOpen}
+          setOpen={() => setDeleteModalOpen(false)}
+          onConfirm={onDeleteBlocks}
+        >
+          {"Are you sure you want to delete these blocks?"}
+        </ConfirmationModal>
       </div>
     </>
   );
