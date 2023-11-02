@@ -87,9 +87,10 @@ export function BlocksGrid({
           isDisabled={page + 1 >= totalPages}
         />
         <ConfirmationModal
+          title="Delete blocks"
           open={deleteModalOpen}
           setOpen={() => setDeleteModalOpen(false)}
-          onConfirm={onDeleteBlocks}
+          confirmAction={onDeleteBlocks}
         >
           {"Are you sure you want to delete these blocks?"}
         </ConfirmationModal>
