@@ -14,19 +14,19 @@ export function Typography({
     switch (mode) {
       case "title":
         return (
-          <Heading className={className} as={"h1"} size={"md"}>
+          <Heading className={className} as={"h1"} size={"lg"}>
             {children}
           </Heading>
         );
       case "subtitle":
         return (
-          <Heading className={className} as={"h2"} size={"lg"}>
+          <Heading className={className} as={"h2"} size={"md"}>
             {children}
           </Heading>
         );
       default:
         return (
-          <Text className={className} size={"md"}>
+          <Text className={className} size={"sm"}>
             {children}
           </Text>
         );

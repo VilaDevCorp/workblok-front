@@ -22,6 +22,11 @@ import { Block } from "../../types/entities";
 import { Typography } from "../atom/Typography";
 import { useApiError } from "../../hooks/useApiError";
 import { useNavigate } from "react-router-dom";
+import { ResultModal } from "../../modals/ResultModal";
+import {
+  getTimeInHoursMinutesSeconds,
+  getTimeInHoursMinutesSecondsString,
+} from "../../utils/utilFunctions";
 
 export function BlockControls({}: {}) {
   const [time, setTime] = useState(25);
@@ -31,8 +36,9 @@ export function BlockControls({}: {}) {
   const today = moment().startOf("day").toDate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
-  const [resultBlock, setResultBlock] = useState<Block | undefined>(undefined);
+  const [resultBlockId, setResultBlockId] = useState<string | undefined>(
+    undefined
+  );
   const navigation = useNavigate();
   const { setError } = useApiError(navigation);
 
@@ -85,9 +91,7 @@ export function BlockControls({}: {}) {
     useMutation({
       mutationFn: (blockId: string) => finishBlock(blockId),
       onSuccess: () => {
-        if (activeBlock) {
-          onOpenResultModal(activeBlock);
-        }
+        setResultBlockId(activeBlock?.id);
         reloadActiveBlock();
         queryClient.invalidateQueries(["getFinishedBlocks"]);
       },
@@ -104,16 +108,6 @@ export function BlockControls({}: {}) {
     },
   });
 
-  const onOpenResultModal = (block: Block) => {
-    setIsResultModalOpen(true);
-    setResultBlock(block);
-  };
-
-  const onCloseResultModal = () => {
-    setIsResultModalOpen(false);
-    setResultBlock(undefined);
-  };
-
   const isCompletedBlock =
     activeBlock &&
     moment(activeBlock?.creationDate)
@@ -124,55 +118,23 @@ export function BlockControls({}: {}) {
       )
       .diff(currentTime, "second") <= 0;
 
-  const remainingHours =
-    activeBlock !== undefined
-      ? Math.floor(
-          Math.abs(
-            moment(activeBlock?.creationDate)
-              .add(
-                activeBlock.targetMinutes +
-                  (activeBlock.distractionMinutes
-                    ? activeBlock.distractionMinutes
-                    : 0),
-                "minute"
-              )
-              .diff(currentTime, "second") / 3600
+  const {
+    hours: remainingHours,
+    minutes: remainingMinutes,
+    seconds: remainingSeconds,
+  } = activeBlock !== undefined
+    ? getTimeInHoursMinutesSeconds(
+        moment(activeBlock?.creationDate)
+          .add(
+            activeBlock.targetMinutes +
+              (activeBlock.distractionMinutes
+                ? activeBlock.distractionMinutes
+                : 0),
+            "minute"
           )
-        )
-      : 0;
-
-  const remainingMinutes =
-    activeBlock !== undefined
-      ? Math.floor(
-          Math.abs(
-            (moment(activeBlock?.creationDate)
-              .add(
-                activeBlock.targetMinutes +
-                  (activeBlock.distractionMinutes
-                    ? activeBlock.distractionMinutes
-                    : 0),
-                "minute"
-              )
-              .diff(currentTime, "second") %
-              3600) /
-              60
-          )
-        )
-      : 0;
-  const remainingSeconds =
-    activeBlock !== undefined
-      ? Math.abs(
-          moment(activeBlock.creationDate)
-            .add(
-              activeBlock.targetMinutes +
-                (activeBlock.distractionMinutes
-                  ? activeBlock.distractionMinutes
-                  : 0),
-              "minute"
-            )
-            .diff(currentTime, "second") % 60
-        )
-      : 0;
+          .diff(currentTime, "second")
+      )
+    : { hours: 0, minutes: 0, seconds: 0 };
 
   return (
     <div className="flex justify-center items-center gap-8 ">
@@ -198,6 +160,7 @@ export function BlockControls({}: {}) {
           <>
             <Jar
               size={100}
+              blockId={activeBlock.id}
               time={activeBlock.targetMinutes}
               passedTime={moment(currentTime).diff(
                 moment(activeBlock.creationDate),
@@ -214,16 +177,14 @@ export function BlockControls({}: {}) {
                       ? `${Math.floor(activeBlock.targetMinutes / 60)} h `
                       : ""
                   }
-                  ${activeBlock.targetMinutes % 60} min 00 sec`
-                : `${isCompletedBlock ? "+" : ""}${
-                    remainingHours > 0 ? `${remainingHours} h ` : ""
-                  } 
-                  ${remainingMinutes > 0 ? `${remainingMinutes} min ` : ""}${
-                    remainingSeconds !== undefined &&
-                    (remainingSeconds < 10
-                      ? "0" + remainingSeconds
-                      : remainingSeconds)
-                  } sec`}
+                  ${activeBlock.targetMinutes % 60} m`
+                : `${isCompletedBlock ? "+" : ""}
+                ${getTimeInHoursMinutesSecondsString(
+                  remainingHours,
+                  remainingMinutes,
+                  remainingSeconds
+                )}
+                `}
             </Typography>
             <div className="flex gap-4 justify-center">
               <Button
@@ -248,7 +209,7 @@ export function BlockControls({}: {}) {
                   )
                 }
               >
-                {"5 min"}
+                {"5 m"}
               </Button>
               <Button
                 leftIcon={<BiMinus />}
@@ -265,7 +226,7 @@ export function BlockControls({}: {}) {
                   )
                 }
               >
-                {"1 min"}
+                {"1 m"}
               </Button>
             </div>
           </>
@@ -282,16 +243,12 @@ export function BlockControls({}: {}) {
           </>
         )}
       </div>
-      <Modal isOpen={isResultModalOpen} onClose={() => onCloseResultModal()}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody></ModalBody>
-          <ModalFooter>
-            <Button onClick={() => onCloseResultModal()}>{"Return"}</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {resultBlockId && (
+        <ResultModal
+          blockId={resultBlockId}
+          onClose={() => setResultBlockId(undefined)}
+        />
+      )}
     </div>
   );
 }
