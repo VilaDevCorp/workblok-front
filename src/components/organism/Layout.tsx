@@ -5,6 +5,7 @@ import logo from "/logo.svg";
 import { Footer } from "./Footer";
 import { Typography } from "../atom/Typography";
 import { Button } from "@chakra-ui/react";
+import { SideMenu } from "../molecule/SideMenu";
 
 export function Layout({
   title,
@@ -30,11 +31,14 @@ export function Layout({
       </main>
     ) : (
       //Private layout
-      <main
-        className={`w-full flex flex-col h-full max-w-[500px] m-auto p-8 gap-8`}
-      >
-        {children}
-      </main>
+      <>
+        <SideMenu />
+        <main
+          className={`w-full flex flex-col h-full max-w-[500px] m-auto p-8 gap-8`}
+        >
+          {children}
+        </main>
+      </>
     )
   ) : (
     //Not logged in layout
