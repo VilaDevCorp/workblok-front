@@ -13,7 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Jar } from "../atom/Jar";
+import { Jar } from "../molecule/Jar";
 import { BiMinus, BiPlay, BiStop } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useApi } from "../../hooks/useApi";
@@ -232,7 +232,7 @@ export function BlockControls({}: {}) {
           </>
         ) : (
           <>
-            <Jar size={100} time={time} passedTime={0} />
+            <Jar size={100} time={time} passedTime={time} />
             <Button
               className="w-fit"
               onClick={() => onStartBlock()}

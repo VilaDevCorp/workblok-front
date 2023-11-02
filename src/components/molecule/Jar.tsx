@@ -32,6 +32,15 @@ export function Jar({
     return ((passedTime - distractionMinutes) / time) * 100;
   };
 
+  const getBgColor = () => {
+    const maxValue = Math.max(time, passedTime - distractionMinutes);
+    if (maxValue < 30) return "#45bd98";
+    if (maxValue < 60) return "#55a1a4";
+    if (maxValue < 90) return "#6c73b4";
+    if (maxValue < 120) return "#7d54c0";
+    return "#8f32cd";
+  };
+
   const filledPercentage = useMemo(
     () => getFilledPercentage(),
     [passedTime, distractionMinutes]
@@ -114,7 +123,7 @@ export function Jar({
             opacity="0.61"
           />
           <g mask={`url(#gradMask_${id})`}>
-            <use xlinkHref={`#tube_${id}`} fill="#7A39DB" />
+            <use xlinkHref={`#tube_${id}`} fill={getBgColor()} />
           </g>
         </g>
 

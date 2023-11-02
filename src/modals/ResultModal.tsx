@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Block } from "../types/entities";
-import { Jar } from "../components/atom/Jar";
+import { Jar } from "../components/molecule/Jar";
 import moment from "moment";
 import { useApi } from "../hooks/useApi";
 import { useQuery } from "react-query";

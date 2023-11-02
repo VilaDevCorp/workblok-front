@@ -3,7 +3,7 @@ import { Block } from "../../types/entities";
 import { Button, IconButton } from "@chakra-ui/react";
 import moment, { invalid } from "moment";
 import { BiChevronLeft, BiChevronRight, BiPlus } from "react-icons/bi";
-import { Jar } from "../atom/Jar";
+import { Jar } from "../molecule/Jar";
 import { IoMdRemove } from "react-icons/io";
 import { useApi } from "../../hooks/useApi";
 import { useMutation, useQueryClient } from "react-query";
