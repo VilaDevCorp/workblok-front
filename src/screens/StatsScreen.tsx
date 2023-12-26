@@ -132,12 +132,12 @@ export function StatsScreen() {
                               name: weekdays(i + 1).substring(0, 3),
                               workingHours:
                                 Number(
-                                  statsData.weekInfo[i]?.workingTime.toFixed(2)
+                                  statsData.weekInfo[i+1]?.workingTime.toFixed(2)
                                 ) || 0,
                               distractionHours:
                                 Number(
                                   statsData.weekInfo[
-                                    i
+                                    i+1
                                   ]?.distractionTime.toFixed(2)
                                 ) || 0,
                             };
