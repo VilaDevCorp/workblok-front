@@ -1,7 +1,6 @@
 import { IconButton } from "@chakra-ui/react";
-import React, { useMemo, useId, useState, useEffect } from "react";
-import { BiInfoCircle, BiPlus } from "react-icons/bi";
-import { IoIosInformation } from "react-icons/io";
+import { useMemo, useId, useState, useEffect } from "react";
+import { BiInfoCircle } from "react-icons/bi";
 import { DetailsModal } from "../../modals/DetailsModal";
 import { useAuth } from "../../hooks/useAuth";
 import { conf } from "../../conf";
@@ -29,7 +28,6 @@ export function Jar({
   const getPercentageOffset = (percentage: number) => {
     if (percentage === 0) return 0;
     if (percentage < 5) return percentage + 2;
-    if (percentage > 5) return percentage + 2;
     return percentage + 5;
   };
 
@@ -114,13 +112,21 @@ export function Jar({
           <path
             id={`liquid_${id}`}
             d={`M${size * 3},${
+              ((size * 2))
+            }H${0}v${
+              (-(size * 2) / 100) * getPercentageOffset(filledPercentage)
+            }c${size/2},0,${size/2},5,${size},5s${size/2}-5,${size}-5,${size/2},5,${size},5Z`}
+          />
+          {/* <path
+            id={`liquid_${id}`}
+            d={`M${size * 3},${
               ((size * 2) / 100) * (100 - getPercentageOffset(filledPercentage))
             }v${
               ((size * 2) / 100) * getPercentageOffset(filledPercentage)
             }H${0}v${
               (-(size * 2) / 100) * getPercentageOffset(filledPercentage)
-            }c100,0,100,5,200,5s100-5,200-5,100,5,200,5Z`}
-          />
+            }c100,0,400,5,400,5Z`}
+          /> */}
           <mask id={`gradMask_${id}`}>
             <use
               xlinkHref={`#liquid_${id}`}
