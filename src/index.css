@@ -16,6 +16,12 @@ select:-webkit-autofill {
   -webkit-text-fill-color: #e5e3ed;
 }
 
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 ::-webkit-scrollbar-thumb {
   border-radius: 12px;
   background: #124969;
@@ -49,7 +55,6 @@ html {
   height: 0;
 }
 
-
 @keyframes liquidMoving {
   from {
     transform: translateX(0%);
@@ -59,7 +64,6 @@ html {
     transform: translateX(-200%);
   }
 }
-
 
 [id*="liquid"] {
   animation: liquidMoving 2s linear infinite;

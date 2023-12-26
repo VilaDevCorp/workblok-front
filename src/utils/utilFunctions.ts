@@ -16,5 +16,7 @@ export const getTimeInHoursMinutesSecondsString = (
   const hoursString = hours > 0 ? `${hours} h ` : "";
   const minutesString = minutes > 0 ? `${minutes} m ` : "";
   const secondsString = seconds > 0 ? `${seconds} s` : "";
+  if (hoursString === "" && minutesString === "" && secondsString === "")
+    return "0 s";
   return `${hoursString}${minutesString}${secondsString}`;
 };

@@ -1,8 +1,10 @@
 import { IconButton } from "@chakra-ui/react";
-import React, { useMemo, useId, useState } from "react";
+import React, { useMemo, useId, useState, useEffect } from "react";
 import { BiInfoCircle, BiPlus } from "react-icons/bi";
 import { IoIosInformation } from "react-icons/io";
 import { DetailsModal } from "../../modals/DetailsModal";
+import { useAuth } from "../../hooks/useAuth";
+import { conf } from "../../conf";
 
 export function Jar({
   size = 100,
@@ -12,6 +14,7 @@ export function Jar({
   onClick,
   isSelected,
   blockId,
+  finishBlock,
 }: {
   size: number;
   time: number;
@@ -20,7 +23,9 @@ export function Jar({
   onClick?: () => void;
   isSelected?: boolean;
   blockId?: string;
+  finishBlock?: () => void;
 }) {
+  const { user } = useAuth();
   const getPercentageOffset = (percentage: number) => {
     if (percentage === 0) return 0;
     if (percentage < 5) return percentage + 2;
@@ -48,6 +53,24 @@ export function Jar({
 
   const id = useId();
   const [showDetails, setShowDetails] = useState(false);
+
+  useEffect(() => {
+    //If the user has allowed exceeded time and the time has passed, finish the block
+    if (user?.config.exceededTime) {
+      //If the exceeded time is allowed, check if the limit time has been reached
+      const timeLImit = user?.config.timeLimit
+        ? user?.config.timeLimit
+        : conf.defaultUserConfig.timeLimit!;
+      if (passedTime - distractionMinutes >= timeLImit) {
+        finishBlock && finishBlock();
+      }
+    } else {
+      //If the exceeded time is not allowed, check if the block has been finished
+      if (passedTime - distractionMinutes >= time) {
+        finishBlock && finishBlock();
+      }
+    }
+  }, [passedTime]);
 
   return (
     <div

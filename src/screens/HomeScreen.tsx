@@ -2,15 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Layout } from "../components/organism/Layout";
-import { useToast } from "@chakra-ui/react";
+import { Select, useToast } from "@chakra-ui/react";
 import { useApi } from "../hooks/useApi";
-import moment from "moment";
-import { Block } from "../types/entities";
+import moment, { months } from "moment";
 import { useQuery } from "react-query";
 import { Section } from "../components/organism/Section";
 import { BlocksGrid } from "../components/organism/BlocksGrid";
 import { BlockControls } from "../components/organism/BlockControls";
 import { useApiError } from "../hooks/useApiError";
+import { DatePicker } from "../components/atom/DatePicker";
 
 export function HomeScreen() {
   const { csrfToken } = useAuth();
@@ -20,15 +20,17 @@ export function HomeScreen() {
   const [page, setPage] = useState(0);
   const navigation = useNavigate();
   const { setError } = useApiError(navigation);
+  const [blocksDate, setBlocksDate] = useState(today);
+
   const { data: finishedBlocks, isLoading: isLoadingFinishedBlocks } = useQuery(
     {
-      queryKey: ["getFinishedBlocks", page],
+      queryKey: ["getFinishedBlocks", page, blocksDate],
       queryFn: () =>
         searchBlocks({
           page,
           pageSize: 9,
           isActive: false,
-          startDate: today,
+          creationDate: blocksDate,
         }),
 
       onSuccess: (data) => {
@@ -53,6 +55,7 @@ export function HomeScreen() {
         <BlockControls />
       </Section>
       <Section title="Finished blocks">
+        <DatePicker date={blocksDate} setDate={setBlocksDate} />
         <BlocksGrid
           blocks={finishedBlocks?.content || []}
           page={page}

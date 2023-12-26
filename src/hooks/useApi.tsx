@@ -8,6 +8,9 @@ import {
   PenaltyForm,
   RegisterUserForm,
   SearchBlockForm,
+  StatsForm,
+  StatsResult,
+  UpdateConfigForm,
   UseVerificationCodeForm,
 } from "../types/entities";
 import { ApiError, ApiResponse, Page } from "../types/types";
@@ -19,10 +22,12 @@ export interface ApiContext {
   sendVerificationCode: (form: CreateVerificationCodeForm) => Promise<void>;
   createBlock: (form: CreateBlockForm) => Promise<void>;
   applyPenalty: (form: PenaltyForm) => Promise<void>;
-  finishBlock: (blockId: string) => Promise<void>;
+  finishBlock: (blockId: string, auto?: boolean) => Promise<void>;
   getBlock: (id: string) => Promise<Block>;
   searchBlocks: (form: SearchBlockForm) => Promise<Page<Block>>;
   deleteBlocks: (ids: string[]) => Promise<void>;
+  getStats: (form: StatsForm) => Promise<StatsResult>;
+  updateConf: (form: UpdateConfigForm) => Promise<void>;
 }
 
 const ApiContext = createContext<ApiContext>({} as any);
@@ -169,13 +174,44 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const finishBlock = async (blockId: string): Promise<void> => {
-    const url = `${apiUrl}private/block/${blockId}/finish`;
+  const finishBlock = async (
+    blockId: string,
+    auto?: boolean
+  ): Promise<void> => {
+    const url = `${apiUrl}private/block/${blockId}/finish${
+      auto ? "?auto=true" : ""
+    }`;
     const options: RequestInit = {
       credentials: "include",
       method: "POST",
       headers: new Headers({
         "X-API-CSRF": csrfToken ? csrfToken : "",
+      }),
+    };
+    try {
+      const res = await fetch(url, options);
+      const resObject: ApiResponse<unknown> = await res.json();
+      if (!res.ok) {
+        throw new ApiError({
+          cause: res.status,
+          message: resObject.message,
+          errCode: resObject.errCode,
+        });
+      }
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const updateConf = async (form: UpdateConfigForm): Promise<void> => {
+    const url = `${apiUrl}private/user/conf`;
+    const options: RequestInit = {
+      credentials: "include",
+      method: "PATCH",
+      body: JSON.stringify(form),
+      headers: new Headers({
+        "X-API-CSRF": csrfToken ? csrfToken : "",
+        "content-type": "application/json",
       }),
     };
     try {
@@ -276,6 +312,33 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getStats = async (form: StatsForm): Promise<StatsResult> => {
+    const url = `${apiUrl}private/block/stats`;
+    const options: RequestInit = {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: new Headers({
+        "X-API-CSRF": csrfToken ? csrfToken : "",
+        "content-type": "application/json",
+      }),
+    };
+    try {
+      const res = await fetch(url, options);
+      const resObject: ApiResponse<StatsResult> = await res.json();
+      if (!res.ok) {
+        throw new ApiError({
+          cause: res.status,
+          message: resObject.message,
+          errCode: resObject.errCode,
+        });
+      }
+      return resObject.obj;
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const value: ApiContext = {
     register,
     sendVerificationCode,
@@ -285,7 +348,9 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     applyPenalty,
     getBlock,
     searchBlocks,
-    deleteBlocks
+    deleteBlocks,
+    getStats,
+    updateConf,
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

@@ -27,6 +27,7 @@ import {
   getTimeInHoursMinutesSeconds,
   getTimeInHoursMinutesSecondsString,
 } from "../../utils/utilFunctions";
+import { useAuth } from "../../hooks/useAuth";
 
 export function BlockControls({}: {}) {
   const [time, setTime] = useState(25);
@@ -36,6 +37,7 @@ export function BlockControls({}: {}) {
   const today = moment().startOf("day").toDate();
   const toast = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [resultBlockId, setResultBlockId] = useState<string | undefined>(
     undefined
   );
@@ -61,7 +63,6 @@ export function BlockControls({}: {}) {
           page: 0,
           pageSize: 0,
           isActive: true,
-          startDate: today,
         }),
       onSuccess: (data) => {
         if (data.content.length > 0) {
@@ -89,7 +90,8 @@ export function BlockControls({}: {}) {
 
   const { isLoading: isLoadingFinishBlock, mutate: onFinishBlock } =
     useMutation({
-      mutationFn: (blockId: string) => finishBlock(blockId),
+      mutationFn: ({ blockId, auto }: { blockId: string; auto?: boolean }) =>
+        finishBlock(blockId, auto),
       onSuccess: () => {
         setResultBlockId(activeBlock?.id);
         reloadActiveBlock();
@@ -167,6 +169,9 @@ export function BlockControls({}: {}) {
                 "minute"
               )}
               distractionMinutes={activeBlock.distractionMinutes}
+              finishBlock={() =>
+                onFinishBlock({ blockId: activeBlock.id, auto: true })
+              }
             />
             <Typography className="text-primary-600 text-lg font-bold">
               {/* This is to avoid discrepancies between the time in the server
@@ -189,7 +194,7 @@ export function BlockControls({}: {}) {
             <div className="flex gap-4 justify-center">
               <Button
                 className="w-fit"
-                onClick={() => onFinishBlock(activeBlock.id)}
+                onClick={() => onFinishBlock({ blockId: activeBlock.id })}
                 leftIcon={<BiStop />}
               >
                 {"Finish"}

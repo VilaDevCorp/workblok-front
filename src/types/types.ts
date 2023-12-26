@@ -1,3 +1,4 @@
+import { GraphElement } from './types';
 export interface SelectOption {
   label: string;
   value: string;
@@ -10,10 +11,16 @@ export interface Page<T> {
 }
 
 export interface ApiResponse<T> {
-	message: string      
-	obj:     T 
-	err:     string       
-	errCode: string      
+  message: string;
+  obj: T;
+  err: string;
+  errCode: string;
+}
+
+export interface GraphElement {
+  name: string;
+  workingHours: number;
+  distractionHours: number;
 }
 
 export class ApiError extends Error {
