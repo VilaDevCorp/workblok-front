@@ -8,6 +8,7 @@ import {
   Button,
   CircularProgress,
   CircularProgressLabel,
+  ModalHeader,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Block } from "../types/entities";
@@ -77,7 +78,9 @@ export function DetailsModal({
     <Modal isOpen={true} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalCloseButton />
+        </ModalHeader>
         <ModalBody className="flex gap-4 flex-col">
           {block ? (
             <div
