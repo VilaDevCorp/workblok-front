@@ -73,7 +73,6 @@ export function DetailsModal({
     ? Math.floor((block.distractionMinutes / totalTime) * 60 * 100)
     : 0;
 
-
   return (
     <Modal isOpen={true} onClose={onClose}>
       <ModalOverlay />
@@ -96,6 +95,7 @@ export function DetailsModal({
                 size={100}
               />
               <div className="flex flex-col gap-4 w-full">
+                <StatData label="Tag" value={block.tag} />
                 <StatData
                   label="Total"
                   value={getTimeInHoursMinutesSecondsString(

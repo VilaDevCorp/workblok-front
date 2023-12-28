@@ -101,6 +101,8 @@ export function ResultModal({
                 tag={block.tag}
               />
               <div className="flex flex-col gap-4 w-full">
+                <StatData label="Tag" value={block.tag} />
+
                 <StatData
                   label="Total"
                   value={getTimeInHoursMinutesSecondsString(

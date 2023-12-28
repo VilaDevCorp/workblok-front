@@ -20,24 +20,27 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import { StatsPanel } from "../components/molecule/StatsPanel";
+import { useAuth } from "../hooks/useAuth";
 
 export function StatsScreen() {
   const { getStats } = useApi();
   const [year, setYear] = useState<number>(moment().year());
   const [month, setMonth] = useState<number>(moment().month());
   const [week, setWeek] = useState<number>(0);
+  const [tag, setTag] = useState<string>("");
 
   const {
     data: statsData,
     isLoading: statsIsLoading,
     isError: statsIsError,
   } = useQuery({
-    queryKey: ["getStats", year, month, week],
+    queryKey: ["getStats", year, month, week, tag],
     queryFn: () =>
       getStats({
         year,
         month: month < 0 ? undefined : month + 1,
         week: week < 0 ? undefined : week,
+        tag: tag === "" ? undefined : tag,
       }),
   });
 
@@ -62,6 +65,19 @@ export function StatsScreen() {
             ))}
           </Select>
         </div>
+        <Select
+          maxWidth={350}
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+        >
+          <option value={""}>{"No tag"}</option>
+          {statsData?.tags?.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
+        </Select>
+
         {statsData?.yearInfo && (
           <WorkingHoursGraph
             data={months().map((monthName, monthPosition) => {
@@ -132,12 +148,14 @@ export function StatsScreen() {
                               name: weekdays(i + 1).substring(0, 3),
                               workingHours:
                                 Number(
-                                  statsData.weekInfo[i+1]?.workingTime.toFixed(2)
+                                  statsData.weekInfo[
+                                    i + 1
+                                  ]?.workingTime.toFixed(2)
                                 ) || 0,
                               distractionHours:
                                 Number(
                                   statsData.weekInfo[
-                                    i+1
+                                    i + 1
                                   ]?.distractionTime.toFixed(2)
                                 ) || 0,
                             };

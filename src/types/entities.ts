@@ -73,6 +73,7 @@ export interface StatsForm {
   month?: number;
   week?: number;
   day?: number;
+  tag?: string;
 }
 
 export interface PeriodStats {
@@ -94,4 +95,5 @@ export interface StatsResult {
   yearInfo: PeriodInfo;
   monthInfo: PeriodInfo;
   weekInfo: PeriodInfo;
+  tags: string[];
 }
