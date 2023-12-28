@@ -1,18 +1,13 @@
 import {
   Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
+  Select,
   Slider,
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Jar } from "../molecule/Jar";
 import { BiMinus, BiPlay, BiStop } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -43,6 +38,7 @@ export function BlockControls({}: {}) {
   );
   const navigation = useNavigate();
   const { setError } = useApiError(navigation);
+  const [tag, setTag] = useState<string>("");
 
   useEffect(() => {
     const interval = setInterval(() => onAddSecond(), 1000);
@@ -82,7 +78,7 @@ export function BlockControls({}: {}) {
     });
 
   const { isLoading: isLoadingStartBlock, mutate: onStartBlock } = useMutation({
-    mutationFn: () => createBlock({ targetMinutes: time }),
+    mutationFn: () => createBlock({ targetMinutes: time, tag }),
     onSuccess: () => {
       reloadActiveBlock();
     },
@@ -139,121 +135,138 @@ export function BlockControls({}: {}) {
     : { hours: 0, minutes: 0, seconds: 0 };
 
   return (
-    <div className="flex justify-center items-center gap-8 ">
+    <div className="flex gap-2 flex-col items-center">
       {!activeBlock && (
-        <Slider
-          className="!h-[150px]"
-          max={120}
-          min={5}
-          step={5}
-          orientation="vertical"
-          value={time}
-          onChange={(value) => setTime(value)}
+        <Select
+          maxWidth={350}
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
         >
-          <SliderTrack className="!w-[10px] ">
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb className="!w-[20px] !h-[20px]" />
-        </Slider>
+          <option value={""}>{"No tag"}</option>
+          {user?.config.tags?.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
+        </Select>
       )}
+      <div className="flex justify-center items-center gap-8 ">
+        {!activeBlock && (
+          <Slider
+            className="!h-[150px]"
+            max={120}
+            min={5}
+            step={5}
+            orientation="vertical"
+            value={time}
+            onChange={(value) => setTime(value)}
+          >
+            <SliderTrack className="!w-[10px] ">
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb className="!w-[20px] !h-[20px]" />
+          </Slider>
+        )}
 
-      <div className="flex flex-col gap-4 justify-center items-center">
-        {activeBlock ? (
-          <>
-            <Jar
-              size={100}
-              blockId={activeBlock.id}
-              time={activeBlock.targetMinutes}
-              passedTime={moment(currentTime).diff(
-                moment(activeBlock.creationDate),
-                "minute"
-              )}
-              distractionMinutes={activeBlock.distractionMinutes}
-              finishBlock={() =>
-                onFinishBlock({ blockId: activeBlock.id, auto: true })
-              }
-            />
-            <Typography className="text-primary-600 text-lg font-bold">
-              {/* This is to avoid discrepancies between the time in the server
+        <div className="flex flex-col gap-4 justify-center items-center">
+          {activeBlock ? (
+            <>
+              <Jar
+                size={100}
+                blockId={activeBlock.id}
+                time={activeBlock.targetMinutes}
+                passedTime={moment(currentTime).diff(
+                  moment(activeBlock.creationDate),
+                  "minute"
+                )}
+                distractionMinutes={activeBlock.distractionMinutes}
+                finishBlock={() =>
+                  onFinishBlock({ blockId: activeBlock.id, auto: true })
+                }
+                tag={activeBlock.tag}
+              />
+              <Typography className="text-primary-600 text-lg font-bold">
+                {/* This is to avoid discrepancies between the time in the server
               and the time in the client */}
-              {moment(currentTime).isBefore(activeBlock.creationDate)
-                ? `${
-                    Math.floor(activeBlock.targetMinutes / 60) > 0
-                      ? `${Math.floor(activeBlock.targetMinutes / 60)} h `
-                      : ""
-                  }
+                {moment(currentTime).isBefore(activeBlock.creationDate)
+                  ? `${
+                      Math.floor(activeBlock.targetMinutes / 60) > 0
+                        ? `${Math.floor(activeBlock.targetMinutes / 60)} h `
+                        : ""
+                    }
                   ${activeBlock.targetMinutes % 60} m`
-                : `${isCompletedBlock ? "+" : ""}
+                  : `${isCompletedBlock ? "+" : ""}
                 ${getTimeInHoursMinutesSecondsString(
                   remainingHours,
                   remainingMinutes,
                   remainingSeconds
                 )}
                 `}
-            </Typography>
-            <div className="flex gap-4 justify-center">
+              </Typography>
+              <div className="flex gap-4 justify-center">
+                <Button
+                  className="w-fit"
+                  onClick={() => onFinishBlock({ blockId: activeBlock.id })}
+                  leftIcon={<BiStop />}
+                >
+                  {"Finish"}
+                </Button>
+                <Button
+                  leftIcon={<BiMinus />}
+                  isDisabled={
+                    !isCompletedBlock &&
+                    activeBlock.targetMinutes - remainingMinutes <= 5
+                  }
+                  className="!border-error border !text-error !"
+                  onClick={() =>
+                    onApplyPenalty(
+                      (activeBlock.distractionMinutes
+                        ? activeBlock.distractionMinutes
+                        : 0) + 5
+                    )
+                  }
+                >
+                  {"5 m"}
+                </Button>
+                <Button
+                  leftIcon={<BiMinus />}
+                  isDisabled={
+                    !isCompletedBlock &&
+                    activeBlock.targetMinutes - remainingMinutes <= 1
+                  }
+                  className="!border-error border !text-error !"
+                  onClick={() =>
+                    onApplyPenalty(
+                      (activeBlock.distractionMinutes
+                        ? activeBlock.distractionMinutes
+                        : 0) + 1
+                    )
+                  }
+                >
+                  {"1 m"}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Jar size={100} time={time} passedTime={time} tag={tag} />
               <Button
                 className="w-fit"
-                onClick={() => onFinishBlock({ blockId: activeBlock.id })}
-                leftIcon={<BiStop />}
+                onClick={() => onStartBlock()}
+                leftIcon={<BiPlay />}
               >
-                {"Finish"}
+                {"Start"}
               </Button>
-              <Button
-                leftIcon={<BiMinus />}
-                isDisabled={
-                  !isCompletedBlock &&
-                  activeBlock.targetMinutes - remainingMinutes <= 5
-                }
-                className="!border-error border !text-error !"
-                onClick={() =>
-                  onApplyPenalty(
-                    (activeBlock.distractionMinutes
-                      ? activeBlock.distractionMinutes
-                      : 0) + 5
-                  )
-                }
-              >
-                {"5 m"}
-              </Button>
-              <Button
-                leftIcon={<BiMinus />}
-                isDisabled={
-                  !isCompletedBlock &&
-                  activeBlock.targetMinutes - remainingMinutes <= 1
-                }
-                className="!border-error border !text-error !"
-                onClick={() =>
-                  onApplyPenalty(
-                    (activeBlock.distractionMinutes
-                      ? activeBlock.distractionMinutes
-                      : 0) + 1
-                  )
-                }
-              >
-                {"1 m"}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
-            <Jar size={100} time={time} passedTime={time} />
-            <Button
-              className="w-fit"
-              onClick={() => onStartBlock()}
-              leftIcon={<BiPlay />}
-            >
-              {"Start"}
-            </Button>
-          </>
+            </>
+          )}
+        </div>
+        {resultBlockId && (
+          <ResultModal
+            blockId={resultBlockId}
+            onClose={() => setResultBlockId(undefined)}
+          />
         )}
       </div>
-      {resultBlockId && (
-        <ResultModal
-          blockId={resultBlockId}
-          onClose={() => setResultBlockId(undefined)}
-        />
-      )}
     </div>
   );
 }

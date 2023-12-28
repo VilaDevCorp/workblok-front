@@ -92,6 +92,7 @@ export function DetailsModal({
                   block.creationDate,
                   "minutes"
                 )}
+                tag={block.tag}
                 size={100}
               />
               <div className="flex flex-col gap-4 w-full">

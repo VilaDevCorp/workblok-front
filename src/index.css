@@ -65,6 +65,6 @@ html {
   }
 }
 
-[id*="liquid"] {
+[id*="liquid_"] {
   animation: liquidMoving 2s linear infinite;
 }

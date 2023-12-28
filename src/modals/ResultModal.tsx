@@ -98,6 +98,7 @@ export function ResultModal({
                   "minutes"
                 )}
                 size={100}
+                tag={block.tag}
               />
               <div className="flex flex-col gap-4 w-full">
                 <StatData

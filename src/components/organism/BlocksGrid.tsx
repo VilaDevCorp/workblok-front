@@ -70,6 +70,7 @@ export function BlocksGrid({
               "minutes"
             )}
             distractionMinutes={block.distractionMinutes}
+            tag={block.tag}
           />
         ))}
       </div>

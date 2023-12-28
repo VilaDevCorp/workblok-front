@@ -14,6 +14,7 @@ export function Jar({
   isSelected,
   blockId,
   finishBlock,
+  tag,
 }: {
   size: number;
   time: number;
@@ -23,6 +24,7 @@ export function Jar({
   isSelected?: boolean;
   blockId?: string;
   finishBlock?: () => void;
+  tag?: string;
 }) {
   const { user } = useAuth();
   const getPercentageOffset = (percentage: number) => {
@@ -111,22 +113,12 @@ export function Jar({
           </clipPath>
           <path
             id={`liquid_${id}`}
-            d={`M${size * 3},${
-              ((size * 2))
-            }H${0}v${
+            d={`M${size * 3},${size * 2}H${0}v${
               (-(size * 2) / 100) * getPercentageOffset(filledPercentage)
-            }c${size/2},0,${size/2},5,${size},5s${size/2}-5,${size}-5,${size/2},5,${size},5Z`}
+            }c${size / 2},0,${size / 2},5,${size},5s${size / 2}-5,${size}-5,${
+              size / 2
+            },5,${size},5Z`}
           />
-          {/* <path
-            id={`liquid_${id}`}
-            d={`M${size * 3},${
-              ((size * 2) / 100) * (100 - getPercentageOffset(filledPercentage))
-            }v${
-              ((size * 2) / 100) * getPercentageOffset(filledPercentage)
-            }H${0}v${
-              (-(size * 2) / 100) * getPercentageOffset(filledPercentage)
-            }c100,0,400,5,400,5Z`}
-          /> */}
           <mask id={`gradMask_${id}`}>
             <use
               xlinkHref={`#liquid_${id}`}
@@ -155,6 +147,30 @@ export function Jar({
             <use xlinkHref={`#tube_${id}`} fill={getBgColor()} />
           </g>
         </g>
+
+        {tag && (
+          <text
+            y={"35%"}
+            x={"50%"}
+            z={1000}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            stroke={"black"}
+            fill={"black"}
+            style={{
+              wordWrap: "break-word",
+              wordBreak: "break-all",
+              fontWeight: "normal",
+              width: "100%",
+              padding: "0 10%",
+              fontSize: "1rem",
+            }}
+          >
+            {tag.length > (size < 100 ? 7 : 10)
+              ? `${tag.substring(0, size < 100 ? 7 : 10)}...`
+              : tag}
+          </text>
+        )}
 
         <text
           y={"50%"}

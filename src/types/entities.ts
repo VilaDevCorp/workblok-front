@@ -9,6 +9,7 @@ export interface User {
 
 export interface CreateBlockForm {
   targetMinutes: number;
+  tag?: string;
 }
 
 export interface PenaltyForm {
@@ -21,6 +22,7 @@ export interface SearchBlockForm {
   pageSize: number;
   creationDate?: Date;
   isActive?: boolean;
+  tag?: string;
 }
 
 export interface DeleteBlockForm {
@@ -38,6 +40,7 @@ export interface UserConfig {
   darkMode?: boolean;
   exceededTime?: boolean;
   timeLimit?: number;
+  tags?: string[];
 }
 
 export interface UpdateConfigForm {
@@ -50,6 +53,7 @@ export interface Block {
   finishDate?: Date;
   targetMinutes: number;
   distractionMinutes: number;
+  tag?: string;
 }
 
 export interface CreateVerificationCodeForm {
