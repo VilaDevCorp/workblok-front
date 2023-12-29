@@ -27,9 +27,11 @@ import { CompletedIndicator } from "../components/atom/CompletedIndicator";
 export function DetailsModal({
   blockId,
   onClose,
+  justCompleted,
 }: {
   blockId: string;
   onClose: () => void;
+  justCompleted?: boolean;
 }) {
   const { getBlock } = useApi();
 
@@ -82,6 +84,16 @@ export function DetailsModal({
           <ModalCloseButton />
         </ModalHeader>
         <ModalBody className="flex gap-4 flex-col">
+          {justCompleted && (
+            <>
+              <Typography mode="title" className="text-success">
+                {"Congratulations!"}
+              </Typography>
+              <Typography mode="subtitle" className="text-success">
+                {"You finished a block"}
+              </Typography>
+            </>
+          )}
           {block ? (
             <div
               className="flex gap-4
@@ -92,13 +104,17 @@ export function DetailsModal({
                 distractionMinutes={block.distractionMinutes}
                 passedTime={moment(block.finishDate).diff(
                   block.creationDate,
-                  "minutes"
+                  "seconds"
                 )}
                 tag={block.tag}
                 size={100}
               />
               <div className="flex flex-col gap-4 w-full">
                 <StatData label="Tag" value={block.tag} />
+                <StatData
+                  label="Target time"
+                  value={`${block.targetMinutes} min`}
+                />
                 <StatData
                   label="Total"
                   value={getTimeInHoursMinutesSecondsString(
