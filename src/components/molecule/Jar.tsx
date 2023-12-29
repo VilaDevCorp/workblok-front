@@ -1,9 +1,10 @@
 import { IconButton } from "@chakra-ui/react";
-import { useMemo, useId, useState, useEffect } from "react";
+import { useMemo, useId, useState, useEffect, useRef } from "react";
 import { BiInfoCircle } from "react-icons/bi";
 import { DetailsModal } from "../../modals/DetailsModal";
 import { useAuth } from "../../hooks/useAuth";
 import { conf } from "../../conf";
+import { Typography } from "../atom/Typography";
 
 export function Jar({
   size = 100,
@@ -27,6 +28,7 @@ export function Jar({
   tag?: string;
 }) {
   const { user } = useAuth();
+  const firstRender = useRef(true);
   const getPercentageOffset = (percentage: number) => {
     if (percentage === 0) return 0;
     if (percentage < 5) return percentage + 2;
@@ -34,11 +36,11 @@ export function Jar({
   };
 
   const getFilledPercentage = () => {
-    return ((passedTime - distractionMinutes) / time) * 100;
+    return ((passedTime - distractionMinutes * 60) / (time * 60)) * 100;
   };
 
   const getBgColor = () => {
-    const maxValue = Math.max(time, passedTime - distractionMinutes);
+    const maxValue = Math.max(time, passedTime / 60 - distractionMinutes);
     if (maxValue < 30) return "#45bd98";
     if (maxValue < 60) return "#55a1a4";
     if (maxValue < 90) return "#6c73b4";
@@ -46,9 +48,28 @@ export function Jar({
     return "#8f32cd";
   };
 
+  const [lastPercentageCheck, setLastPercentageCheck] =
+    useState<number>(passedTime);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
+    setLastPercentageCheck(passedTime);
+  }, [distractionMinutes]);
+
+  useEffect(() => {
+    if (passedTime >= lastPercentageCheck + 20) {
+      setLastPercentageCheck(passedTime);
+    }
+  }, [passedTime]);
+
   const filledPercentage = useMemo(
     () => getFilledPercentage(),
-    [passedTime, distractionMinutes]
+    [lastPercentageCheck, firstRender.current, time]
   );
 
   const id = useId();
@@ -58,15 +79,15 @@ export function Jar({
     //If the user has allowed exceeded time and the time has passed, finish the block
     if (user?.config.exceededTime) {
       //If the exceeded time is allowed, check if the limit time has been reached
-      const timeLImit = user?.config.timeLimit
+      const timeLimit = user?.config.timeLimit
         ? user?.config.timeLimit
         : conf.defaultUserConfig.timeLimit!;
-      if (passedTime - distractionMinutes >= timeLImit) {
+      if (passedTime - distractionMinutes * 60 >= timeLimit * 60) {
         finishBlock && finishBlock();
       }
     } else {
       //If the exceeded time is not allowed, check if the block has been finished
-      if (passedTime - distractionMinutes >= time) {
+      if (passedTime - distractionMinutes * 60 >= time * 60) {
         finishBlock && finishBlock();
       }
     }
@@ -188,8 +209,8 @@ export function Jar({
             fontSize: "1.3rem",
           }}
         >{`${
-          passedTime - distractionMinutes > time
-            ? passedTime - distractionMinutes
+          passedTime - distractionMinutes * 60 > time * 60
+            ? Math.floor(passedTime / 60) - distractionMinutes
             : time
         }`}</text>
         {distractionMinutes && distractionMinutes > 0 && (

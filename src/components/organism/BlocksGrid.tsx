@@ -67,7 +67,7 @@ export function BlocksGrid({
             time={block.targetMinutes}
             passedTime={moment(block.finishDate).diff(
               block.creationDate,
-              "minutes"
+              "seconds"
             )}
             distractionMinutes={block.distractionMinutes}
             tag={block.tag}

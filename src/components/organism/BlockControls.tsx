@@ -17,12 +17,12 @@ import { Block } from "../../types/entities";
 import { Typography } from "../atom/Typography";
 import { useApiError } from "../../hooks/useApiError";
 import { useNavigate } from "react-router-dom";
-import { ResultModal } from "../../modals/ResultModal";
 import {
   getTimeInHoursMinutesSeconds,
   getTimeInHoursMinutesSecondsString,
 } from "../../utils/utilFunctions";
 import { useAuth } from "../../hooks/useAuth";
+import { DetailsModal } from "../../modals/DetailsModal";
 
 export function BlockControls({}: {}) {
   const [time, setTime] = useState(25);
@@ -173,11 +173,12 @@ export function BlockControls({}: {}) {
             <>
               <Jar
                 size={100}
+                key={`jar_${activeBlock.id}`}
                 blockId={activeBlock.id}
                 time={activeBlock.targetMinutes}
                 passedTime={moment(currentTime).diff(
                   moment(activeBlock.creationDate),
-                  "minute"
+                  "second"
                 )}
                 distractionMinutes={activeBlock.distractionMinutes}
                 finishBlock={() =>
@@ -249,7 +250,13 @@ export function BlockControls({}: {}) {
             </>
           ) : (
             <>
-              <Jar size={100} time={time} passedTime={time} tag={tag} />
+              <Jar
+                key={`jar_selector`}
+                size={100}
+                time={time}
+                passedTime={time * 60}
+                tag={tag}
+              />
               <Button
                 className="w-fit"
                 onClick={() => onStartBlock()}
@@ -261,9 +268,10 @@ export function BlockControls({}: {}) {
           )}
         </div>
         {resultBlockId && (
-          <ResultModal
+          <DetailsModal
             blockId={resultBlockId}
             onClose={() => setResultBlockId(undefined)}
+            justCompleted={true}
           />
         )}
       </div>
