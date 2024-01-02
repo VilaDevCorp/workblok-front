@@ -110,7 +110,7 @@ export function DetailsModal({
                 size={100}
               />
               <div className="flex flex-col gap-4 w-full">
-                <StatData label="Tag" value={block.tag} />
+                <StatData label="Tag" value={block.tag ? block.tag : 'No tag'} />
                 <StatData
                   label="Target time"
                   value={`${block.targetMinutes} min`}

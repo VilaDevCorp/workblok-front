@@ -1,15 +1,26 @@
 import { IconButton } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import { HiHome } from "react-icons/hi";
 import { IoMdLogOut, IoMdSettings, IoMdStats } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useScreen } from "../../hooks/useScreen";
+import { Typography } from "../atom/Typography";
 
 export function SideMenu() {
   const [visible, setVisible] = useState<boolean>(false);
   const [visibleLocked, setVisibleLocked] = useState<boolean>(false);
   const { logout } = useAuth();
+  const { isTablet } = useScreen();
+
+  useEffect(() => {
+    if (isTablet) {
+      setVisible(false);
+    } else {
+      setVisible(true);
+    }
+  }, [isTablet]);
 
   const navigate = useNavigate();
 
@@ -18,7 +29,7 @@ export function SideMenu() {
 
   return (
     <div
-      className={`flex  items-center transition-transform z-50 fixed  rounded-e-lg backdrop-blur-sm  ${
+      className={`flex  items-center transition-transform z-50 fixed  rounded-e-lg bg-background-500  ${
         !visible && !visibleLocked && "-translate-x-[66px]"
       } top-1/2 -translate-y-1/2 `}
       onMouseEnter={() => {
@@ -30,7 +41,7 @@ export function SideMenu() {
         setVisible(false);
       }}
     >
-      <nav className="flex p-2 flex-col gap-4  rounded-e-lg">
+      <nav className="flex p-2 flex-col gap-4  rounded-e-lg bg-white">
         <IconButton
           className={optionMenuClasses}
           aria-label="Menu home option"
@@ -56,22 +67,24 @@ export function SideMenu() {
           icon={<IoMdLogOut size={40} />}
         />
       </nav>
-      <IconButton
-        className=" !rounded-e-lg !rounded-s-none !min-w-[32px] !text-primary-900 !bg-transparent"
-        onClick={() => {
-          if (visible && !visibleLocked) return;
-          setVisibleLocked((old) => !old);
-          setVisible(false);
-        }}
-        aria-label="Show menu button"
-        icon={
-          visible || visibleLocked ? (
-            <FiChevronsLeft size={30} />
-          ) : (
-            <FiChevronsRight size={30} />
-          )
-        }
-      />
+      {isTablet && (
+        <IconButton
+          className=" !rounded-e-lg !rounded-s-none !min-w-[32px] !text-primary-900 !bg-transparent"
+          onClick={() => {
+            if (visible && !visibleLocked) return;
+            setVisibleLocked((old) => !old);
+            setVisible(false);
+          }}
+          aria-label="Show menu button"
+          icon={
+            visible || visibleLocked ? (
+              <FiChevronsLeft size={30} />
+            ) : (
+              <FiChevronsRight size={30} />
+            )
+          }
+        />
+      )}
     </div>
   );
 }
