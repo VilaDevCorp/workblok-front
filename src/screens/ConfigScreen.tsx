@@ -79,17 +79,6 @@ export function ConfigScreen() {
       <Section title="Configuration">
         <form className="flex flex-col gap-4" onSubmit={() => onUpdateConfig()}>
           <FormField
-            label="Daily target"
-            input={
-              <TimeSlider
-                value={config.dailyTarget!}
-                setValue={(value) =>
-                  setConfig({ ...config, dailyTarget: value })
-                }
-              ></TimeSlider>
-            }
-          />
-          <FormField
             label="Allow exceeded time"
             input={
               <Switch
@@ -101,6 +90,33 @@ export function ConfigScreen() {
                   })
                 }
               />
+            }
+            oneLine
+          />
+          <FormField
+            label="Dark mode"
+            input={
+              <Switch
+                isChecked={config.darkMode!}
+                onChange={(value) =>
+                  setConfig({
+                    ...config,
+                    darkMode: value.currentTarget.checked,
+                  })
+                }
+              />
+            }
+            oneLine
+          />
+          <FormField
+            label="Daily target"
+            input={
+              <TimeSlider
+                value={config.dailyTarget!}
+                setValue={(value) =>
+                  setConfig({ ...config, dailyTarget: value })
+                }
+              ></TimeSlider>
             }
           />
           <FormField
@@ -129,7 +145,7 @@ export function ConfigScreen() {
                   />
                   <IconButton
                     className="!bg-red"
-                    variant={'solid'}
+                    variant={"solid"}
                     aria-label="Creat new tag"
                     icon={<FaPlus />}
                     onClick={() => onAddNewTag()}
@@ -141,31 +157,21 @@ export function ConfigScreen() {
                       key={`tag_${tag}`}
                       className="px-2 py-1 mr-2 flex gap-2 items-center"
                     >
-                      <IconButton
+                      <Button
                         aria-label="Delete tag"
-                        icon={<FaMinus />}
+                        variant={"ghost"}
+                        color={"error"}
                         onClick={() => onDeleteTag(tag)}
-                      />
-                      <Typography mode="body">{tag}</Typography>
+                      >
+                        <div className="flex gap-4 items-center">
+                          <FaMinus />
+                          <Typography mode="body">{tag}</Typography>
+                        </div>
+                      </Button>
                     </div>
                   ))}
                 </div>
               </div>
-            }
-          />
-
-          <FormField
-            label="Dark mode"
-            input={
-              <Switch
-                isChecked={config.darkMode!}
-                onChange={(value) =>
-                  setConfig({
-                    ...config,
-                    darkMode: value.currentTarget.checked,
-                  })
-                }
-              />
             }
           />
           <Button

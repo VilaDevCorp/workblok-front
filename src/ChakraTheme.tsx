@@ -1,4 +1,12 @@
 import { defineStyleConfig, extendTheme } from "@chakra-ui/react";
+import { sliderAnatomy as parts } from "@chakra-ui/anatomy";
+const { defineMultiStyleConfig: defineMultiStyleConfigSlider } =
+  createMultiStyleConfigHelpers(parts.keys);
+import { switchAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
+
+const { defineMultiStyleConfig: defineMultiStyleConfigSwitch } =
+  createMultiStyleConfigHelpers(switchAnatomy.keys);
 
 const colors = {
   background: {
@@ -51,19 +59,7 @@ const colors = {
     900: "#5D6B77",
     disabled: "#4D4D4D",
   },
-  error: {
-    50: "#CAD7E3",
-    100: "#C0D0DD",
-    200: "#B7C8D8",
-    300: "#ADC1D2",
-    400: "#A4BACD",
-    500: "#9CB3C7",
-    600: "#8CA1B3",
-    700: "#7C8F9F",
-    800: "#6D7D8B",
-    900: "#5D6B77",
-    disabled: "#4D4D4D",
-  },
+  error: "#e73232",
 };
 const Button = defineStyleConfig({
   // The styles all button have in common
@@ -104,6 +100,24 @@ const Heading = defineStyleConfig({
   },
 });
 
+export const Slider = defineMultiStyleConfigSlider({
+  baseStyle: {
+    filledTrack: {
+      bg: "primary.600",
+    },
+  },
+});
+
+export const Switch = defineMultiStyleConfigSwitch({
+  baseStyle: {
+    track: {
+      _checked: {
+        bg: "primary.600",
+      },
+    },
+  },
+});
+
 export const theme = extendTheme({
   styles: {
     global: {
@@ -117,5 +131,7 @@ export const theme = extendTheme({
   components: {
     Button: Button,
     Heading: Heading,
+    Slider: Slider,
+    Switch: Switch,
   },
 });

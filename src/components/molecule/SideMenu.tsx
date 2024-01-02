@@ -30,7 +30,7 @@ export function SideMenu() {
   return (
     <div
       className={`flex  items-center transition-transform z-50 fixed  rounded-e-lg bg-background-500  ${
-        !visible && !visibleLocked && "-translate-x-[66px]"
+        !visible && !visibleLocked && isTablet && "-translate-x-[66px]"
       } top-1/2 -translate-y-1/2 `}
       onMouseEnter={() => {
         if (visibleLocked) return;

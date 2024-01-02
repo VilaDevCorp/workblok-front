@@ -236,8 +236,8 @@ export function Jar({
               alignmentBaseline="middle"
               fontFamily="Urbanist, sans-serif"
               x={"50%"}
-              stroke={"red"}
-              fill={"red"}
+              stroke={theme.colors.error}
+              fill={theme.colors.error}
               style={{
                 wordWrap: "break-word",
                 width: "100%",

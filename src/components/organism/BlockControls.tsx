@@ -161,8 +161,8 @@ export function BlockControls({}: {}) {
             value={time}
             onChange={(value) => setTime(value)}
           >
-            <SliderTrack className="!w-[10px] bg-secondary-400 ">
-              <SliderFilledTrack bg={"#5691d6"} />
+            <SliderTrack className="!w-[10px] ">
+              <SliderFilledTrack />
             </SliderTrack>
             <SliderThumb className="!w-[20px] !h-[20px]" />
           </Slider>

@@ -1,29 +1,56 @@
 import React, { useState } from "react";
 import { Block } from "../../types/entities";
-import { Button, IconButton } from "@chakra-ui/react";
+import { Button, IconButton, useToast } from "@chakra-ui/react";
 import moment, { invalid } from "moment";
 import { BiChevronLeft, BiChevronRight, BiPlus } from "react-icons/bi";
 import { Jar } from "../molecule/Jar";
 import { IoMdRemove } from "react-icons/io";
 import { useApi } from "../../hooks/useApi";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ConfirmationModal } from "../../modals/ConfirmationModal";
+import { useApiError } from "../../hooks/useApiError";
+import { useNavigate } from "react-router-dom";
+import { DatePicker } from "../atom/DatePicker";
+import { MdDelete } from "react-icons/md";
 
-export function BlocksGrid({
-  blocks,
-  page,
-  setPage,
-  totalPages,
-}: {
-  blocks: Block[];
-  page: number;
-  setPage: (page: number) => void;
-  totalPages: number;
-}) {
+export function BlocksGrid() {
+  const today = moment().startOf("day").toDate();
+  const [blocksDate, setBlocksDate] = useState(today);
   const [selectedBlocks, setSelectedBlocks] = useState<Block[]>([]);
-  const { deleteBlocks } = useApi();
+  const { deleteBlocks, searchBlocks } = useApi();
   const queryclient = useQueryClient();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const toast = useToast();
+  const [page, setPage] = useState(0);
+  const navigation = useNavigate();
+  const { setError } = useApiError(navigation);
+
+  const { data: finishedBlocks, isLoading: isLoadingFinishedBlocks } = useQuery(
+    {
+      queryKey: ["getFinishedBlocks", page, blocksDate],
+      queryFn: () =>
+        searchBlocks({
+          page,
+          pageSize: 9,
+          isActive: false,
+          creationDate: blocksDate,
+        }),
+
+      onSuccess: (data) => {
+        if (data.content.length < 1 && page > 0) {
+          setPage(page - 1);
+        }
+      },
+      onError: (err) => {
+        toast({
+          title: "Error obtaining your blocks",
+          status: "error",
+          duration: 5000,
+        });
+        setError(err as Error);
+      },
+    }
+  );
 
   const { mutate: onDeleteBlocks } = useMutation({
     mutationKey: "deleteBlocks",
@@ -49,15 +76,19 @@ export function BlocksGrid({
 
   return (
     <>
-      <Button
-        leftIcon={<IoMdRemove />}
-        isDisabled={selectedBlocks.length < 1}
-        onClick={() => onPrepareDelete()}
-      >
-        Delete
-      </Button>
+      <div className="flex gap-4 mb-4 justify-between">
+        <DatePicker date={blocksDate} setDate={setBlocksDate} />
+        <Button
+          leftIcon={<MdDelete />}
+          isDisabled={selectedBlocks.length < 1}
+          onClick={() => onPrepareDelete()}
+        >
+          Delete
+        </Button>
+      </div>
+
       <div className="grid grid-cols-[repeat(auto-fill,88px)] gap-4 justify-between">
-        {blocks.map((block) => (
+        {finishedBlocks?.content.map((block) => (
           <Jar
             key={block.id}
             blockId={block.id}
@@ -76,16 +107,18 @@ export function BlocksGrid({
       </div>
       <div className="flex gap-4 mt-4 w-full justify-evenly">
         <IconButton
+          className="!text-2xl"
           aria-label="Previous page"
           icon={<BiChevronLeft />}
           onClick={() => setPage(page - 1)}
           isDisabled={page === 0}
         />
         <IconButton
+          className="!text-2xl"
           aria-label="Next page"
           icon={<BiChevronRight />}
           onClick={() => setPage(page + 1)}
-          isDisabled={page + 1 >= totalPages}
+          isDisabled={page + 1 >= finishedBlocks?.totalPages!}
         />
         <ConfirmationModal
           title="Delete blocks"
