@@ -161,8 +161,8 @@ export function BlockControls({}: {}) {
             value={time}
             onChange={(value) => setTime(value)}
           >
-            <SliderTrack className="!w-[10px] ">
-              <SliderFilledTrack />
+            <SliderTrack className="!w-[10px] bg-secondary-400 ">
+              <SliderFilledTrack bg={"#5691d6"} />
             </SliderTrack>
             <SliderThumb className="!w-[20px] !h-[20px]" />
           </Slider>
@@ -218,7 +218,8 @@ export function BlockControls({}: {}) {
                     !isCompletedBlock &&
                     activeBlock.targetMinutes - remainingMinutes <= 5
                   }
-                  className="!border-error border !text-error !"
+                  variant={"outline"}
+                  className="!text-error"
                   onClick={() =>
                     onApplyPenalty(
                       (activeBlock.distractionMinutes
@@ -235,7 +236,8 @@ export function BlockControls({}: {}) {
                     !isCompletedBlock &&
                     activeBlock.targetMinutes - remainingMinutes <= 1
                   }
-                  className="!border-error border !text-error !"
+                  variant={"outline"}
+                  className=" !text-error"
                   onClick={() =>
                     onApplyPenalty(
                       (activeBlock.distractionMinutes

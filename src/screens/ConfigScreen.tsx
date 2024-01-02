@@ -128,7 +128,8 @@ export function ConfigScreen() {
                     onChange={(e) => setNewTag(e.target.value)}
                   />
                   <IconButton
-                    className="bg-red"
+                    className="!bg-red"
+                    variant={'solid'}
                     aria-label="Creat new tag"
                     icon={<FaPlus />}
                     onClick={() => onAddNewTag()}

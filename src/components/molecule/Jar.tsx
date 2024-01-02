@@ -1,10 +1,9 @@
-import { IconButton } from "@chakra-ui/react";
+import { IconButton, useTheme } from "@chakra-ui/react";
 import { useMemo, useId, useState, useEffect, useRef } from "react";
 import { BiInfoCircle } from "react-icons/bi";
 import { DetailsModal } from "../../modals/DetailsModal";
 import { useAuth } from "../../hooks/useAuth";
 import { conf } from "../../conf";
-import { Typography } from "../atom/Typography";
 
 export function Jar({
   size = 100,
@@ -28,6 +27,8 @@ export function Jar({
   tag?: string;
 }) {
   const { user } = useAuth();
+  const theme = useTheme();
+
   const firstRender = useRef(true);
   const getPercentageOffset = (percentage: number) => {
     if (percentage === 0) return 0;
@@ -103,7 +104,9 @@ export function Jar({
       {blockId && (
         <IconButton
           onClick={() => setShowDetails(true)}
-          className={`!absolute !bg-transparent opacity-25 hover:opacity-100  rounded-full !w-[30px] !h-[30px] !min-w-[30px] !min-h-[30px] !top-[10%] !z-10 !right-[50%] translate-x-[50%]`}
+          className={`!absolute !bg-transparent opacity-25 hover:opacity-100  
+          rounded-full !w-[30px] !h-[30px] !min-w-[30px] !min-h-[30px] !top-[10%] !z-10 !right-[50%]
+          translate-x-[50%] !text-primary-500`}
           aria-label="dsf"
           icon={<BiInfoCircle size={24} />}
         ></IconButton>
@@ -176,8 +179,9 @@ export function Jar({
             z={1000}
             textAnchor="middle"
             alignmentBaseline="middle"
-            stroke={"black"}
-            fill={"black"}
+            stroke={theme.colors.primary[900]}
+            fill={theme.colors.primary[900]}
+            fontFamily="Urbanist, sans-serif"
             style={{
               wordWrap: "break-word",
               wordBreak: "break-all",
@@ -197,10 +201,11 @@ export function Jar({
           y={"50%"}
           x={"50%"}
           z={1000}
+          fontFamily="Urbanist, sans-serif"
           textAnchor="middle"
           alignmentBaseline="middle"
-          stroke={"black"}
-          fill={"black"}
+          stroke={theme.colors.primary[900]}
+          fill={theme.colors.primary[900]}
           style={{
             wordWrap: "break-word",
             fontWeight: "bold",
@@ -229,6 +234,7 @@ export function Jar({
               y={0.8 * 2 * size}
               height={20}
               alignmentBaseline="middle"
+              fontFamily="Urbanist, sans-serif"
               x={"50%"}
               stroke={"red"}
               fill={"red"}

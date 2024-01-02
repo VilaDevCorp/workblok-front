@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Noto+Sans+JP&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Urbanist&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -27,10 +27,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #124969;
 }
 
-html {
-  /* background: 'red'; */
-  font-family: "Noto Sans JP", sans-serif;
-}
 
 #root {
   width: 100%;
@@ -48,6 +44,7 @@ html {
 
 * {
   box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {

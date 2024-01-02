@@ -10,23 +10,25 @@ export function Typography({
   mode?: "title" | "subtitle" | "body";
   className?: string;
 }) {
+  const commonClasses = "text-primary-900 ";
+
   const getText = () => {
     switch (mode) {
       case "title":
         return (
-          <Heading className={className} as={"h1"} size={"lg"}>
+          <Heading className={commonClasses + className} as={"h1"} size={"lg"}>
             {children}
           </Heading>
         );
       case "subtitle":
         return (
-          <Heading className={className} as={"h2"} size={"md"}>
+          <Heading className={commonClasses + className} as={"h2"} size={"md"}>
             {children}
           </Heading>
         );
       default:
         return (
-          <Text className={className} size={"sm"}>
+          <Text className={commonClasses + className} size={"sm"}>
             {children}
           </Text>
         );
