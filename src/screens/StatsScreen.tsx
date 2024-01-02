@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { StatsPanel } from "../components/molecule/StatsPanel";
 import { useAuth } from "../hooks/useAuth";
+import { TagSelector } from "../components/molecule/TagSelector";
 
 export function StatsScreen() {
   const { getStats } = useApi();
@@ -65,19 +66,7 @@ export function StatsScreen() {
             ))}
           </Select>
         </div>
-        <Select
-          maxWidth={350}
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-        >
-          <option value={""}>{"No tag"}</option>
-          {statsData?.tags?.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </Select>
-
+        <TagSelector tag={tag} setTag={setTag} tags={statsData?.tags || []} />
         {statsData?.yearInfo && (
           <WorkingHoursGraph
             data={months().map((monthName, monthPosition) => {

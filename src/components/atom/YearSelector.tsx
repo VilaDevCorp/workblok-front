@@ -9,10 +9,11 @@ export function YearSelector({
   year: number;
   setYear: (year: number) => void;
 }) {
-  const controlButtonClasses = "!bg-transparent";
+  const controlButtonClasses = "";
   return (
     <div className="w-full flex gap-2 items-center">
       <IconButton
+        variant={"ghost"}
         className={controlButtonClasses}
         aria-label="Previous year button"
         icon={<BiChevronLeft size={30} />}
@@ -20,6 +21,7 @@ export function YearSelector({
       />
       <span className="text-xl">{year}</span>
       <IconButton
+        variant={"ghost"}
         className={controlButtonClasses}
         aria-label="Next year button"
         icon={<BiChevronRight size={30} />}

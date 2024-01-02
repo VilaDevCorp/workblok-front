@@ -1,12 +1,23 @@
 import { defineStyleConfig, extendTheme } from "@chakra-ui/react";
-import { sliderAnatomy as parts } from "@chakra-ui/anatomy";
+import {
+  sliderAnatomy,
+  switchAnatomy,
+  checkboxAnatomy,
+  inputAnatomy,
+} from "@chakra-ui/anatomy";
 const { defineMultiStyleConfig: defineMultiStyleConfigSlider } =
-  createMultiStyleConfigHelpers(parts.keys);
-import { switchAnatomy } from "@chakra-ui/anatomy";
+  createMultiStyleConfigHelpers(sliderAnatomy.keys);
+import {} from "@chakra-ui/anatomy";
 import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 
 const { defineMultiStyleConfig: defineMultiStyleConfigSwitch } =
   createMultiStyleConfigHelpers(switchAnatomy.keys);
+
+const { defineMultiStyleConfig: defineMultiStyleConfigCheckbox } =
+  createMultiStyleConfigHelpers(checkboxAnatomy.keys);
+
+const { defineMultiStyleConfig: defineMultiStyleConfigInput } =
+  createMultiStyleConfigHelpers(inputAnatomy.keys);
 
 const colors = {
   background: {
@@ -84,6 +95,17 @@ const Button = defineStyleConfig({
       },
       color: "white",
     },
+    ghost: {
+      bg: "transparent",
+      _hover: {
+        color: "primary.900",
+        bg: "transparent !important",
+      },
+      _disabled: {
+        color: "primary.50",
+      },
+      color: "primary.500",
+    },
   },
   // The default size and variant values
   defaultProps: {},
@@ -118,6 +140,20 @@ export const Switch = defineMultiStyleConfigSwitch({
   },
 });
 
+export const CheckBox = defineMultiStyleConfigCheckbox({
+  baseStyle: {
+    control: {
+      _checked: {
+        bg: "primary.600",
+      },
+    },
+  },
+});
+
+export const Input = defineMultiStyleConfigInput({
+  baseStyle: {},
+});
+
 export const theme = extendTheme({
   styles: {
     global: {
@@ -133,5 +169,6 @@ export const theme = extendTheme({
     Heading: Heading,
     Slider: Slider,
     Switch: Switch,
+    Checkbox: CheckBox,
   },
 });

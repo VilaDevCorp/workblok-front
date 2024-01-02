@@ -23,6 +23,7 @@ import {
 } from "../../utils/utilFunctions";
 import { useAuth } from "../../hooks/useAuth";
 import { DetailsModal } from "../../modals/DetailsModal";
+import { TagSelector } from "../molecule/TagSelector";
 
 export function BlockControls({}: {}) {
   const [time, setTime] = useState(25);
@@ -137,18 +138,11 @@ export function BlockControls({}: {}) {
   return (
     <div className="flex gap-2 flex-col items-center">
       {!activeBlock && (
-        <Select
-          maxWidth={350}
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-        >
-          <option value={""}>{"No tag"}</option>
-          {user?.config.tags?.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </Select>
+        <TagSelector
+          tag={tag}
+          setTag={setTag}
+          tags={user?.config?.tags || []}
+        />
       )}
       <div className="flex justify-center items-center gap-8 ">
         {!activeBlock && (

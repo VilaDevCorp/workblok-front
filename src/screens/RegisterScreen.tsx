@@ -276,7 +276,7 @@ export function RegisterScreen() {
                 <Modal isOpen={isTermsOfServiceOpen} onClose={() => setIsTermsOfServiceOpen(false)}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader>Modal Title</ModalHeader>
+                        <ModalHeader>{'Terms of service'}</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             <Typography mode='body'>{termsOfService}</Typography>
