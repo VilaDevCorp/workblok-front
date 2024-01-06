@@ -154,6 +154,11 @@ export const Input = defineMultiStyleConfigInput({
   baseStyle: {},
 });
 
+const Spinner = defineStyleConfig({
+  // The styles all button have in common
+  baseStyle: { color: "primary.500" },
+});
+
 export const theme = extendTheme({
   styles: {
     global: {
@@ -170,5 +175,6 @@ export const theme = extendTheme({
     Slider: Slider,
     Switch: Switch,
     Checkbox: CheckBox,
+    Spinner: Spinner,
   },
 });
