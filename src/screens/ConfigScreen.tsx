@@ -11,6 +11,7 @@ import {
   IconButton,
   Input,
   Switch,
+  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import { useApi } from "../hooks/useApi";
@@ -31,6 +32,7 @@ export function ConfigScreen() {
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const firstRender = useRef(true);
   const toast = useToast();
+  const { toggleColorMode, colorMode } = useColorMode();
 
   const { isLoading: isLoadingUpdateConfig, mutate: onUpdateConfig } =
     useMutation({
@@ -97,13 +99,8 @@ export function ConfigScreen() {
             label="Dark mode"
             input={
               <Switch
-                isChecked={config.darkMode!}
-                onChange={(value) =>
-                  setConfig({
-                    ...config,
-                    darkMode: value.currentTarget.checked,
-                  })
-                }
+                isChecked={colorMode === "dark"}
+                onChange={() => toggleColorMode()}
               />
             }
             oneLine

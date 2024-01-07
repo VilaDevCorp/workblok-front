@@ -45,6 +45,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 * {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif !important;
+  transition: background-color 2s ease-in-out;
 }
 
 .no-scrollbar::-webkit-scrollbar {

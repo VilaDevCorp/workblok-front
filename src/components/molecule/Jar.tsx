@@ -1,4 +1,4 @@
-import { IconButton, useTheme } from "@chakra-ui/react";
+import { IconButton, useColorMode, useTheme } from "@chakra-ui/react";
 import { useMemo, useId, useState, useEffect, useRef } from "react";
 import { BiInfoCircle } from "react-icons/bi";
 import { DetailsModal } from "../../modals/DetailsModal";
@@ -43,10 +43,10 @@ export function Jar({
   const getBgColor = () => {
     const maxValue = Math.max(time, passedTime / 60 - distractionMinutes);
     if (maxValue < 30) return "#45bd98";
-    if (maxValue < 60) return "#55a1a4";
-    if (maxValue < 90) return "#6c73b4";
-    if (maxValue < 120) return "#7d54c0";
-    return "#8f32cd";
+    if (maxValue < 60) return "#61a3b2";
+    if (maxValue < 90) return "#798cc9";
+    if (maxValue < 120) return "#9373e2";
+    return "#af58fc";
   };
 
   const [lastPercentageCheck, setLastPercentageCheck] =
@@ -94,11 +94,24 @@ export function Jar({
     }
   }, [passedTime]);
 
+  const { colorMode } = useColorMode();
+
   return (
     <div
-      className={`${onClick && "hover:backdrop-brightness-75"}
-      } transition-[backdrop-filter] relative border-4 border-transparent rounded-[25px] ${
-        isSelected && " !border-primary-500 backdrop-brightness-75"
+      className={`${
+        onClick &&
+        (colorMode === "dark"
+          ? "hover:backdrop-brightness-200"
+          : "hover:backdrop-brightness-75")
+      }
+      transition-[backdrop-filter] relative border-4 border-transparent rounded-[25px] 
+      ${
+        isSelected &&
+        ` ${
+          colorMode === "dark"
+            ? "!border-primary-200 backdrop-brightness-200"
+            : "!border-primary-500 backdrop-brightness-75 "
+        }`
       }`}
     >
       {blockId && (
@@ -106,8 +119,10 @@ export function Jar({
           onClick={() => setShowDetails(true)}
           className={`!absolute !bg-transparent opacity-25 hover:opacity-100  
           rounded-full !w-[30px] !h-[30px] !min-w-[30px] !min-h-[30px] !top-[10%] !z-10 !right-[50%]
-          translate-x-[50%] !text-primary-500`}
-          aria-label="dsf"
+          translate-x-[50%] ${
+            colorMode === "dark" ? "!text-primary-100" : "!text-primary-500"
+          } `}
+          aria-label="Info button"
           icon={<BiInfoCircle size={24} />}
         ></IconButton>
       )}
@@ -164,7 +179,7 @@ export function Jar({
           <use
             xlinkHref={`#tube_${id}`}
             className={`tubeBg_${id}`}
-            fill="#C8D9D3"
+            fill={colorMode === "dark" ? theme.colors.primary[600] : "#C8D9D3"}
             opacity="0.61"
           />
           <g mask={`url(#gradMask_${id})`}>
@@ -179,8 +194,16 @@ export function Jar({
             z={1000}
             textAnchor="middle"
             alignmentBaseline="middle"
-            stroke={theme.colors.primary[900]}
-            fill={theme.colors.primary[900]}
+            fill={
+              colorMode === "dark"
+                ? theme.colors.primary[100]
+                : theme.colors.primary[900]
+            }
+            stroke={
+              colorMode === "dark"
+                ? theme.colors.primary[100]
+                : theme.colors.primary[900]
+            }
             fontFamily="Urbanist, sans-serif"
             style={{
               wordWrap: "break-word",
@@ -204,8 +227,16 @@ export function Jar({
           fontFamily="Urbanist, sans-serif"
           textAnchor="middle"
           alignmentBaseline="middle"
-          stroke={theme.colors.primary[900]}
-          fill={theme.colors.primary[900]}
+          stroke={
+            colorMode === "dark"
+              ? theme.colors.primary[100]
+              : theme.colors.primary[900]
+          }
+          fill={
+            colorMode === "dark"
+              ? theme.colors.primary[100]
+              : theme.colors.primary[900]
+          }
           style={{
             wordWrap: "break-word",
             fontWeight: "bold",

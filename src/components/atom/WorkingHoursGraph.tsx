@@ -16,12 +16,18 @@ import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { useColorMode } from "@chakra-ui/react";
 
 const CustomTooltip = (props: TooltipProps<ValueType, NameType>) => {
   let actName, actIcon;
+  const { colorMode } = useColorMode();
   if (props.active && props.payload && props.payload.length) {
     return (
-      <div className="bg-background-500 rounded-lg px-2 py-2">
+      <div
+        className={`${
+          colorMode === "dark" ? "bg-primary-900" : "bg-background"
+        } rounded-lg px-2 py-2`}
+      >
         <p>{props.label}</p>
         <div className="text-background-900 flex gap-2">
           <span>{"Working:"}</span>
@@ -43,7 +49,6 @@ export const WorkingHoursGraph = ({ data }: { data: GraphElement[] }) => {
     <ResponsiveContainer width="100%" height="100%" minHeight={"300px"}>
       <AreaChart
         data={data}
-        
         margin={{
           top: 10,
           right: 30,

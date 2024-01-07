@@ -1,5 +1,6 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 import React from "react";
+import { Typography } from "../atom/Typography";
 
 export function TagSelector({
   tag,
@@ -10,10 +11,18 @@ export function TagSelector({
   setTag: (tag: string) => void;
   tags: string[];
 }) {
+  const { colorMode } = useColorMode();
+
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        bgColor={tag === "" ? "primary.50 !important" : undefined}
+        bgColor={`${
+          tag === ""
+            ? colorMode === "dark"
+              ? "primary.700 !important"
+              : "primary.50 !important"
+            : ""
+        }`}
         border={0}
         variant={"outline"}
         onClick={() => {
@@ -25,7 +34,13 @@ export function TagSelector({
       </Button>
       {tags.map((t) => (
         <Button
-          bgColor={tag === t ? "primary.50 !important" : undefined}
+          bgColor={`${
+            tag === t
+              ? colorMode === "dark"
+                ? "primary.700 !important"
+                : "primary.50 !important"
+              : ""
+          }`}
           border={0}
           key={`tag_${t}`}
           variant={"outline"}

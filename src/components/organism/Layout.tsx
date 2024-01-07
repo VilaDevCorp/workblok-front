@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { Header } from "../organism/Header";
 import logo from "/logo.svg";
-import { Footer } from "./Footer";
+import darkLogo from "/darkLogo.svg";
 import { Typography } from "../atom/Typography";
-import { Button } from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 import { SideMenu } from "../molecule/SideMenu";
 
 export function Layout({
@@ -20,6 +19,8 @@ export function Layout({
 }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const { colorMode } = useColorMode();
 
   return isPublic || user ? (
     //Public Layout
@@ -48,7 +49,11 @@ export function Layout({
       <main
         className={`flex p-8 rounded-lg h-full md:h-auto justify-center items-center py flex-col gap-6 m-auto`}
       >
-        <img src={logo} alt="Logo" className="mb-10 self-center  w-[200px]" />
+        <img
+          src={colorMode === "dark" ? darkLogo : logo}
+          alt="Logo"
+          className="mb-10 self-center  w-[200px]"
+        />
         <Typography>{"You need an account to view this page"}</Typography>
         <Button onClick={() => navigate("/login")}>{"Sign in"}</Button>
       </main>

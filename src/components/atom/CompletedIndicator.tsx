@@ -8,13 +8,13 @@ export function CompletedIndicator({
 }) {
   const getColor = () => {
     if (completedPercentage < 25) {
-      return "red";
+      return "error";
     } else if (completedPercentage < 50) {
-      return "orange";
+      return "warning";
     } else if (completedPercentage < 75) {
-      return "yellow";
+      return "successLow";
     } else if (completedPercentage < 100) {
-      return "green";
+      return "success";
     } else {
       return "teal";
     }
@@ -25,7 +25,8 @@ export function CompletedIndicator({
       value={completedPercentage}
       size={75}
       color={getColor()}
-      className="w-fit "
+      trackColor="transparent"
+            className="w-fit "
     >
       <CircularProgressLabel
         className="!text-lg font-bold"

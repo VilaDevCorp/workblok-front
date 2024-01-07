@@ -5,8 +5,6 @@ import {
   getTimeInHoursMinutesSecondsString,
 } from "../../utils/utilFunctions";
 import { StatData } from "../atom/StatData";
-import { TooltipProps } from "recharts";
-import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 
 export function StatsPanel({ statsData }: { statsData?: StatsResult }) {
   const {

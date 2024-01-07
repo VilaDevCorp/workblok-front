@@ -1,4 +1,8 @@
-import { defineStyleConfig, extendTheme } from "@chakra-ui/react";
+import {
+  StyleFunctionProps,
+  defineStyleConfig,
+  extendTheme,
+} from "@chakra-ui/react";
 import {
   sliderAnatomy,
   switchAnatomy,
@@ -20,17 +24,6 @@ const { defineMultiStyleConfig: defineMultiStyleConfigInput } =
   createMultiStyleConfigHelpers(inputAnatomy.keys);
 
 const colors = {
-  background: {
-    100: "#B4C8D3",
-    200: "#315264",
-    300: "#213E4E",
-    400: "#132B37",
-    500: "#ffffff",
-    600: "#08161E",
-    700: "#07141B",
-    800: "#061117",
-    900: "#060F14",
-  },
   primary: {
     50: "#C8D2DE",
     100: "#AFBCCD",
@@ -42,35 +35,15 @@ const colors = {
     700: "#3B4F6A",
     800: "#2D4059",
     900: "#293A50",
+    1000: "#121A24",
     disabled: "#415849",
   },
-  secondary: {
-    50: "#CAD7E3",
-    100: "#C0D0DD",
-    200: "#B7C8D8",
-    300: "#ADC1D2",
-    400: "#A4BACD",
-    500: "#9CB3C7",
-    600: "#8CA1B3",
-    700: "#7C8F9F",
-    800: "#6D7D8B",
-    900: "#5D6B77",
-    disabled: "#4D4D4D",
-  },
-  success: {
-    50: "#CAD7E3",
-    100: "#C0D0DD",
-    200: "#B7C8D8",
-    300: "#ADC1D2",
-    400: "#A4BACD",
-    500: "#9CB3C7",
-    600: "#8CA1B3",
-    700: "#7C8F9F",
-    800: "#6D7D8B",
-    900: "#5D6B77",
-    disabled: "#4D4D4D",
-  },
+  background: "#fafafa",
+  success: "#256E58",
   error: "#e73232",
+  warning: "#ED9121",
+  successLow: "#d7ca27",
+  transparent: "transparent",
 };
 const Button = defineStyleConfig({
   // The styles all button have in common
@@ -83,6 +56,9 @@ const Button = defineStyleConfig({
       border: "2px solid",
       borderColor: "primary.600",
       _hover: {},
+      _dark: {
+        color: "primary.200",
+      },
       color: "primary.900",
     },
     solid: {
@@ -161,13 +137,16 @@ const Spinner = defineStyleConfig({
 
 export const theme = extendTheme({
   styles: {
-    global: {
+    global: (props: StyleFunctionProps) => ({
       body: {
-        bg: "white",
-        color: "primary.900",
+        bg: props.colorMode === "dark" ? "primary.1000" : "background",
+        color: props.colorMode === "dark" ? "primary.100" : "primary.900",
       },
-    },
+    }),
   },
+  initialColorMode: "dark",
+  useSystemColorMode: true,
+
   colors,
   components: {
     Button: Button,

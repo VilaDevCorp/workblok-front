@@ -1,4 +1,4 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Heading, Text, useColorMode } from "@chakra-ui/react";
 import React, { useCallback } from "react";
 
 export function Typography({
@@ -10,7 +10,11 @@ export function Typography({
   mode?: "title" | "subtitle" | "body";
   className?: string;
 }) {
-  const commonClasses = "text-primary-900 ";
+  const { colorMode } = useColorMode();
+
+  const commonClasses = `${
+    colorMode === "dark" ? "text-primary-100" : "text-primary-900"
+  } `;
 
   const getText = () => {
     switch (mode) {
