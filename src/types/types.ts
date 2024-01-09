@@ -1,4 +1,3 @@
-import { GraphElement } from './types';
 export interface SelectOption {
   label: string;
   value: string;
