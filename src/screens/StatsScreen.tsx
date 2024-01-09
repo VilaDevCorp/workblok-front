@@ -8,7 +8,7 @@ import {
 } from "../utils/utilFunctions";
 import { WorkingHoursGraph } from "../components/atom/WorkingHoursGraph";
 import { conf } from "../conf";
-import moment, { months, weekdays } from "moment";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { YearSelector } from "../components/atom/YearSelector";
 import {
@@ -60,7 +60,7 @@ export function StatsScreen() {
             onChange={(e) => setMonth(Number(e.target.value))}
           >
             <option value={-1}>All</option>
-            {months().map((month, index) => (
+            {moment.months().map((month, index) => (
               <option key={index} value={index}>
                 {month}
               </option>
@@ -76,7 +76,7 @@ export function StatsScreen() {
           <>
             {statsData?.yearInfo && (
               <WorkingHoursGraph
-                data={months().map((monthName, monthPosition) => {
+                data={moment.months().map((monthName, monthPosition) => {
                   return {
                     name: monthName.substring(0, 3),
                     workingHours:
@@ -143,7 +143,7 @@ export function StatsScreen() {
                               statsData.weekInfo &&
                               Array.from({ length: 7 }, (v, i) => {
                                 return {
-                                  name: weekdays(i + 1).substring(0, 3),
+                                  name: moment.weekdays(i + 1).substring(0, 3),
                                   workingHours:
                                     Number(
                                       statsData.weekInfo[

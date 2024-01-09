@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { conf } from "../../conf";
-import moment, { months, weekdays } from "moment";
 import { BiCalendar } from "react-icons/bi";
 import { YearSelector } from "./YearSelector";
+import moment from "moment";
 
 export function DatePicker({
   date,
@@ -92,7 +92,7 @@ export function DatePicker({
                 value={date.getMonth()}
                 onChange={(e) => onChangeMonth(Number(e.target.value))}
               >
-                {months().map((month, index) => (
+                {moment.months().map((month, index) => (
                   <option key={index} value={index}>
                     {month}
                   </option>
@@ -101,7 +101,7 @@ export function DatePicker({
             </PopoverHeader>
             <PopoverBody>
               <div className="grid grid-cols-7 gap-2">
-                {[...weekdays().slice(1, 7), weekdays()[0]].map(
+                {[...moment.weekdays().slice(1, 7), moment.weekdays()[0]].map(
                   (weekday, index) => (
                     <div
                       key={weekday}
