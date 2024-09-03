@@ -13,6 +13,7 @@ import { IoMdClose } from 'react-icons/io';
 import { Typography } from '../components/atom/Typography';
 import { Link } from '../components/atom/Link';
 import { TbLock } from 'react-icons/tb';
+import { PasswordInput } from '../components/atom/PasswordInput';
 
 
 export function ResetPasswordScreen() {
@@ -110,32 +111,15 @@ export function ResetPasswordScreen() {
                 {step === 1 ?
                     <>
                         <FormControl isInvalid={passwordDirty && passwordError}>
-                            <InputGroup>
-                                <Input placeholder="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
-                                <InputLeftElement
-                                    pointerEvents='none'
-                                    color='gray.300'
-                                    fontSize='1.2em'
-                                >
-                                    <TbLock color='gray.300' />
-                                </InputLeftElement>
-                            </InputGroup>
+                            <PasswordInput password={password} setPassword={setPassword} placeholder='Password' />
                             {passwordDirty && passwordError ?
                                 <FormErrorMessage>{passwordMessage}</FormErrorMessage>
                                 : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                             }
                         </FormControl>
                         <FormControl isInvalid={passwordMatchDirty && passwordMatchError != ''} >
-                            <InputGroup>
-                                <Input placeholder="Repeat password" type='password' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
-                                <InputLeftElement
-                                    pointerEvents='none'
-                                    color='gray.300'
-                                    fontSize='1.2em'
-                                >
-                                    <TbLock color='gray.300' />
-                                </InputLeftElement>
-                            </InputGroup>
+                            <PasswordInput password={repeatPassword} setPassword={setRepeatPassword} placeholder='Repeat password' />
+
                             {passwordMatchDirty && passwordMatchError != '' ?
                                 <FormErrorMessage>{passwordMatchError}</FormErrorMessage>
                                 : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>

@@ -13,6 +13,7 @@ import { HiOutlineMail } from 'react-icons/hi';
 import { TbLock } from 'react-icons/tb';
 import { Typography } from '../components/atom/Typography';
 import { Link } from '../components/atom/Link';
+import { PasswordInput } from '../components/atom/PasswordInput';
 
 export function RegisterScreen() {
 
@@ -231,32 +232,14 @@ export function RegisterScreen() {
                 </FormControl>
 
                 <FormControl isInvalid={passwordDirty && passwordError}>
-                    <InputGroup>
-                        <Input placeholder="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <InputLeftElement
-                            pointerEvents='none'
-                            color='gray.300'
-                            fontSize='1.2em'
-                        >
-                            <TbLock color='gray.300' />
-                        </InputLeftElement>
-                    </InputGroup>
+                    <PasswordInput password={password} setPassword={setPassword} placeholder='Password' />
                     {passwordDirty && passwordError ?
                         <FormErrorMessage>{passwordMessage}</FormErrorMessage>
                         : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                     }
                 </FormControl>
                 <FormControl isInvalid={passwordMatchDirty && passwordMatchError != ''} >
-                    <InputGroup>
-                        <Input placeholder="Repeat password" type='password' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
-                        <InputLeftElement
-                            pointerEvents='none'
-                            color='gray.300'
-                            fontSize='1.2em'
-                        >
-                            <TbLock color='gray.300' />
-                        </InputLeftElement>
-                    </InputGroup>
+                    <PasswordInput password={repeatPassword} setPassword={setRepeatPassword} placeholder='Repeat password' />
                     {passwordMatchDirty && passwordMatchError != '' ?
                         <FormErrorMessage>{passwordMatchError}</FormErrorMessage>
                         : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
