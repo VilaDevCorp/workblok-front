@@ -49,7 +49,7 @@ export function ForgottenPasswordScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Reset password'}>
+            <PublicFormLayout title={'Reset password'} onSubmit={onSendCode}>
                 <FormControl isInvalid={emailDirty && emailError}>
                     <InputGroup>
                         <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -66,7 +66,7 @@ export function ForgottenPasswordScreen() {
                         : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                     }
                 </FormControl>
-                <Button isLoading={isLoading} isDisabled={disabledButton} onClick={onSendCode}>{'Reset password'}</Button>
+                <Button type='submit' isLoading={isLoading} isDisabled={disabledButton}>{'Reset password'}</Button>
 
             </PublicFormLayout >
         </Layout >

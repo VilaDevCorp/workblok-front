@@ -7,6 +7,7 @@ interface PasswordInputProps {
     password: string;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
     placeholder?: string;
+    onBlur?: () => void;
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(function PasswordInput(props, ref) {
@@ -28,12 +29,14 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(fu
                 placeholder={placeholder}
                 type={showPassword ? 'text' : 'password'}
                 value={password}
+                onBlur={props.onBlur}
                 onChange={(e) =>
                     setPassword(e.target.value)
                 }
             />
             <InputRightElement>
-                <IconButton variant={'ghost'} style={{ boxShadow: 'none' }} aria-label='show-password'
+                <IconButton type={"button"} variant={'ghost'} style={{ boxShadow: 'none' }} aria-label='show-password'
+                    tabIndex={-1} 
                     icon={showPassword ? <BiHide /> : <BiShow />} onClick={() => setShowPassword(oldVal => !oldVal)} />
             </InputRightElement>
         </InputGroup>

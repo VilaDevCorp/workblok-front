@@ -94,7 +94,7 @@ export function LoginScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Sign in'}>
+            <PublicFormLayout title={'Sign in'} onSubmit={onLogin}>
                 {!notValidatedAccount ?
                     <>
                         <FormControl isInvalid={emailDirty && emailError}>
@@ -115,7 +115,7 @@ export function LoginScreen() {
                         </FormControl>
 
                         <FormControl isInvalid={passwordDirty && passwordError}>
-                            <PasswordInput password={password} setPassword={setPassword} placeholder='Password'/>
+                            <PasswordInput password={password} setPassword={setPassword} placeholder='Password' />
                             {passwordDirty && passwordError ?
                                 <FormErrorMessage>{passwordMessage}</FormErrorMessage>
                                 : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
@@ -127,7 +127,7 @@ export function LoginScreen() {
                             </Checkbox>
                             <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                         </FormControl>
-                        <Button isLoading={isLoading} isDisabled={disabledButton} onClick={onLogin}>{'Sign in'}</Button>
+                        <Button type='submit' isLoading={isLoading} isDisabled={disabledButton}>{'Sign in'}</Button>
                         <Link className='mt-2' onClick={() => navigate("/recover-password")}>{'I have forgotten my password'}</Link>
                         <span className='flex mt-5'>
                             <Typography>{`New here? ${'\u00A0'}`}</Typography><Link onClick={() => navigate("/register")}>{'Sign up'}</Link>

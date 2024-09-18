@@ -72,7 +72,7 @@ export function ValidateAccountScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Email validation'}>
+            <PublicFormLayout title={'Email validation'} onSubmit={() => false}>
                 {step === 1 ?
                     <div className='ml-auto mr-auto mt-2 flex flex-col items-center gap-4'>
                         <Spinner speed='.8s' size={'xl'} color='blue.500' />

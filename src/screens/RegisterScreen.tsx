@@ -27,9 +27,9 @@ export function RegisterScreen() {
     const [repeatPassword, setRepeatPassword] = useState<string>('')
     const [serviceTermsAccepted, setServiceTermsAccepted] = useState<boolean>(false)
 
-    const [usernameDirty, usernameError, usernameMessage, usernameValidate] = useValidator(username, [notEmptyValidator])
-    const [emailDirty, emailError, emailMessage, emailValidate] = useValidator(email, [notEmptyValidator, emailValidator]);
-    const [passwordDirty, passwordError, passwordMessage, passwordValidate] = useValidator(password, [notEmptyValidator, minLength8Validator, upperLowerCaseValidator]);
+    const [usernameDirty, usernameError, usernameMessage, usernameValidate, setUsernameDirty] = useValidator(username, [notEmptyValidator])
+    const [emailDirty, emailError, emailMessage, emailValidate, setEmailDirty] = useValidator(email, [notEmptyValidator, emailValidator]);
+    const [passwordDirty, passwordError, passwordMessage, passwordValidate, setPasswordDirty] = useValidator(password, [notEmptyValidator, minLength8Validator, upperLowerCaseValidator]);
     const [passwordMatchError, setPasswordMatchError] = useState<string>('')
     const [passwordMatchDirty, setPasswordMatchDirty] = useState<boolean>(false)
     const [serviceTermsAcceptedDirty, setServiceTermsAcceptedDirty] = useState<boolean>(false)
@@ -196,10 +196,10 @@ export function RegisterScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Sign up'}>
+            <PublicFormLayout title={'Sign up'} onSubmit={()=>onRegister()}>
                 <FormControl isInvalid={emailDirty && emailError}>
                     <InputGroup>
-                        <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <Input placeholder="Email" onBlur={() => setEmailDirty(true)} value={email} onChange={(e) => setEmail(e.target.value)} />
                         <InputLeftElement
                             pointerEvents='none'
                             color='gray.300'
@@ -216,7 +216,7 @@ export function RegisterScreen() {
 
                 <FormControl isInvalid={usernameDirty && usernameError}>
                     <InputGroup>
-                        <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <Input placeholder="Username" onBlur={() => setUsernameDirty(true)} value={username} onChange={(e) => setUsername(e.target.value)} />
                         <InputLeftElement
                             pointerEvents='none'
                             color='gray.300'
@@ -232,7 +232,7 @@ export function RegisterScreen() {
                 </FormControl>
 
                 <FormControl isInvalid={passwordDirty && passwordError}>
-                    <PasswordInput password={password} setPassword={setPassword} placeholder='Password' />
+                    <PasswordInput password={password} setPassword={setPassword} onBlur={() => setPasswordDirty(true)} placeholder='Password' />
                     {passwordDirty && passwordError ?
                         <FormErrorMessage>{passwordMessage}</FormErrorMessage>
                         : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
@@ -254,7 +254,7 @@ export function RegisterScreen() {
                         : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                     }
                 </FormControl>
-                <Button isLoading={isLoading} isDisabled={disabledButton} onClick={onRegister}>{'Sign up'}</Button>
+                <Button type='submit' isLoading={isLoading} isDisabled={disabledButton}>{'Sign up'}</Button>
 
                 <Modal isOpen={isTermsOfServiceOpen} onClose={() => setIsTermsOfServiceOpen(false)}>
                     <ModalOverlay />

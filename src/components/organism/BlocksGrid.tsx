@@ -117,30 +117,32 @@ export function BlocksGrid() {
           ))}
         </div>
       )}
-      <div className="flex gap-4 mt-4 w-full justify-evenly">
-        <IconButton
-          className="!text-2xl"
-          aria-label="Previous page"
-          icon={<BiChevronLeft />}
-          onClick={() => setPage(page - 1)}
-          isDisabled={page === 0}
-        />
-        <IconButton
-          className="!text-2xl"
-          aria-label="Next page"
-          icon={<BiChevronRight />}
-          onClick={() => setPage(page + 1)}
-          isDisabled={page + 1 >= finishedBlocks?.totalPages!}
-        />
-        <ConfirmationModal
-          title="Delete blocks"
-          open={deleteModalOpen}
-          setOpen={() => setDeleteModalOpen(false)}
-          confirmAction={onDeleteBlocks}
-        >
-          {"Are you sure you want to delete these blocks?"}
-        </ConfirmationModal>
-      </div>
+      {finishedBlocks && finishedBlocks.totalPages > 1 &&
+        <div className="flex gap-4 mt-4 w-full justify-evenly">
+          <IconButton
+            className="!text-2xl"
+            aria-label="Previous page"
+            icon={<BiChevronLeft />}
+            onClick={() => setPage(page - 1)}
+            isDisabled={page === 0}
+          />
+          <IconButton
+            className="!text-2xl"
+            aria-label="Next page"
+            icon={<BiChevronRight />}
+            onClick={() => setPage(page + 1)}
+            isDisabled={page + 1 >= finishedBlocks?.totalPages!}
+          />
+        </div>
+      }
+      <ConfirmationModal
+        title="Delete blocks"
+        open={deleteModalOpen}
+        setOpen={() => setDeleteModalOpen(false)}
+        confirmAction={onDeleteBlocks}
+      >
+        {"Are you sure you want to delete these blocks?"}
+      </ConfirmationModal>
     </>
   );
 }

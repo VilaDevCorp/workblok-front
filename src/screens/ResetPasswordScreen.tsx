@@ -107,7 +107,7 @@ export function ResetPasswordScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Reset password'}>
+            <PublicFormLayout title={'Reset password'} onSubmit={() => onValidate()}>
                 {step === 1 ?
                     <>
                         <FormControl isInvalid={passwordDirty && passwordError}>
@@ -125,7 +125,7 @@ export function ResetPasswordScreen() {
                                 : <FormHelperText visibility={'hidden'}>{'.'}</FormHelperText>
                             }
                         </FormControl>
-                        <Button isLoading={isLoading} isDisabled={disabledButton} onClick={() => onValidate()}>{'Change password'}</Button>
+                        <Button type='submit' isLoading={isLoading} isDisabled={disabledButton}>{'Change password'}</Button>
                     </>
                     :
                     <>
