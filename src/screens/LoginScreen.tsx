@@ -1,96 +1,125 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useMisc } from '../hooks/useMisc';
 import { useValidator, notEmptyValidator } from '../hooks/useValidator';
-import { ApiError } from '../types/types';
+import { ApiError, ErrorCode } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { PublicFormLayout } from '../components/organism/PublicFormLayout';
 import { Layout } from '../components/organism/Layout';
 import { FormControl, InputGroup, Input, InputLeftElement, FormErrorMessage, FormHelperText, Checkbox, Button, useToast } from '@chakra-ui/react';
 import { HiOutlineMail } from 'react-icons/hi';
-import { TbLock } from 'react-icons/tb';
 import { Typography } from '../components/atom/Typography';
 import { Link } from '../components/atom/Link';
 import { IoMdClose } from 'react-icons/io';
 import { useApi } from '../hooks/useApi';
 import { PasswordInput } from '../components/atom/PasswordInput';
+import { useMutation } from 'react-query';
 
 
 export function LoginScreen() {
 
     const auth = useAuth()
     const navigate = useNavigate()
-    const { sendVerificationCode } = useApi()
+    const { sendValidationCode } = useApi()
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [rememberMe, setRememberMe] = useState<boolean>(false)
     const [notValidatedAccount, setNotValidatedAccount] = useState<boolean>(false)
-
-    const { isLoading, setIsLoading, triggerReloadUserInfo } = useMisc()
-
     const [emailDirty, emailError, emailMessage, emailValidate] = useValidator(email, [notEmptyValidator]);
     const [passwordDirty, passwordError, passwordMessage, passwordValidate] = useValidator(password, [notEmptyValidator]);
 
     const toast = useToast()
 
-    const onResendCode = async () => {
-        setIsLoading(true)
-        try {
-            await sendVerificationCode({ email, type: 'validate_account' })
+    const resendCode = async () => {
+        await sendValidationCode(email);
+    };
+
+    const { mutate: onResendCode } = useMutation({
+        mutationFn: resendCode,
+        onSuccess: () => {
             toast({
                 title: 'The code was succesfully sent!',
                 status: 'success',
                 duration: 5000,
             })
-        } catch (e) {
-            toast({
-                title: 'There was an error sending the new code. Try again',
-                status: 'error',
-                duration: 5000,
-            })
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    const disabledButton = isLoading || emailError || passwordError
-
-    const onLogin = async () => {
-        const emailValid = emailValidate()
-        const passwordValid = passwordValidate()
-
-        if (emailValid && passwordValid) {
-            setIsLoading(true)
-            try {
-                await auth.authenticate(email, password, rememberMe)
-                triggerReloadUserInfo()
-                navigate('/')
-            } catch (e) {
-                setIsLoading(false)
-                if (e instanceof ApiError) {
-                    if (e.cause === StatusCode.ClientErrorUnauthorized && e.errCode === '002') {
-                        setNotValidatedAccount(true)
-                    }
-                    if (e.cause === StatusCode.ClientErrorUnauthorized && e.errCode === '001' || e.cause === StatusCode.ClientErrorNotFound) {
-                        toast({
-                            title: 'Wrong credentials',
-                            status: 'error',
-                            duration: 5000,
-                        })
-                    }
-                } else {
+        },
+        onError: (e) => {
+            if (e instanceof ApiError) {
+                if (e.statusCode === StatusCode.ClientErrorConflict) {
                     toast({
-                        title: 'An internal error has occurred',
+                        title: 'The account is already validated',
                         status: 'error',
                         duration: 5000,
                     })
+                    return;
                 }
             }
-            setIsLoading(false)
+            if (e instanceof Error) {
+                toast({
+                    title: 'Internal error',
+                    status: 'error',
+                    duration: 5000,
+                })
+                return;
+            }
         }
-    }
+    });
+
+    const login = async () => {
+        const emailValid = emailValidate();
+        const passwordValid = passwordValidate();
+
+        if (emailValid && passwordValid) {
+            await auth.authenticate(email, password, rememberMe);
+        } else {
+            toast({
+                title: 'There are errors in the form',
+                status: 'error',
+                duration: 5000,
+            })
+        }
+    };
+
+    const { mutate: onLogin, isLoading } = useMutation({
+        mutationFn: login,
+        onSuccess: () => {
+            navigate('/');
+        },
+        onError: (e) => {
+            if (e instanceof ApiError) {
+                if (
+                    e.statusCode === StatusCode.ClientErrorForbidden &&
+                    e.code === ErrorCode.NOT_VALIDATED_ACCOUNT
+                ) {
+                    setNotValidatedAccount(true);
+                    return;
+                }
+                if (
+                    e.statusCode === StatusCode.ClientErrorUnauthorized &&
+                    e.code === ErrorCode.INVALID_CREDENTIALS
+                ) {
+                    toast({
+                        title: 'Wrong credentials',
+                        status: 'error',
+                        duration: 5000,
+                    })
+                    return;
+                }
+            }
+            if (e instanceof Error) {
+                toast({
+                    title: 'Internal error',
+                    status: 'error',
+                    duration: 5000,
+                })
+                return;
+            }
+        }
+    });
+
+    const disabledButton = isLoading || emailError || passwordError
+
 
     return (
         <Layout isPublic>
@@ -99,7 +128,8 @@ export function LoginScreen() {
                     <>
                         <FormControl isInvalid={emailDirty && emailError}>
                             <InputGroup>
-                                <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <Input placeholder="Email" value={email}
+                                    onChange={(e) => setEmail(e.target.value)} />
                                 <InputLeftElement
                                     pointerEvents='none'
                                     color='gray.300'

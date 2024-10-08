@@ -12,14 +12,13 @@ import { BiCheck } from 'react-icons/bi';
 import { IoMdClose } from 'react-icons/io';
 import { Typography } from '../components/atom/Typography';
 import { Link } from '../components/atom/Link';
-import { TbLock } from 'react-icons/tb';
 import { PasswordInput } from '../components/atom/PasswordInput';
 
 
 export function ResetPasswordScreen() {
 
     const navigate = useNavigate()
-    const { useVerificationCode, sendVerificationCode } = useApi()
+    const { forgottenPassword, resetPassword } = useApi()
     const [step, setStep] = useState<number>(1)
     const [password, setPassword] = useState<string>('')
     const [repeatPassword, setRepeatPassword] = useState<string>('')
@@ -66,7 +65,7 @@ export function ResetPasswordScreen() {
         if (passwordValid) {
             setIsLoading(true)
             try {
-                await useVerificationCode({ code: code!, email: userMail!, type: 'recover_password', newPass: password })
+                await resetPassword(userMail!, code!, password)
             } catch (e) {
                 if (e instanceof ApiError) {
                     if (e.cause === StatusCode.ClientErrorNotFound || e.cause === StatusCode.ClientErrorUnauthorized) {
@@ -87,7 +86,7 @@ export function ResetPasswordScreen() {
     const onSendCode = async () => {
         setIsLoading(true)
         try {
-            await sendVerificationCode({ email: userMail!, type: 'recover_password' })
+            await forgottenPassword(userMail!)
             toast({
                 title: 'The code was succesfully sent!',
                 status: 'success',

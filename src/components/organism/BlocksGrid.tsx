@@ -8,7 +8,6 @@ import { IoMdRemove } from "react-icons/io";
 import { useApi } from "../../hooks/useApi";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ConfirmationModal } from "../../modals/ConfirmationModal";
-import { useApiError } from "../../hooks/useApiError";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "../atom/DatePicker";
 import { MdDelete } from "react-icons/md";
@@ -23,10 +22,8 @@ export function BlocksGrid() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const toast = useToast();
   const [page, setPage] = useState(0);
-  const navigation = useNavigate();
-  const { setError } = useApiError(navigation);
 
-  const { data: finishedBlocks, isLoading: isLoadingFinishedBlocks } = useQuery(
+  const { data: finishedBlocks, isLoading: isLoadingFinishedBlocks, isError: isErrorFinishedBlocks } = useQuery(
     {
       queryKey: ["getFinishedBlocks", page, blocksDate],
       queryFn: () =>
@@ -41,15 +38,7 @@ export function BlocksGrid() {
         if (data.content.length < 1 && page > 0) {
           setPage(page - 1);
         }
-      },
-      onError: (err) => {
-        toast({
-          title: "Error obtaining your blocks",
-          status: "error",
-          duration: 5000,
-        });
-        setError(err as Error);
-      },
+      }
     }
   );
 
@@ -92,31 +81,33 @@ export function BlocksGrid() {
         <div className="h-20 flex justify-center items-center w-full">
           <Spinner size="lg" />
         </div>
-      ) : (
-        <div className="grid grid-cols-[repeat(auto-fill,88px)] gap-4 justify-between">
-          {finishedBlocks?.content && finishedBlocks.content.length < 1 && (
-            <div className="h-20 flex justify-center items-center col-span-4">
-              <Typography>{'No elements found'}</Typography>
-            </div>
-          )}
-          {finishedBlocks?.content.map((block) => (
-            <Jar
-              key={block.id}
-              blockId={block.id}
-              onClick={() => onClickBlock(block)}
-              isSelected={selectedBlocks.includes(block)}
-              size={80}
-              time={block.targetMinutes}
-              passedTime={moment(block.finishDate).diff(
-                block.creationDate,
-                "seconds"
-              )}
-              distractionMinutes={block.distractionMinutes}
-              tag={block.tag}
-            />
-          ))}
-        </div>
-      )}
+      ) : isErrorFinishedBlocks ?
+        <Typography mode="error">{"Has occurred an error loading your blocks history"}</Typography>
+        : (
+          <div className="grid grid-cols-[repeat(auto-fill,88px)] gap-4 justify-between">
+            {finishedBlocks?.content && finishedBlocks.content.length < 1 && (
+              <div className="h-20 flex justify-center items-center col-span-4">
+                <Typography>{'No elements found'}</Typography>
+              </div>
+            )}
+            {finishedBlocks?.content.map((block) => (
+              <Jar
+                key={block.id}
+                blockId={block.id}
+                onClick={() => onClickBlock(block)}
+                isSelected={selectedBlocks.includes(block)}
+                size={80}
+                time={block.targetMinutes}
+                passedTime={moment(block.finishDate).diff(
+                  block.creationDate,
+                  "seconds"
+                )}
+                distractionMinutes={block.distractionMinutes}
+                tag={block.tag}
+              />
+            ))}
+          </div>
+        )}
       {finishedBlocks && finishedBlocks.totalPages > 1 &&
         <div className="flex gap-4 mt-4 w-full justify-evenly">
           <IconButton

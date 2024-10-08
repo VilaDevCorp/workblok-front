@@ -1,25 +1,29 @@
 import moment from "moment";
-import React, { createContext, ReactNode, useContext } from "react";
-import StatusCode from "status-code-enum";
+import { createContext, ReactNode, useContext } from "react";
 import {
   Block,
   CreateBlockForm,
-  CreateVerificationCodeForm,
   PenaltyForm,
   RegisterUserForm,
   SearchBlockForm,
   StatsForm,
   StatsResult,
   UpdateConfigForm,
-  UseVerificationCodeForm,
 } from "../types/entities";
-import { ApiError, ApiResponse, Page } from "../types/types";
+import { ApiResponse, Page } from "../types/types";
 import { useAuth } from "./useAuth";
+import { checkResponseException } from "../utils/utilFunctions";
 
 export interface ApiContext {
   register: (user: RegisterUserForm) => void;
-  useVerificationCode: (form: UseVerificationCodeForm) => Promise<void>;
-  sendVerificationCode: (form: CreateVerificationCodeForm) => Promise<void>;
+  sendValidationCode: (email: string) => Promise<void>;
+  validateAccount: (email: string, code: string) => Promise<void>;
+  forgottenPassword: (email: string) => Promise<void>;
+  resetPassword: (
+    email: string,
+    code: string,
+    password: string
+  ) => Promise<void>;
   createBlock: (form: CreateBlockForm) => Promise<void>;
   applyPenalty: (form: PenaltyForm) => Promise<void>;
   finishBlock: (blockId: string, auto?: boolean) => Promise<void>;
@@ -44,8 +48,8 @@ export const useApi = () => {
 };
 
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
-  const { user, csrfToken } = useAuth();
   const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+  const { fetchWithAuth } = useAuth();
 
   const register = async (user: RegisterUserForm) => {
     const url = `${apiUrl}public/register`;
@@ -56,293 +60,189 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
         "content-type": "application/json",
       }),
     };
-    let result = [];
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetch(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
-  const sendVerificationCode = async (
-    form: CreateVerificationCodeForm
+  const sendValidationCode = async (
+    email: string
   ): Promise<void> => {
-    const url = `${apiUrl}public/newVerificationCode`;
+    const url = `${apiUrl}public/validate/${email}/resend`;
     const options: RequestInit = {
       method: "POST",
-      body: JSON.stringify(form),
-      headers: new Headers({
-        "content-type": "application/json",
-      }),
     };
-    let result = [];
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new Error();
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetch(url, options);
+    const resObject: ApiResponse<void> = await res.json();
+    checkResponseException(res, resObject);
+
   };
 
-  const useVerificationCode = async (
-    form: UseVerificationCodeForm
+  const validateAccount = async (
+    email: string,
+    code: string
   ): Promise<void> => {
-    const url = `${apiUrl}public/useVerificationCode`;
+    const url = `${apiUrl}public/validate/${email}/${code}`;
     const options: RequestInit = {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: new Headers({
-        "content-type": "application/json",
-      }),
+      method: 'POST'
     };
-    let result = [];
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetch(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
+  };
+
+
+  const forgottenPassword = async (email: string): Promise<void> => {
+    const url = `${apiUrl}public/forgotten-password/${email}`;
+    const options: RequestInit = {
+      method: 'POST'
+    };
+    const res = await fetch(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
+  };
+
+  const resetPassword = async (
+    email: string,
+    code: string,
+    password: string
+  ): Promise<void> => {
+    const url = `${apiUrl}public/reset-password/${email}/${code}`;
+    const options: RequestInit = {
+      method: 'POST',
+      body: password,
+      headers: new Headers({
+        'content-type': 'text/plain'
+      })
+    };
+    const res = await fetch(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const createBlock = async (block: CreateBlockForm): Promise<void> => {
     const url = `${apiUrl}private/block`;
     const options: RequestInit = {
-      credentials: "include",
       method: "POST",
       body: JSON.stringify(block),
       headers: new Headers({
         "content-type": "application/json",
-        "X-API-CSRF": csrfToken ? csrfToken : "",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const applyPenalty = async (penalty: PenaltyForm): Promise<void> => {
     const url = `${apiUrl}private/block/penalty`;
     const options: RequestInit = {
-      credentials: "include",
       method: "POST",
       body: JSON.stringify(penalty),
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const finishBlock = async (
     blockId: string,
     auto?: boolean
   ): Promise<void> => {
-    const url = `${apiUrl}private/block/${blockId}/finish${
-      auto ? "?auto=true" : ""
-    }`;
+    const url = `${apiUrl}private/block/${blockId}/finish${auto ? "?auto=true" : ""
+      }`;
     const options: RequestInit = {
-      credentials: "include",
       method: "POST",
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const updateConf = async (form: UpdateConfigForm): Promise<void> => {
     const url = `${apiUrl}private/user/conf`;
     const options: RequestInit = {
-      credentials: "include",
       method: "PATCH",
       body: JSON.stringify(form),
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const getBlock = async (id: string): Promise<Block> => {
     const url = `${apiUrl}private/block/${id}`;
     const options: RequestInit = {
-      credentials: "include",
       method: "GET",
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    let result: Block | undefined = undefined;
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<Block> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-      result = resObject.obj;
-    } catch (e) {
-      throw e;
-    }
-    return result;
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<Block> = await res.json();
+    checkResponseException(res, resObject);
+    return resObject.data;
   };
 
   const searchBlocks = async (form: SearchBlockForm): Promise<Page<Block>> => {
     const url = `${apiUrl}private/block/search`;
+    console.log(form);
     const options: RequestInit = {
-      credentials: "include",
       method: "POST",
       body: JSON.stringify(form),
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    let result: any;
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-      result = resObject.obj;
-    } catch (e) {
-      throw e;
-    }
-    return result;
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<Page<Block>> = await res.json();
+    checkResponseException(res, resObject);
+    return resObject.data;
   };
 
   const deleteBlocks = async (ids: string[]): Promise<void> => {
     const url = `${apiUrl}private/block`;
     const options: RequestInit = {
-      credentials: "include",
       method: "DELETE",
       body: JSON.stringify({ blockIds: ids }),
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<unknown> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<unknown> = await res.json();
+    checkResponseException(res, resObject);
   };
 
   const getStats = async (form: StatsForm): Promise<StatsResult> => {
     const url = `${apiUrl}private/block/stats`;
     const options: RequestInit = {
-      credentials: "include",
       method: "POST",
       body: JSON.stringify(form),
       headers: new Headers({
-        "X-API-CSRF": csrfToken ? csrfToken : "",
         "content-type": "application/json",
       }),
     };
-    try {
-      const res = await fetch(url, options);
-      const resObject: ApiResponse<StatsResult> = await res.json();
-      if (!res.ok) {
-        throw new ApiError({
-          cause: res.status,
-          message: resObject.message,
-          errCode: resObject.errCode,
-        });
-      }
-      return resObject.obj;
-    } catch (e) {
-      throw e;
-    }
+    const res = await fetchWithAuth(url, options);
+    const resObject: ApiResponse<StatsResult> = await res.json();
+    checkResponseException(res, resObject);
+    return resObject.data;
   };
 
   const value: ApiContext = {
     register,
-    sendVerificationCode,
-    useVerificationCode,
+    sendValidationCode,
+    validateAccount,
+    forgottenPassword,
+    resetPassword,
     finishBlock,
     createBlock,
     applyPenalty,

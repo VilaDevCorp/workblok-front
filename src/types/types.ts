@@ -10,10 +10,9 @@ export interface Page<T> {
 }
 
 export interface ApiResponse<T> {
-  message: string;
-  obj: T;
-  err: string;
-  errCode: string;
+  data: T;
+  errorMessage: string;
+  errorCode: ErrorCode;
 }
 
 export interface GraphElement {
@@ -21,24 +20,50 @@ export interface GraphElement {
   workingHours: number;
   distractionHours: number;
 }
-
 export class ApiError extends Error {
+  statusCode: number;
   message: string;
-  cause: number;
-  errCode?: string;
+  code?: string;
 
   constructor({
     message,
-    cause,
-    errCode,
+    statusCode,
+    code
   }: {
     message: string;
-    cause: number;
-    errCode?: string;
+    statusCode: number;
+    code?: string;
   }) {
     super();
     this.message = message;
-    this.cause = cause;
-    this.errCode = errCode;
+    this.statusCode = statusCode;
+    this.code = code;
   }
 }
+
+
+export enum ErrorCode {
+  NOT_JWT_TOKEN = 'NOT_JWT_TOKEN',
+  NOT_CSR_TOKEN = 'NOT_CSR_TOKEN',
+  INVALID_TOKEN = 'INVALID_TOKEN',
+  NOT_VALIDATED_ACCOUNT = 'NOT_VALIDATED_ACCOUNT',
+  USERNAME_ALREADY_IN_USE = 'USERNAME_ALREADY_IN_USE',
+  EMAIL_ALREADY_IN_USE = 'EMAIL_ALREADY_IN_USE',
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  EXPIRED_VALIDATION_CODE = 'EXPIRED_VALIDATION_CODE',
+  INCORRECT_VALIDATION_CODE = 'INCORRECT_VALIDATION_CODE',
+  ALREADY_USED_VALIDATION_CODE = 'ALREADY_USED_VALIDATION_CODE',
+  ALREADY_INVITED_USER = 'ALREADY_INVITED_USER',
+  ALREADY_MEMBER_GROUP = 'ALREADY_MEMBER_GROUP',
+  NOT_GROUP_MEMBER = 'NOT_GROUP_MEMBER',
+  KICKED_CREATOR = 'KICKED_CREATOR',
+  NOT_ABOVE_0_AMOUNT = 'NOT_ABOVE_0_AMOUNT',
+  PAYEE_NOT_IN_GROUP = 'PAYEE_NOT_IN_GROUP',
+  PAYER_NOT_IN_GROUP = 'PAYER_NOT_IN_GROUP',
+  INACTIVE_GROUP = 'INACTIVE_GROUP',
+  NON_ZERO_BALANCE = 'NON_ZERO_BALANCE',
+  ALREADY_VALIDATED_ACCOUNT = 'ALREADY_VALIDATED_ACCOUNT',
+  USER_AGENT_NOT_MATCH = 'USER_AGENT_NOT_MATCH',
+  TOKEN_ALREADY_USED = 'TOKEN_ALREADY_USED'
+}
+

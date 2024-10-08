@@ -7,14 +7,13 @@ export function Typography({
   className,
 }: {
   children: React.ReactNode;
-  mode?: "title" | "subtitle" | "body";
+  mode?: "title" | "subtitle" | "body" | "error";
   className?: string;
 }) {
   const { colorMode } = useColorMode();
 
-  const commonClasses = `${
-    colorMode === "dark" ? "text-primary-100" : "text-primary-900"
-  } `;
+  const commonClasses = `${colorMode === "dark" ? "text-primary-100" : "text-primary-900"
+    } `;
 
   const getText = () => {
     switch (mode) {
@@ -29,6 +28,12 @@ export function Typography({
           <Heading className={commonClasses + className} as={"h2"} size={"md"}>
             {children}
           </Heading>
+        );
+      case "error":
+        return (
+          <Text className={commonClasses + className + "w-full text-center py-2"} size={"sm"} color={"error"}>
+            {children}
+          </Text>
         );
       default:
         return (

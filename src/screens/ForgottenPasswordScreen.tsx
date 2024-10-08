@@ -14,7 +14,7 @@ import { HiOutlineMail } from 'react-icons/hi';
 export function ForgottenPasswordScreen() {
 
     const navigate = useNavigate()
-    const { useVerificationCode, sendVerificationCode } = useApi()
+    const { forgottenPassword, resetPassword } = useApi()
 
     const [email, setEmail] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -30,7 +30,7 @@ export function ForgottenPasswordScreen() {
     const onSendCode = async () => {
         setIsLoading(true)
         try {
-            await sendVerificationCode({ email, type: 'recover_password' })
+            await forgottenPassword(email)
             toast({
                 title: 'The code was succesfully sent!',
                 status: 'success',

@@ -79,7 +79,7 @@ export function ConfigScreen() {
   return (
     <Layout>
       <Section title="Configuration">
-        <form className="flex flex-col gap-4" onSubmit={() => onUpdateConfig()}>
+        <form className="flex flex-col gap-4" onSubmit={(e) =>{e.preventDefault(); onUpdateConfig()}}>
           <FormField
             label="Allow exceeded time"
             input={

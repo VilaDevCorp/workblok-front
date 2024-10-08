@@ -35,6 +35,11 @@ export interface RegisterUserForm {
   password: string;
 }
 
+export interface LoginResponse {
+  authToken: string;
+  sessionId: string;
+}
+
 export interface UserConfig {
   dailyTarget?: number;
   darkMode?: boolean;

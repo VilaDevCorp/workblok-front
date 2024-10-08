@@ -1,3 +1,5 @@
+import { ApiError, ApiResponse } from "../types/types";
+
 export const getTimeInHoursMinutesSeconds = (
   totalSeconds: number
 ): { hours: number; minutes: number; seconds: number } => {
@@ -19,4 +21,17 @@ export const getTimeInHoursMinutesSecondsString = (
   if (hoursString === "" && minutesString === "" && secondsString === "")
     return "0 s";
   return `${hoursString}${minutesString}${secondsString}`;
+};
+
+export const checkResponseException = (
+  res: Response,
+  resObject: ApiResponse<unknown>
+) => {
+  if (!res.ok) {
+    throw new ApiError({
+      statusCode: res.status,
+      message: resObject.errorMessage,
+      code: resObject.errorCode
+    });
+  }
 };

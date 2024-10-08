@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApi } from '../hooks/useApi';
 import { emailValidator, minLength8Validator, notEmptyValidator, upperLowerCaseValidator, useValidator } from '../hooks/useValidator';
-import { ApiError } from '../types/types';
+import { ApiError, ErrorCode } from '../types/types';
 import StatusCode from 'status-code-enum';
 import { useNavigate } from 'react-router-dom';
 import { useMisc } from '../hooks/useMisc';
@@ -14,12 +14,12 @@ import { TbLock } from 'react-icons/tb';
 import { Typography } from '../components/atom/Typography';
 import { Link } from '../components/atom/Link';
 import { PasswordInput } from '../components/atom/PasswordInput';
+import { useMutation } from 'react-query';
 
 export function RegisterScreen() {
 
     const { register } = useApi()
     const navigate = useNavigate()
-    const { isLoading, setIsLoading } = useMisc()
 
     const [username, setUsername] = useState<string>('')
     const [email, setEmail] = useState<string>('')
@@ -41,7 +41,6 @@ export function RegisterScreen() {
 
     const firstRender = useRef(true)
 
-    const disabledButton = isLoading || emailError || passwordError || passwordMatchError !== '' || usernameError || serviceTermsAcceptedError !== ''
 
     const passwordMatchValidate = () => {
         if (!firstRender.current) {
@@ -81,58 +80,64 @@ export function RegisterScreen() {
         firstRender.current = false
     }, [])
 
-    const onRegister = async () => {
+    const registerUser = async () => {
         const usernameValid = usernameValidate()
         const emailValid = emailValidate()
         const passwordValid = passwordValidate()
         const passwordMatch = passwordMatchValidate()
         const serviceTermsAccepted = serviceTermsAcceptedValidate()
-        if (usernameValid && emailValid && passwordValid && passwordMatch && serviceTermsAccepted) {
-            setIsLoading(true)
-            try {
-                await register({ username, email, password })
-                toast({
-                    title: 'User succesfully registered',
-                    status: 'success',
-                    duration: 5000,
-                })
-                navigate("/login")
-            } catch (e) {
-                if (e instanceof ApiError) {
-                    if (e.cause === StatusCode.ClientErrorConflict) {
-                        if (e.errCode === 'user') {
-                            toast({
-                                title: 'The username is already in use',
-                                status: 'error',
-                                duration: 5000,
-                            })
-                        }
-                        if (e.errCode === 'mail') {
-                            toast({
-                                title: 'The email is already in use',
-                                status: 'error',
-                                duration: 5000,
-                            })
-                        }
-                    } else {
+        if (usernameValid && emailValid && passwordValid && passwordMatch &&
+            serviceTermsAccepted) {
+            await register({ username, email, password })
+        } else {
+            throw new Error('There are errors in the form');
+        }
+    };
+
+    const { mutate: onRegister, isLoading } = useMutation({
+        mutationFn: registerUser,
+        onSuccess: () => {
+            toast({
+                title: 'User succesfully registered',
+                status: 'success',
+                duration: 5000,
+            })
+            navigate("/login")
+        },
+        onError: (e) => {
+            if (e instanceof ApiError) {
+                if (e.statusCode === StatusCode.ClientErrorConflict) {
+                    if (e.code === ErrorCode.USERNAME_ALREADY_IN_USE) {
                         toast({
-                            title: 'An internal error has occurred',
+                            title: 'The username is already in use',
                             status: 'error',
                             duration: 5000,
                         })
+                        return;
                     }
-                } else {
-                    toast({
-                        title: 'An internal error has occurred',
-                        status: 'error',
-                        duration: 5000,
-                    })
+                    if (e.code === ErrorCode.EMAIL_ALREADY_IN_USE) {
+                        toast({
+                            title: 'The email is already in use',
+                            status: 'error',
+                            duration: 5000,
+                        })
+                        return;
+                    }
                 }
-            } finally {
-                setIsLoading(false)
+            }
+            if (e instanceof Error) {
+                toast({
+                    title: 'An internal error has occurred',
+                    status: 'error',
+                    duration: 5000,
+                })
+                return;
             }
         }
-    }
+    });
+
+    const disabledButton = isLoading || emailError || passwordError || passwordMatchError !== '' || usernameError || serviceTermsAcceptedError !== ''
+
 
     const termsOfService = `
     **Terms of Service Agreement**
@@ -196,7 +201,7 @@ export function RegisterScreen() {
 
     return (
         <Layout isPublic>
-            <PublicFormLayout title={'Sign up'} onSubmit={()=>onRegister()}>
+            <PublicFormLayout title={'Sign up'} onSubmit={() => onRegister()}>
                 <FormControl isInvalid={emailDirty && emailError}>
                     <InputGroup>
                         <Input placeholder="Email" onBlur={() => setEmailDirty(true)} value={email} onChange={(e) => setEmail(e.target.value)} />

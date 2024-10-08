@@ -16,7 +16,7 @@ import { Link } from '../components/atom/Link';
 export function ValidateAccountScreen() {
 
     const navigate = useNavigate()
-    const { useVerificationCode, sendVerificationCode } = useApi()
+    const { validateAccount, sendValidationCode } = useApi()
     const [step, setStep] = useState<number>(1)
     const { code, userMail } = useParams();
     const [codeError, setCodeError] = useState<string>('')
@@ -32,7 +32,7 @@ export function ValidateAccountScreen() {
     const onValidate = async () => {
         setIsLoading(true)
         try {
-            await useVerificationCode({ code: code!, email: userMail!, type: 'validate_account' })
+            await validateAccount(userMail!, code!)
         } catch (e) {
             if (e instanceof ApiError) {
                 if (e.cause === StatusCode.ClientErrorNotFound || e.cause === StatusCode.ClientErrorUnauthorized) {
@@ -53,7 +53,7 @@ export function ValidateAccountScreen() {
     const onResendCode = async () => {
         setIsLoading(true)
         try {
-            await sendVerificationCode({ email: userMail!, type: 'validate_account' })
+            await sendValidationCode(userMail!)
             toast({
                 title: 'The code was succesfully sent!',
                 status: 'success',

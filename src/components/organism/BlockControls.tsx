@@ -15,7 +15,6 @@ import { useApi } from "../../hooks/useApi";
 import moment from "moment";
 import { Block } from "../../types/entities";
 import { Typography } from "../atom/Typography";
-import { useApiError } from "../../hooks/useApiError";
 import { useNavigate } from "react-router-dom";
 import {
   getTimeInHoursMinutesSeconds,
@@ -33,12 +32,10 @@ export function BlockControls({}: {}) {
   const today = moment().startOf("day").toDate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const [resultBlockId, setResultBlockId] = useState<string | undefined>(
     undefined
   );
-  const navigation = useNavigate();
-  const { setError } = useApiError(navigation);
   const [tag, setTag] = useState<string>("");
 
   useEffect(() => {
@@ -54,7 +51,7 @@ export function BlockControls({}: {}) {
 
   const { refetch: reloadActiveBlock, isLoading: isLoadingActiveBlock } =
     useQuery({
-      queryKey: ["getActiveBlock"],
+      queryKey: ["getActiveBlock", authToken],
       queryFn: () =>
         searchBlocks({
           page: 0,
@@ -74,7 +71,6 @@ export function BlockControls({}: {}) {
           status: "error",
           duration: 5000,
         });
-        setError(err as Error);
       },
     });
 
