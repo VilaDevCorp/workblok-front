@@ -194,7 +194,6 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   const searchBlocks = async (form: SearchBlockForm): Promise<Page<Block>> => {
     const url = `${apiUrl}private/block/search`;
-    console.log(form);
     const options: RequestInit = {
       method: "POST",
       body: JSON.stringify(form),

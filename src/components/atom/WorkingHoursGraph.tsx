@@ -62,7 +62,6 @@ export const WorkingHoursGraph = ({ data }: { data: GraphElement[] }) => {
         <Tooltip content={<CustomTooltip />} />
         <Area
           cursor={"pointer"}
-          onClick={() => console.log("click")}
           type="monotone"
           dataKey="workingHours"
           stackId="1"

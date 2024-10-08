@@ -32,7 +32,7 @@ interface WeekMonthLimits {
 const calculateCurrentWeek = () => {
   const monthStart = moment().month(moment().startOf("week").month()).year(moment().startOf("week").year()).startOf("month").startOf("week");
   const weekStart = moment().startOf("week");
-  const currentWeek = Math.min(Math.max(weekStart.diff(monthStart, "weeks"), 0), 4);
+  const currentWeek = Math.min(Math.max(weekStart.diff(monthStart, "weeks") - 1, 0), 4);
   console.log(monthStart)
   console.log(weekStart)
   console.log(currentWeek)
